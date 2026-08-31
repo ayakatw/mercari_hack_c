@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>推しかつ — Hi-Fi Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Shippori+Mincho+B1:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   推しかつ / OSHI MARKET — Design tokens
+   ワイヤーフレーム(推しかつSNS wireframe)を高精細化したもの
+   ============================================================ */
+:root{
+  /* ink */
+  --navy:#191947;          /* 見出し・ロゴ */
+  --ink:#2B2B55;           /* 本文 */
+  --ink-2:#5B5A80;         /* 副次テキスト */
+  --muted:#9A98B6;         /* プレースホルダ・補足 */
+
+  /* surface */
+  --bg:#F4F2FA;            /* アプリ背景 */
+  --surface:#FFFFFF;
+  --surface-2:#FBFAFE;
+  --line:#EEEAF7;
+  --line-2:#E3DDF3;
+
+  /* brand */
+  --primary:#9375E8;
+  --primary-strong:#7C5CE0;
+  --primary-soft:#F5F2FC;
+  --primary-soft-2:#EFEAFC;
+  --blue:#7B8EFE;
+  --pink:#FD72B9;
+  --mint:#5FB3A9;
+
+  /* gradients */
+  --grad-cta:linear-gradient(97deg,#7B8EFE 0%,#A97FEE 38%,#BA7DE6 60%,#FD72B9 100%);
+  --grad-hero:linear-gradient(112deg,#E7DBFD 0%,#E8E8FD 42%,#E2DAFD 70%,#DCD7FD 100%);
+  --grad-fab:linear-gradient(150deg,#B9A6F6 0%,#A7AFF6 45%,#F3A0D2 100%);
+  --grad-asset:linear-gradient(110deg,#8E7BF0 0%,#A97FEE 55%,#F58FC6 100%);
+
+  /* shadow */
+  --sh-card:0 4px 18px rgba(122,95,214,.09);
+  --sh-pop:0 8px 26px rgba(97,72,183,.18);
+  --sh-cta:0 8px 20px rgba(168,109,225,.35);
+
+  /* radius */
+  --r-card:18px;
+  --r-tile:14px;
+  --r-field:12px;
+
+  --font:"M PLUS Rounded 1c",-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+  --serif:"Shippori Mincho B1","Hiragino Mincho ProN",serif;
+}
+
+/* ---------- document chrome ---------- */
+*{box-sizing:border-box}
+body{
+  margin:0;background:
+    radial-gradient(900px 500px at 12% -6%,#EFE9FC 0%,transparent 60%),
+    radial-gradient(800px 480px at 92% 4%,#FDE9F4 0%,transparent 58%),
+    #F7F5FB;
+  font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;
+}
+.doc{max-width:1560px;margin:0 auto;padding:56px 40px 96px}
+.doc-head{margin:0 0 54px}
+.doc-kicker{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--primary-strong);background:#fff;border:1px solid var(--line-2);padding:6px 13px;border-radius:999px;box-shadow:var(--sh-card)}
+.doc-title{margin:18px 0 0;font-family:var(--serif);font-size:44px;line-height:1.2;color:var(--navy);letter-spacing:.01em}
+.doc-sub{margin:12px 0 0;font-size:14px;line-height:1.9;color:var(--ink-2);max-width:62ch}
+.doc-meta{margin:22px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.doc-meta span{font-size:11.5px;font-weight:500;color:var(--ink-2);background:#fff;border:1px solid var(--line);padding:5px 11px;border-radius:999px}
+
+.sec{margin:0 0 62px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 6px}
+.sec-no{font:800 11px/1 var(--font);letter-spacing:.1em;color:#fff;background:var(--navy);padding:6px 9px;border-radius:7px;text-decoration:none}
+.sec-name{font-family:var(--serif);font-size:23px;color:var(--navy);font-weight:700}
+.sec-note{margin:0 0 24px;font-size:13px;line-height:1.8;color:var(--ink-2);max-width:70ch}
+.rack{display:flex;flex-wrap:wrap;gap:34px 30px;align-items:flex-start}
+
+figure.frame{margin:0;display:flex;flex-direction:column;gap:12px;scroll-margin-top:20px}
+figure.frame figcaption{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);max-width:375px;line-height:1.5}
+.oid{font:800 10.5px/1 var(--font);letter-spacing:.06em;color:var(--primary-strong);background:var(--primary-soft);border:1px solid var(--line-2);padding:5px 8px;border-radius:6px;text-decoration:none;flex:none}
+figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ---------- device ---------- */
+.device{
+  width:375px;height:812px;position:relative;flex:none;
+  background:var(--bg);border-radius:44px;
+  box-shadow:0 0 0 8px #fff, 0 0 0 9px var(--line-2), 0 22px 50px rgba(84,62,158,.16);
+  overflow:hidden;
+}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:104px;height:27px;border-radius:999px;background:#14142E;z-index:40}
+.app{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+
+.statusbar{flex:none;height:52px;padding:16px 26px 0;display:flex;align-items:center;justify-content:space-between;color:var(--navy);position:relative;z-index:30}
+.statusbar .time{font-size:15px;font-weight:700;letter-spacing:.01em}
+.statusbar .sysic{display:flex;align-items:center;gap:6px}
+.homebar{flex:none;height:22px;display:flex;align-items:center;justify-content:center;background:transparent}
+.homebar i{display:block;width:134px;height:5px;border-radius:3px;background:#1C1C36;opacity:.85}
+
+.scroll{flex:1;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.scroll-inner{flex:1;overflow:hidden;display:flex;flex-direction:column;gap:14px}
+.scroll-inner>*{flex:none}
+.fade-b{position:absolute;left:0;right:0;bottom:0;height:26px;background:linear-gradient(to top,var(--bg),transparent);pointer-events:none;z-index:12}
+
+/* ---------- app bar ---------- */
+.appbar{flex:none;height:44px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;background:var(--surface)}
+.appbar.plain{background:transparent}
+.logo{font-size:16.5px;font-weight:800;letter-spacing:.13em;color:var(--navy)}
+.appbar-title{font-size:17px;font-weight:800;color:var(--navy);letter-spacing:.02em}
+.appbar-act{display:flex;align-items:center;gap:16px;color:var(--navy)}
+.bell{position:relative;display:flex}
+.bell b{position:absolute;top:-1px;right:-1px;width:7px;height:7px;border-radius:50%;background:#FF5C8A;border:1.5px solid #fff}
+.link-p{font-size:14px;font-weight:700;color:var(--primary)}
+
+.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic-s{width:16px;height:16px;stroke-width:2}
+.ic-xs{width:13px;height:13px;stroke-width:2.2}
+
+/* ---------- section titles inside app ---------- */
+.h-sec{display:flex;align-items:center;gap:7px;padding:0 16px;font-size:15px;font-weight:800;color:var(--navy)}
+.h-sec .spk{color:#C3ADF2;font-size:13px}
+.h-sec .more{margin-left:auto;display:flex;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--primary)}
+
+/* ---------- photo stand-ins (画像なし・CSSのみ) ---------- */
+.ph{position:relative;overflow:hidden;background:#DDE7F7;isolation:isolate}
+.ph::before{content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle at 22% 26%,rgba(255,255,255,.55),transparent 42%),
+    radial-gradient(circle at 78% 72%,rgba(255,255,255,.34),transparent 46%),
+    radial-gradient(circle at 62% 14%,rgba(255,255,255,.24),transparent 34%);
+  z-index:1;}
+.ph::after{content:"";position:absolute;inset:0;z-index:2;opacity:.75;
+  background-image:
+    radial-gradient(circle at 14% 68%,rgba(255,255,255,.95) 0 1px,transparent 1.6px),
+    radial-gradient(circle at 40% 22%,rgba(255,255,255,.85) 0 1.3px,transparent 2px),
+    radial-gradient(circle at 71% 47%,rgba(255,255,255,.9) 0 1px,transparent 1.6px),
+    radial-gradient(circle at 88% 20%,rgba(255,255,255,.7) 0 1.2px,transparent 1.9px),
+    radial-gradient(circle at 30% 88%,rgba(255,255,255,.65) 0 1px,transparent 1.5px);}
+.ph>*{position:relative;z-index:3}
+.p-blue{background:linear-gradient(152deg,#C4DBF7 0%,#93B9EC 46%,#6E9BE0 100%)}
+.p-blue2{background:linear-gradient(152deg,#DCEAFB 0%,#AFCBF1 52%,#8AAEE6 100%)}
+.p-violet{background:linear-gradient(152deg,#CDB2F3 0%,#9E7DE5 50%,#7A5FD6 100%)}
+.p-mint{background:linear-gradient(152deg,#B2DCD4 0%,#74B9B0 55%,#4E9A93 100%)}
+.p-pink{background:linear-gradient(152deg,#F9C0D9 0%,#F292C4 50%,#E874B2 100%)}
+.p-lav{background:linear-gradient(155deg,#EAE1FC 0%,#CDBCF4 100%)}
+.p-cream{background:linear-gradient(155deg,#FCF1F7 0%,#E9DBF3 100%)}
+.p-sky{background:linear-gradient(155deg,#E2EDFC 0%,#BDD4F4 100%)}
+.p-dusk{background:linear-gradient(155deg,#B9C6F5 0%,#8E9EE8 55%,#7B7FD8 100%)}
+.p-rose{background:linear-gradient(155deg,#FBE2EE 0%,#F3BFD9 100%)}
+
+/* ---------- hero ---------- */
+.hero{flex:none;height:94px;position:relative;overflow:hidden;background:var(--grad-hero);display:flex;flex-direction:column;justify-content:center;padding:0 20px}
+.hero h1{margin:0;font-family:var(--serif);font-size:26px;line-height:1.1;color:var(--navy);letter-spacing:.02em;font-weight:700}
+.hero p{margin:7px 0 0;font-size:10.5px;font-weight:500;color:#4B4A78;letter-spacing:.04em}
+.hero .sq{position:absolute;color:#fff;opacity:.9;text-shadow:0 0 6px rgba(255,255,255,.9)}
+.wand{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
+
+/* ---------- 推し棚 ---------- */
+.shelf{display:flex;gap:5px;padding:0 16px;overflow:hidden}
+.shelf .tile{flex:none;width:87px;height:78px;border-radius:var(--r-tile);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#fff}
+.shelf .tile span{font-size:12.5px;font-weight:800;letter-spacing:.02em;text-shadow:0 1px 4px rgba(40,25,80,.45)}
+.shelf .tile svg{filter:drop-shadow(0 1px 3px rgba(40,25,80,.4))}
+/* 写真の上に文字が乗るタイルは、白ボケを抑えて下方向にスクリムを敷く */
+.shelf .tile::before,.tagrail .tg::before,.mcard .mth::before{opacity:.5}
+.shelf .tile::after,.tagrail .tg::after{opacity:1;background-image:
+  linear-gradient(to top,rgba(28,16,62,.46) 0%,rgba(28,16,62,.12) 55%,rgba(28,16,62,0) 100%),
+  radial-gradient(circle at 14% 68%,rgba(255,255,255,.95) 0 1px,transparent 1.6px),
+  radial-gradient(circle at 40% 22%,rgba(255,255,255,.85) 0 1.3px,transparent 2px),
+  radial-gradient(circle at 71% 47%,rgba(255,255,255,.9) 0 1px,transparent 1.6px),
+  radial-gradient(circle at 88% 20%,rgba(255,255,255,.7) 0 1.2px,transparent 1.9px)}
+
+/* ---------- おすすめカード ---------- */
+.feed{margin:0 16px;background:var(--surface);border-radius:var(--r-card);box-shadow:var(--sh-card);overflow:hidden}
+.feed .shot{height:167px;position:relative}
+.pricepill{position:absolute;display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:7px 8px 7px 11px;box-shadow:0 4px 12px rgba(50,35,100,.18)}
+.pricepill .t{display:flex;flex-direction:column;gap:1px}
+.pricepill .t b{font-size:11px;font-weight:700;color:var(--navy);letter-spacing:.02em}
+.pricepill .t i{font-style:normal;font-size:13px;font-weight:800;color:var(--navy)}
+.pricepill .dotbtn{width:22px;height:22px;border-radius:50%;background:var(--grad-fab);display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.tether{position:absolute;z-index:4}
+.tether i{position:absolute;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.5)}
+.feed .meta{display:flex;align-items:flex-start;gap:9px;padding:9px 12px 11px}
+.av{border-radius:50%;flex:none;overflow:hidden;position:relative}
+.feed .meta .txt{flex:1;min-width:0}
+.feed .meta .txt b{display:block;font-size:11.5px;font-weight:800;color:var(--navy)}
+.feed .meta .txt p{margin:3px 0 0;font-size:10.5px;line-height:1.55;color:var(--ink-2)}
+.likepill{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 10px;box-shadow:0 2px 8px rgba(80,60,150,.08);flex:none}
+.likepill b{font-size:11px;font-weight:700;color:var(--ink)}
+.pager{display:flex;justify-content:center;gap:5px;padding:2px 0 0}
+.pager i{width:5px;height:5px;border-radius:999px;background:#DCD5EF}
+.pager i.on{width:14px;background:var(--primary)}
+
+/* ---------- タグ ---------- */
+.tagrail{display:flex;gap:5px;padding:0 16px;overflow:hidden;position:relative}
+.tagrail .tg{flex:none;width:105px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12.5px;font-weight:800;text-shadow:0 1px 4px rgba(40,25,80,.4)}
+.railnext{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:0 3px 10px rgba(60,40,130,.2);display:flex;align-items:center;justify-content:center;color:var(--navy);z-index:5}
+
+/* ---------- tab bar ---------- */
+.tabbar{flex:none;height:60px;background:var(--surface);border-top:1px solid var(--line);display:flex;align-items:center;padding:0 6px;position:relative;box-shadow:0 -2px 14px rgba(90,66,170,.05)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:#A7A5C2;font-size:9.5px;font-weight:700}
+.tab.on{color:var(--primary)}
+.tab.hole{visibility:hidden}
+.fab{position:absolute;left:50%;top:-16px;transform:translateX(-50%);width:58px;height:58px;border-radius:50%;background:var(--grad-fab);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;box-shadow:0 6px 16px rgba(168,120,220,.42);border:3px solid #fff}
+.fab span{font-size:7.5px;font-weight:800;letter-spacing:.02em;margin-top:1px}
+
+/* ---------- generic app pieces ---------- */
+.card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--sh-card);margin:0 16px}
+.card-h{display:flex;align-items:center;gap:8px;padding:13px 14px 11px;font-size:14px;font-weight:800;color:var(--navy)}
+.card-h .ic{color:var(--primary)}
+.card-h .right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.rowline{border-top:1px solid var(--line)}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--primary-soft);color:var(--primary-strong);font-size:10.5px;font-weight:700;padding:5px 9px;border-radius:8px;white-space:nowrap}
+.chip.o{background:#fff;border:1px solid var(--line-2);color:var(--ink-2)}
+.chip.on{background:var(--primary);color:#fff}
+.chip.pink{background:#FDECF5;color:#D9569A}
+.chip.mint{background:#E4F4F1;color:#3F8B83}
+.toggle{width:46px;height:26px;border-radius:999px;background:var(--primary);position:relative;flex:none;box-shadow:inset 0 1px 3px rgba(60,35,130,.25)}
+.toggle i{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(60,35,130,.3)}
+.toggle.off{background:#DFDAF0}
+.toggle.off i{right:auto;left:3px}
+.iconbtn{width:34px;height:34px;border-radius:50%;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;color:var(--primary);flex:none}
+.dashed{margin:0 12px 12px;border:1.6px dashed var(--primary);border-radius:var(--r-field);height:44px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--primary-strong);font-size:13px;font-weight:700;background:#FCFAFF}
+.cta{margin:0 16px;height:56px;border-radius:999px;background:var(--grad-cta);color:#fff;font-size:17px;font-weight:800;letter-spacing:.03em;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:var(--sh-cta);position:relative;overflow:hidden}
+.cta .s1,.cta .s2{position:absolute;color:rgba(255,255,255,.85)}
+.cta .s1{left:20px;top:14px;font-size:13px}
+.cta .s2{right:22px;bottom:12px;font-size:15px}
+.foot-note{text-align:center;font-size:10.5px;color:var(--muted);font-weight:500;padding:9px 0 2px}
+.btn-o{height:42px;border-radius:12px;border:1.5px solid var(--line-2);background:#fff;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:700;color:var(--navy)}
+.btn-p{height:48px;border-radius:999px;background:var(--grad-cta);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;box-shadow:var(--sh-cta)}
+.btn-danger{height:42px;border-radius:12px;border:1.5px solid #F6CFE2;color:#D9569A;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+
+.listrow{display:flex;align-items:center;gap:11px;padding:11px 14px}
+.listrow .nm{flex:1;min-width:0}
+.listrow .nm b{display:block;font-size:13.5px;font-weight:700;color:var(--navy)}
+.listrow .nm i{font-style:normal;display:block;font-size:14px;font-weight:800;color:var(--navy);margin-top:3px}
+.listrow .nm p{margin:2px 0 0;font-size:10.5px;color:var(--muted);font-weight:500}
+.thumb{width:58px;height:48px;border-radius:9px;flex:none}
+
+.settingrow{display:flex;align-items:center;gap:9px;padding:12px 14px;font-size:13.5px;font-weight:700;color:var(--navy)}
+.settingrow .ic{color:var(--primary)}
+.settingrow .rt{margin-left:auto;display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12.5px;font-weight:500}
+
+/* ---------- bottom sheet / modal ---------- */
+.dim{position:absolute;inset:0;background:rgba(26,20,58,.34);z-index:20;backdrop-filter:blur(1.5px)}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--surface);border-radius:26px 26px 0 0;padding:10px 16px 26px;box-shadow:var(--sh-pop);display:flex;flex-direction:column;gap:11px}
+.grab{width:38px;height:4px;border-radius:3px;background:#E2DCF2;margin:0 auto 4px}
+.sheet h3{margin:2px 0 4px;text-align:center;font-size:15px;font-weight:800;color:var(--navy)}
+.sheet-opt{height:54px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 15px;font-size:14px;font-weight:700;color:var(--navy)}
+.sheet-opt .ic{color:var(--primary)}
+.sheet-opt .sub{display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-top:2px}
+.sheet-opt .col{display:flex;flex-direction:column}
+.sheet-opt .chev{margin-left:auto;color:#C6C2DC}
+.cancel{text-align:center;font-size:13.5px;font-weight:700;color:var(--muted);padding:4px 0 0}
+.field{border:1.5px solid var(--line-2);border-radius:12px;padding:9px 12px;background:var(--surface-2)}
+.field label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.field b{display:block;font-size:14px;font-weight:700;color:var(--navy);margin-top:3px}
+
+/* ---------- 投稿作成フォーム(密度を1画面に収める) ---------- */
+.compose .card-h{padding:9px 14px 8px}
+.compose .listrow{padding:7px 14px}
+.compose .thumb{width:48px;height:38px}
+.compose .nm i{margin-top:2px}
+.compose .dashed{height:38px;margin:8px 12px 8px}
+.compose .settingrow{padding:9px 14px}
+.compose .card{box-shadow:0 3px 14px rgba(122,95,214,.08)}
+
+/* ---------- charts ---------- */
+.kpi{text-align:center;padding:4px 0 0}
+.kpi .lb{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.kpi .val{font-size:34px;font-weight:800;color:var(--navy);letter-spacing:.01em;margin-top:2px;font-feature-settings:"tnum"}
+.deltapill{display:inline-flex;align-items:center;gap:4px;margin-top:7px;background:#E9FBF3;color:#20916B;font-size:11.5px;font-weight:800;padding:5px 11px;border-radius:999px}
+.grouphead{display:flex;align-items:center;gap:7px;padding:0 16px;font-size:11.5px;font-weight:800;color:var(--ink-2)}
+.grouphead::after{content:"";flex:1;height:1px;background:var(--line)}
+.check{width:19px;height:19px;border-radius:6px;border:1.8px solid var(--line-2);flex:none;background:#fff}
+.check.on{background:var(--primary);border-color:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff}
+.tabs{display:flex;gap:20px;padding:0 16px;border-bottom:1px solid var(--line)}
+.tabs span{padding:0 2px 9px;font-size:13.5px;font-weight:700;color:var(--muted)}
+.tabs span.on{color:var(--navy);font-weight:800;box-shadow:inset 0 -3px 0 var(--primary)}
+
+/* ---------- profile ---------- */
+.stats{display:flex;flex:1;justify-content:space-around;text-align:center}
+.stats div b{display:block;font-size:16px;font-weight:800;color:var(--navy)}
+.stats div span{font-size:10.5px;color:var(--muted);font-weight:600}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.grid3 .cel{aspect-ratio:1/1;position:relative}
+.hilite{display:flex;gap:13px;padding:0 16px;overflow:hidden}
+.hilite .hl{display:flex;flex-direction:column;align-items:center;gap:5px;flex:none;width:58px}
+.hilite .ring{width:56px;height:56px;border-radius:50%;padding:2.5px;background:linear-gradient(140deg,#B49BF2,#F49BCC)}
+.hilite .ring .in{width:100%;height:100%;border-radius:50%;border:2px solid #fff}
+.hilite small{font-size:9.5px;font-weight:700;color:var(--ink-2)}
+.assetbanner{margin:0 16px;border-radius:16px;background:var(--grad-asset);color:#fff;padding:13px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px rgba(150,110,220,.32)}
+.assetbanner .lb{font-size:10.5px;font-weight:700;opacity:.9}
+.assetbanner .val{font-size:21px;font-weight:800;letter-spacing:.01em}
+.assetbanner .up{margin-left:auto;text-align:right;font-size:11px;font-weight:800;background:rgba(255,255,255,.22);padding:6px 10px;border-radius:999px}
+
+/* ---------- search ---------- */
+.searchbar{margin:0 16px;height:42px;border-radius:999px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;gap:9px;padding:0 15px;color:var(--muted);font-size:13px;font-weight:500;box-shadow:var(--sh-card)}
+.chiprail{display:flex;gap:7px;padding:0 16px;overflow:hidden}
+.masonry{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px}
+.mcard{border-radius:14px;overflow:hidden;background:#fff;box-shadow:var(--sh-card)}
+.mcard .mth{position:relative}
+.mcard .pv{position:absolute;left:7px;bottom:7px;z-index:5;background:rgba(255,255,255,.94);border-radius:8px;padding:3px 8px;font-size:11px;font-weight:800;color:var(--navy);box-shadow:0 2px 6px rgba(50,35,100,.14)}
+.mcard .fv{position:absolute;right:7px;top:7px;z-index:5;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;color:#EF6FA8;box-shadow:0 2px 6px rgba(50,35,100,.12)}
+.mcard .cap{padding:9px 10px 11px}
+.mcard .cap b{font-size:12px;font-weight:700;color:var(--navy);display:block}
+.mcard .cap p{margin:4px 0 0;font-size:10px;color:var(--muted);font-weight:600}
+
+/* ---------- talk ---------- */
+.talkrow{display:flex;align-items:center;gap:11px;padding:11px 16px}
+.talkrow .tx{flex:1;min-width:0}
+.talkrow .tx b{font-size:13.5px;font-weight:800;color:var(--navy)}
+.talkrow .tx p{margin:3px 0 0;font-size:11.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.talkrow .rt{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:none}
+.talkrow .rt small{font-size:10px;color:var(--muted);font-weight:600}
+.unread{min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--pink);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+/* ---------- foundations ---------- */
+.tok{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+.tokcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--sh-card)}
+.tokcard h4{margin:0 0 14px;font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--muted)}
+.sw{display:flex;flex-wrap:wrap;gap:12px}
+.sw div{width:96px}
+.sw i{display:block;height:56px;border-radius:12px;border:1px solid rgba(25,25,71,.07)}
+.sw b{display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-top:7px}
+.sw small{display:block;font-size:10.5px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+.typerow{display:flex;align-items:baseline;gap:16px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.typerow:last-child{border:0}
+.typerow small{width:120px;flex:none;font-size:10.5px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+</style>
+</head>
+<body>
+
+<!-- =============== icon sprite =============== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.4 12 3.6l8.5 6.8V19a1.6 1.6 0 0 1-1.6 1.6h-4.2v-5.7H9.3v5.7H5.1A1.6 1.6 0 0 1 3.5 19z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.9"/><path d="M15.9 15.9 20.6 20.6"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8.8a6 6 0 1 0-12 0c0 6.4-2.6 8-2.6 8h17.2S18 15.2 18 8.8z"/><path d="M13.7 20.3a2 2 0 0 1-3.4 0"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20.5 11.6c0 4-3.8 7.2-8.5 7.2a10 10 0 0 1-2.6-.34L4.2 20.2l1.3-3.5A6.9 6.9 0 0 1 3.5 11.6c0-4 3.8-7.2 8.5-7.2s8.5 3.2 8.5 7.2z"/><circle cx="8.6" cy="11.6" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="11.6" r=".9" fill="currentColor" stroke="none"/><circle cx="15.4" cy="11.6" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="4"/><path d="M4.6 20.4c.6-4 3.7-6.2 7.4-6.2s6.8 2.2 7.4 6.2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.3S3.6 15.5 3.6 9.7A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8.4 2.7c0 5.8-8.4 10.6-8.4 10.6z"/></symbol>
+  <symbol id="i-heart-f" viewBox="0 0 24 24"><path d="M12 20.3S3.6 15.5 3.6 9.7A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8.4 2.7c0 5.8-8.4 10.6-8.4 10.6z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1.1 5.9-5.3-2.9-5.3 2.9 1.1-5.9-4.3-4.1 5.9-.8z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.8S10.2 4.9 4.6 4.9v12.6c5.6 0 7.4 1.9 7.4 1.9s1.8-1.9 7.4-1.9V4.9c-5.6 0-7.4 1.9-7.4 1.9zM12 6.8v12.6"/></symbol>
+  <symbol id="i-mask" viewBox="0 0 24 24"><path d="M4.2 7.4c0-1 .8-1.7 1.8-1.6 3.9.5 8.1.5 12 0 1-.1 1.8.6 1.8 1.6v3.9c0 4.2-3.5 7.6-7.8 7.6s-7.8-3.4-7.8-7.6z"/><path d="M8.6 10.4h.01M15.4 10.4h.01" stroke-width="2.6"/><path d="M9.2 14.4a4 4 0 0 0 5.6 0"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5.4 7.6h13.2l-.9 11.2a1.8 1.8 0 0 1-1.8 1.6H8.1a1.8 1.8 0 0 1-1.8-1.6z"/><path d="M8.6 7.6V6.4a3.4 3.4 0 0 1 6.8 0v1.2"/><path d="m9.9 12.6 2.1 2.1 2.1-2.1"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M16.4 4.6a2.1 2.1 0 0 1 3 3L9.2 17.8l-4 1 1-4z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M11.3 3.9H4.4a.5.5 0 0 0-.5.5v6.9c0 .3.1.5.3.7l8.6 8.6a1.4 1.4 0 0 0 2 0l6.2-6.2a1.4 1.4 0 0 0 0-2L12.4 4.2a1 1 0 0 0-1.1-.3z"/><circle cx="8.2" cy="8.2" r="1.4"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8M12 3.6c2.1 2.3 3.3 5.3 3.3 8.4S14.1 18.1 12 20.4C9.9 18.1 8.7 15.1 8.7 12S9.9 5.9 12 3.6z"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9.4 5.6 6.6 6.4-6.6 6.4"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M14.6 5.6 8 12l6.6 6.4"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.6" y="5.2" width="16.8" height="13.6" rx="2.6"/><circle cx="8.6" cy="10" r="1.5"/><path d="m4.6 17.4 4.6-4.4 3.3 3 2.7-2.4 4.2 3.8"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3.6 8.8c0-1.1.9-2 2-2h2.2l1.3-2.1h5.8l1.3 2.1h2.2c1.1 0 2 .9 2 2v8.4c0 1.1-.9 2-2 2H5.6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.8" r="3.4"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="m12 3.4 8 4v9.2l-8 4-8-4V7.4z"/><path d="m4 7.4 8 4 8-4M12 11.4v9.2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.2 12.6 4.4 4.4 9.2-10"/></symbol>
+  <symbol id="i-badge" viewBox="0 0 24 24"><path d="m12 3.2 2.2 1.7 2.8-.2 1 2.6 2.4 1.4-.8 2.7.8 2.7-2.4 1.4-1 2.6-2.8-.2L12 19.6l-2.2-1.7-2.8.2-1-2.6-2.4-1.4.8-2.7-.8-2.7 2.4-1.4 1-2.6 2.8.2z"/><path d="m8.9 11.9 2.2 2.2 4-4.4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.2" y="10.4" width="13.6" height="9.6" rx="2.4"/><path d="M8.4 10.4V7.8a3.6 3.6 0 0 1 7.2 0v2.6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.1"/><path d="M19.2 14.6a1.5 1.5 0 0 0 .3 1.6l.1.1a1.8 1.8 0 1 1-2.6 2.6l-.1-.1a1.5 1.5 0 0 0-2.5 1v.3a1.8 1.8 0 1 1-3.6 0v-.2a1.5 1.5 0 0 0-2.6-1l-.1.1a1.8 1.8 0 1 1-2.6-2.6l.1-.1a1.5 1.5 0 0 0-1-2.5H4.3a1.8 1.8 0 1 1 0-3.6h.2a1.5 1.5 0 0 0 1-2.6l-.1-.1A1.8 1.8 0 1 1 8 5l.1.1a1.5 1.5 0 0 0 2.5-1V3.8a1.8 1.8 0 1 1 3.6 0V4a1.5 1.5 0 0 0 2.6 1l.1-.1A1.8 1.8 0 1 1 19.5 7.5l-.1.1a1.5 1.5 0 0 0 1 2.5h.3a1.8 1.8 0 1 1 0 3.6h-.2a1.5 1.5 0 0 0-1.3 .9z"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="m3.6 16.6 5.2-5.4 3.6 3.2 8-8.2"/><path d="M15.6 6.2h4.8V11"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24"><path d="M4.4 7h15.2M7 12h10M10 17h4"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20.4 4.2v4.6h-4.6"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 20 12"><rect x="0" y="7.5" width="3" height="4.5" rx="1" fill="currentColor" stroke="none"/><rect x="4.6" y="5" width="3" height="7" rx="1" fill="currentColor" stroke="none"/><rect x="9.2" y="2.5" width="3" height="9.5" rx="1" fill="currentColor" stroke="none"/><rect x="13.8" y="0" width="3" height="12" rx="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 18 13"><path d="M1 4.6a12 12 0 0 1 16 0M3.8 7.7a8 8 0 0 1 10.4 0" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round"/><path d="M9 12.2a1.7 1.7 0 1 0 0-3.4 1.7 1.7 0 0 0 0 3.4z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-battery" viewBox="0 0 27 13"><rect x=".8" y=".8" width="22" height="11.4" rx="3.4" stroke="currentColor" stroke-width="1.1" fill="none" opacity=".4"/><rect x="2.4" y="2.4" width="18.8" height="8.2" rx="2.2" fill="currentColor" stroke="none"/><path d="M24.6 4.6v3.8a2.3 2.3 0 0 0 0-3.8z" fill="currentColor" stroke="none" opacity=".5"/></symbol>
+</svg>
+
+<div class="doc">
+
+<header class="doc-head">
+  <span class="doc-kicker">✦ HI-FI DESIGN &nbsp;/&nbsp; 推しかつSNS wireframe → design</span>
+  <h1 class="doc-title">推しかつ / OSHI MARKET</h1>
+  <p class="doc-sub">ワイヤーフレームの全画面を、ビジュアルカンプの配色・書体・角丸・余白でそのまま高精細化したものです。抜けていた <b>推しを探す</b>・<b>トーク</b> を追加し、タブバーの5導線をすべて実画面で埋めています。写真は使わず、すべて CSS のグラデーションで再現しています。</p>
+  <div class="doc-meta">
+    <span>375 × 812 (iPhone)</span><span>M PLUS Rounded 1c / Shippori Mincho B1</span><span>14 screens</span><span>画像アセット 0</span><span>単一HTML・依存なし</span>
+  </div>
+</header>
+
+<!-- ============================================================
+     00 FOUNDATIONS
+     ============================================================ -->
+<section class="sec" id="t0">
+  <div class="sec-head"><a class="sec-no" href="#t0">00</a><span class="sec-name">ファウンデーション</span></div>
+  <p class="sec-note">カンプから抽出した実測値。ワイヤーの黒 <code>#1a1a1a</code> / 赤 <code>#ec3013</code> は、ネイビー <code>#191947</code> とパープル〜ピンクのグラデーションに置き換えています。</p>
+  <div class="tok">
+    <div class="tokcard">
+      <h4>COLOR</h4>
+      <div class="sw">
+        <div><i style="background:#191947"></i><b>Ink / Navy</b><small>#191947</small></div>
+        <div><i style="background:#2B2B55"></i><b>Body</b><small>#2B2B55</small></div>
+        <div><i style="background:#9A98B6"></i><b>Muted</b><small>#9A98B6</small></div>
+        <div><i style="background:#9375E8"></i><b>Primary</b><small>#9375E8</small></div>
+        <div><i style="background:#7C5CE0"></i><b>Primary +</b><small>#7C5CE0</small></div>
+        <div><i style="background:#F5F2FC"></i><b>Primary soft</b><small>#F5F2FC</small></div>
+        <div><i style="background:#7B8EFE"></i><b>Blue</b><small>#7B8EFE</small></div>
+        <div><i style="background:#FD72B9"></i><b>Pink</b><small>#FD72B9</small></div>
+        <div><i style="background:#F4F2FA"></i><b>App BG</b><small>#F4F2FA</small></div>
+        <div><i style="background:#EEEAF7"></i><b>Line</b><small>#EEEAF7</small></div>
+      </div>
+    </div>
+    <div class="tokcard">
+      <h4>GRADIENT</h4>
+      <div class="sw">
+        <div><i style="background:linear-gradient(112deg,#E7DBFD,#E8E8FD 42%,#DCD7FD)"></i><b>Hero</b><small>banner</small></div>
+        <div><i style="background:linear-gradient(97deg,#7B8EFE,#BA7DE6 60%,#FD72B9)"></i><b>CTA</b><small>primary button</small></div>
+        <div><i style="background:linear-gradient(150deg,#B9A6F6,#A7AFF6 45%,#F3A0D2)"></i><b>FAB</b><small>投稿・出品</small></div>
+        <div><i style="background:linear-gradient(110deg,#8E7BF0,#A97FEE 55%,#F58FC6)"></i><b>Asset</b><small>資産バナー</small></div>
+      </div>
+    </div>
+    <div class="tokcard" style="max-width:470px">
+      <h4>TYPE</h4>
+      <div class="typerow"><small>serif / 26 / 700</small><span style="font-family:var(--serif);font-size:26px;color:var(--navy)">今日も推しが尊い。</span></div>
+      <div class="typerow"><small>title / 17 / 800</small><span style="font-size:17px;font-weight:800;color:var(--navy)">新しい投稿</span></div>
+      <div class="typerow"><small>section / 15 / 800</small><span style="font-size:15px;font-weight:800;color:var(--navy)">あなたへのおすすめ</span></div>
+      <div class="typerow"><small>body / 13.5 / 700</small><span style="font-size:13.5px;font-weight:700;color:var(--navy)">痛バッグ</span></div>
+      <div class="typerow"><small>caption / 10.5 / 500</small><span style="font-size:10.5px;font-weight:500;color:var(--muted)">商品が売れた後も投稿は残ります</span></div>
+    </div>
+    <div class="tokcard" style="width:300px">
+      <h4>COMPONENT</h4>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="cta" style="margin:0;height:50px;font-size:15px"><span class="s1">✦</span>投稿して出品する<span class="s2">✧</span></div>
+        <div class="btn-o" style="margin:0">＋ 商品を追加</div>
+        <div style="display:flex;gap:7px;align-items:center"><span class="chip">#現場コーデ</span><span class="chip on">所有中</span><span class="chip o">新規</span></div>
+        <div style="display:flex;gap:12px;align-items:center"><div class="toggle"><i></i></div><div class="toggle off"><i></i></div><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="check"></div></div>
+        <div class="dashed" style="margin:0"><svg class="ic ic-s"><use href="#i-plus"/></svg>商品を追加</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     01 ホーム
+     ============================================================ -->
+<section class="sec" id="t1">
+  <div class="sec-head"><a class="sec-no" href="#t1">01</a><span class="sec-name">トップ(インスタ風フィード)</span></div>
+  <p class="sec-note">ワイヤー 1b。ヒーロー → 推し棚 → あなたへのおすすめ → いま盛り上がっているタグ の縦積み。おすすめカードは写真上に価格ピンを重ね、SNS の投稿とマーケットの出品を1枚に同居させています。</p>
+  <div class="rack">
+
+  <figure class="frame" id="1b">
+    <div class="device"><div class="island"></div><div class="app">
+      <div class="statusbar" style="background:#fff">
+        <span class="time">9:41</span>
+        <span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span>
+      </div>
+      <div class="appbar">
+        <span class="logo">OSHI MARKET</span>
+        <span class="appbar-act">
+          <svg class="ic"><use href="#i-search"/></svg>
+          <span class="bell"><svg class="ic"><use href="#i-bell"/></svg><b></b></span>
+        </span>
+      </div>
+
+      <div class="scroll">
+        <div class="hero">
+          <span class="sq" style="left:150px;top:14px;font-size:9px">✦</span>
+          <span class="sq" style="left:196px;top:60px;font-size:7px">✦</span>
+          <span class="sq" style="left:243px;top:26px;font-size:11px">✧</span>
+          <span class="sq" style="left:262px;top:70px;font-size:8px">✦</span>
+          <h1>今日も推しが尊い。</h1>
+          <p>好きから、次の出会いへ</p>
+          <svg class="wand" width="86" height="92" viewBox="0 0 86 92" fill="none">
+            <defs>
+              <radialGradient id="wg" cx="50%" cy="42%" r="55%">
+                <stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".55" stop-color="#E3D3FB" stop-opacity=".8"/><stop offset="1" stop-color="#C8AEF5" stop-opacity=".25"/>
+              </radialGradient>
+            </defs>
+            <path d="M43 12c-9-11-26-6-26 8 0 12 18 24 26 30 8-6 26-18 26-30 0-14-17-19-26-8z" fill="url(#wg)" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M43 20c-5-6-14-3-14 4 0 6 9 13 14 16 5-3 14-10 14-16 0-7-9-10-14-4z" stroke="#fff" stroke-width="1.6" fill="none" opacity=".8"/>
+            <text x="43" y="43" text-anchor="middle" font-family="M PLUS Rounded 1c" font-size="9" font-weight="700" fill="#7B62CE" opacity=".9">my</text>
+            <text x="43" y="53" text-anchor="middle" font-family="M PLUS Rounded 1c" font-size="9" font-weight="700" fill="#7B62CE" opacity=".9">oshi ♥</text>
+            <rect x="39" y="50" width="8" height="34" rx="4" fill="#C7B4F3" opacity=".85"/>
+            <path d="M35 60c-6-5-12 2-6 6M51 60c6-5 12 2 6 6" stroke="#B9A2EE" stroke-width="3" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+
+        <div class="scroll-inner" style="background:var(--surface);border-radius:22px 22px 0 0;padding:13px 0 0;margin-top:-8px;position:relative;z-index:2;gap:12px">
+          <div class="h-sec">推し棚 <span class="spk">✦</span></div>
+          <div class="shelf">
+            <div class="tile ph p-blue"><svg class="ic" style="color:#fff"><use href="#i-heart"/></svg><span>ブルー担当</span></div>
+            <div class="tile ph p-violet"><svg class="ic" style="color:#fff"><use href="#i-mask"/></svg><span>2.5次元</span></div>
+            <div class="tile ph p-mint"><svg class="ic" style="color:#fff"><use href="#i-book"/></svg><span>少年漫画</span></div>
+            <div class="tile ph p-pink"><svg class="ic" style="color:#fff"><use href="#i-star"/></svg><span>K-POP</span></div>
+          </div>
+
+          <div class="h-sec" style="margin-top:2px">あなたへのおすすめ <span class="spk">✦</span></div>
+          <div class="feed">
+            <div class="shot ph p-blue2" style="height:150px">
+              <svg class="tether" style="left:118px;top:36px" width="52" height="46"><path d="M2 8 H36 A6 6 0 0 1 42 14 V40" stroke="#fff" stroke-width="1.6" fill="none" opacity=".85"/><circle cx="42" cy="41" r="3.6" fill="#fff"/></svg>
+              <div class="pricepill" style="left:12px;top:22px">
+                <div class="t"><b>痛バッグ</b><i>¥6,500</i></div>
+                <div class="dotbtn"><svg class="ic ic-xs"><use href="#i-lock"/></svg></div>
+              </div>
+              <svg class="tether" style="right:110px;bottom:52px" width="46" height="40"><circle cx="4" cy="6" r="3.6" fill="#fff"/><path d="M4 10 V30 A6 6 0 0 0 10 36 H44" stroke="#fff" stroke-width="1.6" fill="none" opacity=".85"/></svg>
+              <div class="pricepill" style="right:12px;bottom:16px">
+                <div class="t"><b>ペンライト</b><i>¥2,200</i></div>
+                <div class="dotbtn"><svg class="ic ic-xs"><use href="#i-lock"/></svg></div>
+              </div>
+            </div>
+            <div class="meta">
+              <div class="av ph p-dusk" style="width:34px;height:34px"></div>
+              <div class="txt">
+                <b>ゆあ 💙</b>
+                <p>今日は待ちに待った参戦日！💙<br>推し色コーデで気合いばっちり✧･ﾟ</p>
+              </div>
+              <div class="likepill"><svg class="ic ic-s" style="color:#FF6B9D"><use href="#i-heart-f"/></svg><b>128</b></div>
+            </div>
+          </div>
+          <div class="pager"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+
+          <div class="h-sec" style="margin-top:2px">いま盛り上がっているタグ <span class="spk">✦</span></div>
+          <div class="tagrail">
+            <div class="tg ph p-lav">#現場コーデ</div>
+            <div class="tg ph p-blue2">#推し色ブルー</div>
+            <div class="tg ph p-rose">#交換歓迎</div>
+            <div class="tg ph p-sky">#譲渡</div>
+            <div class="railnext"><svg class="ic ic-s"><use href="#i-chev"/></svg></div>
+          </div>
+          <div class="fade-b"></div>
+        </div>
+      </div>
+
+      <div class="tabbar">
+        <div class="tab on"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
+        <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
+        <div class="tab hole">•</div>
+        <div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
+        <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
+        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#1b">1b</a>ホーム — ヒーロー / 推し棚 / おすすめ / タグ</figcaption>
+  </figure>
+
+  <figure class="frame" id="1c">
+    <div class="device"><div class="island"></div><div class="app">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="logo">OSHI MARKET</span><span class="appbar-act"><svg class="ic"><use href="#i-search"/></svg><span class="bell"><svg class="ic"><use href="#i-bell"/></svg><b></b></span></span></div>
+      <div class="scroll" style="background:#fff">
+        <div class="scroll-inner" style="padding-top:12px">
+          <div class="h-sec">フォロー中 <span class="spk">✦</span><span class="more">すべて<svg class="ic ic-xs"><use href="#i-chev"/></svg></span></div>
+          <div class="hilite">
+            <div class="hl"><div class="ring"><div class="in ph p-violet"></div></div><small>みお</small></div>
+            <div class="hl"><div class="ring"><div class="in ph p-blue"></div></div><small>りん</small></div>
+            <div class="hl"><div class="ring"><div class="in ph p-pink"></div></div><small>あお</small></div>
+            <div class="hl"><div class="ring"><div class="in ph p-mint"></div></div><small>ここ</small></div>
+            <div class="hl"><div class="ring"><div class="in ph p-cream"></div></div><small>なな</small></div>
+          </div>
+
+          <div style="border-top:1px solid var(--line);margin:2px 0 0"></div>
+
+          <div style="display:flex;align-items:center;gap:9px;padding:0 16px">
+            <div class="av ph p-blue" style="width:36px;height:36px"></div>
+            <div style="flex:1"><b style="display:block;font-size:13px;font-weight:800;color:var(--navy)">みお ✧</b><small style="font-size:10.5px;color:var(--muted);font-weight:600">#2.5次元 ・ 3時間前</small></div>
+            <svg class="ic ic-s" style="color:#C6C2DC"><use href="#i-sort"/></svg>
+          </div>
+          <div class="ph p-violet" style="height:250px;margin:0 0;position:relative">
+            <div class="pricepill" style="left:14px;bottom:14px"><div class="t"><b>アクスタ 2種</b><i>¥3,200</i></div><div class="dotbtn"><svg class="ic ic-xs"><use href="#i-bag"/></svg></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;padding:0 16px;color:var(--navy)">
+            <span style="display:flex;align-items:center;gap:5px"><svg class="ic" style="color:#FF6B9D"><use href="#i-heart-f"/></svg><b style="font-size:12.5px">342</b></span>
+            <span style="display:flex;align-items:center;gap:5px"><svg class="ic"><use href="#i-chat"/></svg><b style="font-size:12.5px">28</b></span>
+            <span style="margin-left:auto" class="chip">交換歓迎</span>
+          </div>
+          <p style="margin:0;padding:0 16px;font-size:12px;line-height:1.6;color:var(--ink-2)"><b style="color:var(--navy)">みお</b> 今回のブラインド、被り出たので譲れます🕊 コメントください〜</p>
+          <div class="fade-b"></div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab on"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
+        <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
+        <div class="tab hole">•</div>
+        <div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
+        <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
+        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#1c">1c</a>フォロー中フィード — 投稿に価格が付いた状態</figcaption>
+  </figure>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     02 推しを探す
+     ============================================================ -->
+<section class="sec" id="t2">
+  <div class="sec-head"><a class="sec-no" href="#t2">02</a><span class="sec-name">推しを探す(タブ2)</span></div>
+  <p class="sec-note">ワイヤーに無かった画面。タブバーの「推しを探す」導線を埋めるための検索・発見画面です。ジャンルチップ → 急上昇タグ → 2列グリッドの順。</p>
+  <div class="rack">
+
+  <figure class="frame" id="2s">
+    <div class="device"><div class="island"></div><div class="app">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="appbar-title">推しを探す</span><span class="appbar-act"><svg class="ic"><use href="#i-sort"/></svg></span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="padding-top:6px">
+          <div class="searchbar"><svg class="ic ic-s"><use href="#i-search"/></svg>アイテム・タグ・ユーザーを検索</div>
+          <div class="chiprail">
+            <span class="chip on">すべて</span><span class="chip">アクスタ</span><span class="chip">トレカ</span><span class="chip">缶バッジ</span><span class="chip">ペンライト</span>
+          </div>
+
+          <div class="h-sec">急上昇タグ <span class="spk">✦</span></div>
+          <div class="tagrail">
+            <div class="tg ph p-rose">#交換歓迎</div>
+            <div class="tg ph p-blue2">#推し色ブルー</div>
+            <div class="tg ph p-lav">#現場コーデ</div>
+            <div class="railnext"><svg class="ic ic-s"><use href="#i-chev"/></svg></div>
+          </div>
+
+          <div class="h-sec">おすすめの出品 <span class="spk">✦</span><span class="more">並び替え<svg class="ic ic-xs"><use href="#i-chev"/></svg></span></div>
+          <div class="masonry">
+            <div class="mcard"><div class="mth"><div class="ph p-blue" style="height:126px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥6,500</div></div><div class="cap"><b>痛バッグ・ブルー</b><p>ゆあ ・ 3分前</p></div></div>
+            <div class="mcard"><div class="mth"><div class="ph p-pink" style="height:126px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥2,200</div></div><div class="cap"><b>ペンライト</b><p>みお ・ 12分前</p></div></div>
+            <div class="mcard"><div class="mth"><div class="ph p-violet" style="height:110px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥3,200</div></div><div class="cap"><b>アクスタ A</b><p>りん ・ 1時間前</p></div></div>
+            <div class="mcard"><div class="mth"><div class="ph p-mint" style="height:110px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥800</div></div><div class="cap"><b>缶バッジ B</b><p>ここ ・ 2時間前</p></div></div>
+          </div>
+          <div class="fade-b"></div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
+        <div class="tab on"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
+        <div class="tab hole">•</div>
+        <div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
+        <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
+        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#2s">2s</a>推しを探す — 検索 / ジャンル / 急上昇タグ / グリッド</figcaption>
+  </figure>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     03 投稿作成
+     ============================================================ -->
+<section class="sec" id="t3">
+  <div class="sec-head"><a class="sec-no" href="#t3">03</a><span class="sec-name">投稿作成(写真選択 → 出品フォーム)</span></div>
+  <p class="sec-note">ワイヤー 2a〜2d。1枚の写真に対して複数の商品をぶら下げ、「投稿」と「出品」を同一フローで完了させます。CTA はグラデーション + キラキラで、SNS 投稿に近い高揚感を持たせています。</p>
+  <div class="rack">
+
+  <!-- 3a 写真を追加 -->
+  <figure class="frame" id="3a">
+    <div class="device"><div class="island"></div><div class="app">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="logo">OSHI MARKET</span><span class="appbar-act"><svg class="ic"><use href="#i-search"/></svg><span class="bell"><svg class="ic"><use href="#i-bell"/></svg><b></b></span></span></div>
+      <div class="scroll">
+        <div class="hero" style="opacity:.85"><h1>今日も推しが尊い。</h1><p>好きから、次の出会いへ</p></div>
+        <div class="scroll-inner" style="background:#fff;border-radius:22px 22px 0 0;padding:16px 0 0;margin-top:-8px">
+          <div class="h-sec">推し棚 <span class="spk">✦</span></div>
+          <div class="shelf">
+            <div class="tile ph p-blue"><svg class="ic" style="color:#fff"><use href="#i-heart"/></svg><span>ブルー担当</span></div>
+            <div class="tile ph p-violet"><svg class="ic" style="color:#fff"><use href="#i-mask"/></svg><span>2.5次元</span></div>
+            <div class="tile ph p-mint"><svg class="ic" style="color:#fff"><use href="#i-book"/></svg><span>少年漫画</span></div>
+            <div class="tile ph p-pink"><svg class="ic" style="color:#fff"><use href="#i-star"/></svg><span>K-POP</span></div>
+          </div>
+          <div class="h-sec">あなたへのおすすめ <span class="spk">✦</span></div>
+          <div class="feed"><div class="shot ph p-blue2" style="height:150px"></div></div>
+        </div>
+      </div>
+      <div class="tabbar"><div class="tab on"><svg class="ic"><use href="#i-home"/></svg>ホーム</div><div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div><div class="tab hole">•</div><div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div><div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div></div>
+      <div class="homebar"><i></i></div>
+
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="grab"></div>
+        <h3>写真を追加</h3>
+        <div class="sheet-opt"><svg class="ic"><use href="#i-camera"/></svg><div class="col">カメラを起動<span class="sub">その場で撮って投稿</span></div><svg class="ic ic-s chev"><use href="#i-chev"/></svg></div>
+        <div class="sheet-opt"><svg class="ic"><use href="#i-image"/></svg><div class="col">ファイルから選択<span class="sub">最大10枚まで</span></div><svg class="ic ic-s chev"><use href="#i-chev"/></svg></div>
+        <div class="cancel">キャンセル</div>
+        <div class="homebar" style="margin:-8px 0 -16px"><i></i></div>
+      </div>
+    </div></div>
+    <figcaption><a class="oid" href="#3a">3a</a>写真を追加(ボトムシート)</figcaption>
+  </figure>
+
+  <!-- 3b 新しい投稿 -->
+  <figure class="frame" id="3b">
+    <div class="device"><div class="island"></div><div class="app compose" style="background:#F8F6FC">
+      <div class="statusbar"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar plain"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">新しい投稿</span><span class="link-p">プレビュー</span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="padding-top:8px;gap:11px">
+
+          <div class="ph p-dusk" style="margin:0 16px;height:170px;border-radius:16px;box-shadow:var(--sh-card)">
+            <div style="position:absolute;right:11px;bottom:11px;z-index:4;background:#fff;border-radius:11px;padding:8px 13px;display:flex;align-items:center;gap:8px;box-shadow:0 3px 10px rgba(50,35,100,.18)">
+              <svg class="ic ic-s" style="color:var(--primary)"><use href="#i-image"/></svg><b style="font-size:13px;font-weight:800;color:var(--navy)">写真を追加</b>
+            </div>
+            <div style="position:absolute;left:11px;bottom:11px;z-index:4;display:flex;gap:4px">
+              <i style="width:6px;height:6px;border-radius:999px;background:#fff;display:block"></i>
+              <i style="width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.5);display:block"></i>
+              <i style="width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.5);display:block"></i>
+            </div>
+          </div>
+
+          <div class="card" style="display:flex;align-items:center;gap:12px;padding:8px 15px">
+            <div style="position:relative;flex:none">
+              <div class="av ph p-lav" style="width:34px;height:34px"></div>
+              <span style="position:absolute;right:-2px;bottom:-2px;width:17px;height:17px;border-radius:50%;background:var(--primary);border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff"><svg class="ic" style="width:9px;height:9px;stroke-width:3"><use href="#i-plus"/></svg></span>
+            </div>
+            <span style="font-size:13.5px;color:var(--muted);font-weight:500">今日の推し活をシェアしよう...</span>
+          </div>
+
+          <div class="card">
+            <div class="card-h"><svg class="ic ic-s"><use href="#i-bag"/></svg>販売する商品<div class="right"><div class="toggle"><i></i></div></div></div>
+            <div class="listrow rowline">
+              <div class="thumb ph p-blue2"></div>
+              <div class="nm"><b>痛バッグ</b><i>¥6,500</i></div>
+              <div class="iconbtn"><svg class="ic ic-s"><use href="#i-pencil"/></svg></div>
+            </div>
+            <div class="listrow rowline">
+              <div class="thumb ph p-sky"></div>
+              <div class="nm"><b>ペンライト</b><i>¥2,200</i></div>
+              <div class="iconbtn"><svg class="ic ic-s"><use href="#i-pencil"/></svg></div>
+            </div>
+            <div class="dashed" style="margin-top:12px"><svg class="ic ic-s"><use href="#i-plus"/></svg>商品を追加</div>
+          </div>
+
+          <div class="card" style="position:relative;overflow:hidden">
+            <span style="position:absolute;right:22px;top:11px;color:#D9CCF6;font-size:10px">✦</span>
+            <span style="position:absolute;right:12px;top:16px;color:#C6B4F1;font-size:13px">✧</span>
+            <div class="card-h"><svg class="ic ic-s"><use href="#i-badge"/></svg>投稿設定</div>
+            <div style="margin:0 12px 12px;border:1px solid var(--line);border-radius:12px;overflow:hidden">
+              <div class="settingrow"><svg class="ic ic-s"><use href="#i-tag"/></svg>タグ<div class="rt"><span class="chip">#現場コーデ</span><span class="chip">#推し色ブルー</span><svg class="ic ic-s" style="color:#C6C2DC"><use href="#i-chev"/></svg></div></div>
+              <div class="settingrow rowline"><svg class="ic ic-s"><use href="#i-globe"/></svg>公開範囲<div class="rt">すべての人<svg class="ic ic-s" style="color:#C6C2DC"><use href="#i-chev"/></svg></div></div>
+            </div>
+          </div>
+          <div style="height:8px"></div>
+        </div>
+        <div class="fade-b" style="height:44px"></div>
+      </div>
+      <div style="position:absolute;left:0;right:0;bottom:22px;z-index:15;padding:20px 0 0;background:linear-gradient(to top,#F8F6FC 58%,rgba(248,246,252,0))">
+        <div class="cta"><span class="s1">✦</span><span style="font-size:15px">✦</span>投稿して出品する<span class="s2">✧</span></div>
+        <div class="foot-note">商品が売れた後も投稿は残ります 💜</div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#3b">3b</a>新しい投稿 — 写真 + 商品 + タグ(カンプ準拠)</figcaption>
+  </figure>
+
+  <!-- 3c 商品を追加 -->
+  <figure class="frame" id="3c">
+    <div class="device"><div class="island"></div><div class="app" style="background:#F8F6FC">
+      <div class="statusbar"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar plain"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">新しい投稿</span><span class="link-p">プレビュー</span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="padding-top:8px;gap:12px">
+          <div class="ph p-dusk" style="margin:0 16px;height:200px;border-radius:16px"></div>
+          <div class="card">
+            <div class="card-h"><svg class="ic ic-s"><use href="#i-bag"/></svg>販売する商品<div class="right"><div class="toggle"><i></i></div></div></div>
+            <div class="listrow rowline"><div class="thumb ph p-blue2"></div><div class="nm"><b>痛バッグ</b><i>¥6,500</i></div><div class="iconbtn"><svg class="ic ic-s"><use href="#i-pencil"/></svg></div></div>
+            <div class="dashed" style="margin-top:12px"><svg class="ic ic-s"><use href="#i-plus"/></svg>商品を追加</div>
+          </div>
+        </div>
+      </div>
+      <div class="homebar"><i></i></div>
+
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="grab"></div>
+        <h3>商品を追加</h3>
+        <div class="sheet-opt"><svg class="ic"><use href="#i-box"/></svg><div class="col">持ち物から選ぶ<span class="sub">登録済み 24点</span></div><svg class="ic ic-s chev"><use href="#i-chev"/></svg></div>
+        <div class="sheet-opt"><svg class="ic"><use href="#i-pencil"/></svg><div class="col">新規で追加<span class="sub">写真・名前・価格を入力</span></div><svg class="ic ic-s chev"><use href="#i-chev"/></svg></div>
+        <div style="display:flex;gap:8px;padding:2px 2px 0;overflow:hidden">
+          <div style="flex:none;width:66px"><div class="ph p-violet" style="height:66px;border-radius:12px"></div><small style="display:block;font-size:10px;font-weight:700;color:var(--ink-2);margin-top:5px;text-align:center">アクスタA</small></div>
+          <div style="flex:none;width:66px"><div class="ph p-pink" style="height:66px;border-radius:12px"></div><small style="display:block;font-size:10px;font-weight:700;color:var(--ink-2);margin-top:5px;text-align:center">トレカC</small></div>
+          <div style="flex:none;width:66px"><div class="ph p-mint" style="height:66px;border-radius:12px"></div><small style="display:block;font-size:10px;font-weight:700;color:var(--ink-2);margin-top:5px;text-align:center">缶バッジB</small></div>
+          <div style="flex:none;width:66px"><div class="ph p-sky" style="height:66px;border-radius:12px"></div><small style="display:block;font-size:10px;font-weight:700;color:var(--ink-2);margin-top:5px;text-align:center">ペンライト</small></div>
+        </div>
+        <div class="cancel">キャンセル</div>
+        <div class="homebar" style="margin:-8px 0 -16px"><i></i></div>
+      </div>
+    </div></div>
+    <figcaption><a class="oid" href="#3c">3c</a>「商品を追加」— 持ち物のサムネイルも同時提示</figcaption>
+  </figure>
+
+  <!-- 3d 商品を編集 -->
+  <figure class="frame" id="3d">
+    <div class="device"><div class="island"></div><div class="app" style="background:#F8F6FC">
+      <div class="statusbar"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar plain"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">新しい投稿</span><span class="link-p">プレビュー</span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="padding-top:8px;gap:12px">
+          <div class="ph p-dusk" style="margin:0 16px;height:150px;border-radius:16px"></div>
+        </div>
+      </div>
+      <div class="homebar"><i></i></div>
+
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="grab"></div>
+        <h3>商品を編集</h3>
+        <div style="display:flex;align-items:center;gap:12px;padding:2px 0 6px">
+          <div class="ph p-blue2" style="width:64px;height:64px;border-radius:14px;flex:none"></div>
+          <div><b style="display:block;font-size:15px;font-weight:800;color:var(--navy)">痛バッグ</b><small style="font-size:11px;color:var(--muted);font-weight:600">現場コーデ ・ ブルー担当</small></div>
+          <div class="iconbtn" style="margin-left:auto"><svg class="ic ic-s"><use href="#i-image"/></svg></div>
+        </div>
+        <div class="field"><label>商品名</label><b>痛バッグ</b></div>
+        <div class="field"><label>価格</label><b>¥6,500</b></div>
+        <div>
+          <label style="display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.04em;margin:0 0 7px">状態</label>
+          <div style="display:flex;gap:7px"><span class="chip on">所有中</span><span class="chip o">出品する</span><span class="chip o">交換希望</span></div>
+        </div>
+        <div>
+          <label style="display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.04em;margin:0 0 7px">タグ</label>
+          <div style="display:flex;gap:7px;flex-wrap:wrap"><span class="chip">#A担</span><span class="chip">#現場コーデ</span><span class="chip">#限定</span><span class="chip o">＋</span></div>
+        </div>
+        <div class="btn-p" style="margin-top:2px">保存する</div>
+        <div class="btn-danger">この商品を削除</div>
+        <div class="homebar" style="margin:-8px 0 -16px"><i></i></div>
+      </div>
+    </div></div>
+    <figcaption><a class="oid" href="#3d">3d</a>「✎ 編集」— 名前 / 価格 / 状態 / タグ</figcaption>
+  </figure>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     04 トーク
+     ============================================================ -->
+<section class="sec" id="t4">
+  <div class="sec-head"><a class="sec-no" href="#t4">04</a><span class="sec-name">トーク(タブ4)</span></div>
+  <p class="sec-note">ワイヤーで欠番だった導線。取引と譲渡・交換のやり取りが同じ受信箱に並びます。行の右肩に取引ステータスを出し、「話しているだけ」と「お金が動いている」を見分けられるようにしています。</p>
+  <div class="rack">
+
+  <figure class="frame" id="4a">
+    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="appbar-title">トーク</span><span class="appbar-act"><svg class="ic"><use href="#i-search"/></svg></span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="gap:0">
+          <div class="tabs" style="margin-bottom:8px"><span class="on">すべて</span><span>取引中</span><span>交換</span><span>コメント</span></div>
+
+          <div class="talkrow">
+            <div class="av ph p-violet" style="width:46px;height:46px"></div>
+            <div class="tx"><b>みお ✧</b><p>アクスタの件、お譲りできます！住所を…</p></div>
+            <div class="rt"><small>9:12</small><span class="unread">2</span></div>
+          </div>
+          <div class="talkrow rowline">
+            <div class="av ph p-blue" style="width:46px;height:46px"></div>
+            <div class="tx"><b>りん 💙</b><p>痛バッグ、発送完了しました〜</p></div>
+            <div class="rt"><small>昨日</small><span class="chip mint" style="font-size:9.5px;padding:3px 7px">発送済</span></div>
+          </div>
+          <div class="talkrow rowline">
+            <div class="av ph p-pink" style="width:46px;height:46px"></div>
+            <div class="tx"><b>あお 🩷</b><p>交換の候補、この2点でどうでしょう？</p></div>
+            <div class="rt"><small>昨日</small><span class="chip" style="font-size:9.5px;padding:3px 7px">交換中</span></div>
+          </div>
+          <div class="talkrow rowline">
+            <div class="av ph p-mint" style="width:46px;height:46px"></div>
+            <div class="tx"><b>ここ 🌿</b><p>ペンライトまだ在庫ありますか？</p></div>
+            <div class="rt"><small>2日前</small></div>
+          </div>
+          <div class="talkrow rowline">
+            <div class="av ph p-cream" style="width:46px;height:46px"></div>
+            <div class="tx"><b>なな ✿</b><p>ありがとうございました！また買います🙌</p></div>
+            <div class="rt"><small>3日前</small><span class="chip o" style="font-size:9.5px;padding:3px 7px">完了</span></div>
+          </div>
+          <div class="talkrow rowline">
+            <div class="av ph p-sky" style="width:46px;height:46px"></div>
+            <div class="tx"><b>ゆき ❄</b><p>缶バッジのタグ、#限定 も付けてほしいです</p></div>
+            <div class="rt"><small>先週</small></div>
+          </div>
+          <div class="fade-b"></div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
+        <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
+        <div class="tab hole">•</div>
+        <div class="tab on"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
+        <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
+        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#4a">4a</a>トーク一覧 — 取引・交換・コメントを1つの受信箱に</figcaption>
+  </figure>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     05 資産ポートフォリオ
+     ============================================================ -->
+<section class="sec" id="t5">
+  <div class="sec-head"><a class="sec-no" href="#t5">05</a><span class="sec-name">資産ポートフォリオ(チャート)</span></div>
+  <p class="sec-note">ワイヤー 3a〜3c。「祭壇」に積み上がったグッズを時価で見せ、重複や非推しメンバー分を売却・継承の候補として抽出します。金融ダッシュボードの厳しさが出ないよう、ラインは紫、上昇はミント色で。</p>
+  <div class="rack">
+
+  <!-- 5a -->
+  <figure class="frame" id="5a">
+    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">祭壇の資産</span><span class="appbar-act"><svg class="ic"><use href="#i-refresh"/></svg></span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="gap:12px;padding-top:6px">
+          <div class="kpi">
+            <div class="lb">祭壇の時価総額</div>
+            <div class="val">¥312,800</div>
+            <div class="deltapill"><svg class="ic ic-xs"><use href="#i-trend"/></svg>+¥12,400 (今週)</div>
+          </div>
+
+          <svg viewBox="0 0 343 92" style="width:343px;height:92px;margin:0 16px;display:block">
+            <defs>
+              <linearGradient id="ln" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7B8EFE"/><stop offset="1" stop-color="#DA7ED2"/></linearGradient>
+              <linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A98BEE" stop-opacity=".28"/><stop offset="1" stop-color="#A98BEE" stop-opacity="0"/></linearGradient>
+            </defs>
+            <path d="M0 72 L37 64 L75 68 L112 46 L150 50 L187 30 L225 34 L262 14 L300 22 L337 9 L337 92 L0 92 Z" fill="url(#fl)"/>
+            <path d="M0 72 L37 64 L75 68 L112 46 L150 50 L187 30 L225 34 L262 14 L300 22 L337 9" fill="none" stroke="url(#ln)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="337" cy="9" r="4.5" fill="#fff" stroke="#DA7ED2" stroke-width="2.8"/>
+          </svg>
+          <div style="display:flex;gap:6px;padding:0 16px;justify-content:center">
+            <span class="chip o" style="font-size:10px">1M</span><span class="chip on" style="font-size:10px">6M</span><span class="chip o" style="font-size:10px">1Y</span><span class="chip o" style="font-size:10px">全期間</span>
+          </div>
+
+          <div class="grouphead">ブルー担当</div>
+          <div style="padding:0 6px">
+            <div class="listrow" style="padding:8px 10px"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-violet" style="width:38px;height:38px;border-radius:9px"></div><div class="nm"><b>アクスタ A</b><p>2点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 17 L11 10 L21 13 L31 6 L41 3" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥3,200</b></div>
+            <div class="listrow" style="padding:8px 10px"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-pink" style="width:38px;height:38px;border-radius:9px"></div><div class="nm"><b>トレカ C</b><p>1点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 15 L11 11 L21 5 L31 6 L41 2" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥5,400</b></div>
+          </div>
+
+          <div class="grouphead">2.5次元</div>
+          <div style="padding:0 6px">
+            <div class="listrow" style="padding:8px 10px"><div class="check"></div><div class="thumb ph p-mint" style="width:38px;height:38px;border-radius:9px"></div><div class="nm"><b>缶バッジ B</b><p>4点保有 ・ 重複3</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 5 L11 11 L21 8 L31 14 L41 17" fill="none" stroke="#EF88B4" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥800</b></div>
+          </div>
+
+          <div class="grouphead">現場コーデ</div>
+          <div style="padding:0 6px">
+            <div class="listrow" style="padding:8px 10px"><div class="check"></div><div class="thumb ph p-blue2" style="width:38px;height:38px;border-radius:9px"></div><div class="nm"><b>痛バッグ</b><p>1点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 15 L11 9 L21 11 L31 5 L41 4" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥6,500</b></div>
+          </div>
+        </div>
+        <div class="fade-b" style="height:40px"></div>
+      </div>
+      <div style="flex:none;padding:6px 0 0;background:linear-gradient(to top,#fff 62%,transparent)">
+        <div class="cta" style="height:52px;font-size:15px"><span class="s1">✦</span>選択した2点を売る(¥6,200)<span class="s2">✧</span></div>
+        <div class="foot-note">相場は直近30日の成約価格から算出しています</div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#5a">5a</a>ダッシュボード — 時価総額 / 推し別内訳 / まとめ売り</figcaption>
+  </figure>
+
+  <!-- 5b -->
+  <figure class="frame" id="5b">
+    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">祭壇の資産</span><span class="appbar-act"><svg class="ic"><use href="#i-refresh"/></svg></span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="gap:14px">
+          <div class="tabs"><span class="on">全体</span><span>アイテム別</span><span>推し別</span></div>
+          <div class="kpi" style="padding-top:0"><div class="val" style="font-size:30px">¥312,800</div><div class="deltapill"><svg class="ic ic-xs"><use href="#i-trend"/></svg>+120% (イベント後)</div></div>
+
+          <svg viewBox="0 0 343 128" style="width:343px;height:128px;margin:0 16px;display:block">
+            <defs><linearGradient id="fl2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A98BEE" stop-opacity=".26"/><stop offset="1" stop-color="#A98BEE" stop-opacity="0"/></linearGradient></defs>
+            <g stroke="#F1EDFA" stroke-width="1">
+              <line x1="0" y1="24" x2="343" y2="24"/><line x1="0" y1="56" x2="343" y2="56"/><line x1="0" y1="88" x2="343" y2="88"/>
+            </g>
+            <path d="M0 100 L49 92 L98 95 L147 82 L172 20 L196 76 L245 40 L294 30 L343 44 L343 128 L0 128 Z" fill="url(#fl2)"/>
+            <path d="M0 100 L49 92 L98 95 L147 82 L172 20 L196 76 L245 40 L294 30 L343 44" fill="none" stroke="url(#ln)" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+            <line x1="172" y1="4" x2="172" y2="124" stroke="#E28CC6" stroke-width="1.4" stroke-dasharray="4 4"/>
+            <circle cx="172" cy="20" r="5" fill="#fff" stroke="#E28CC6" stroke-width="2.8"/>
+            <text x="0" y="14" font-family="M PLUS Rounded 1c" font-size="9" font-weight="700" fill="#9A98B6">¥400k</text>
+          </svg>
+
+          <div class="card" style="padding:12px 14px;display:flex;align-items:flex-start;gap:10px;background:#FDF4FA;box-shadow:none;border:1px solid #F7E2F0">
+            <span style="width:9px;height:9px;border-radius:50%;background:#E28CC6;margin-top:4px;flex:none"></span>
+            <div><b style="display:block;font-size:12.5px;font-weight:800;color:#B84E8D">○○ 卒業発表 → 相場 +120%</b><p style="margin:4px 0 0;font-size:11px;line-height:1.6;color:var(--ink-2)">2月14日。関連アクスタ・トレカが急騰しました。売り時の通知を受け取りますか？</p></div>
+          </div>
+
+          <div class="h-sec" style="margin-top:2px">値上がりしたアイテム <span class="spk">✦</span></div>
+          <div style="padding:0 6px">
+            <div class="listrow" style="padding:8px 10px"><div class="thumb ph p-pink" style="width:40px;height:40px;border-radius:10px"></div><div class="nm"><b>トレカ C</b><p>取得 ¥1,800</p></div><span class="chip mint">+200%</span><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥5,400</b></div>
+            <div class="listrow" style="padding:8px 10px"><div class="thumb ph p-violet" style="width:40px;height:40px;border-radius:10px"></div><div class="nm"><b>アクスタ A</b><p>取得 ¥2,000</p></div><span class="chip mint">+60%</span><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥3,200</b></div>
+          </div>
+          <div style="padding:0 16px"><div class="btn-o">アイテム別を見る</div></div>
+          <div class="fade-b"></div>
+        </div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#5b">5b</a>タブ切替 — イベントで相場が動いた瞬間を可視化</figcaption>
+  </figure>
+
+  <!-- 5c -->
+  <figure class="frame" id="5c">
+    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">整理のおすすめ</span><span class="appbar-act"><svg class="ic"><use href="#i-sort"/></svg></span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="gap:14px;padding-top:6px">
+          <div class="assetbanner">
+            <div><div class="lb">合計</div><div class="val">¥312,800</div></div>
+            <div class="up">今週 +¥12,400</div>
+          </div>
+
+          <div class="h-sec">最近ふえた推し <span class="spk">✦</span></div>
+          <div class="shelf">
+            <div style="flex:none;width:92px"><div class="ph p-violet" style="height:92px;border-radius:14px"></div><b style="display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-top:6px">アクスタ A</b><small style="font-size:10px;color:var(--muted);font-weight:600">¥3,200</small></div>
+            <div style="flex:none;width:92px"><div class="ph p-pink" style="height:92px;border-radius:14px"></div><b style="display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-top:6px">トレカ C</b><small style="font-size:10px;color:var(--muted);font-weight:600">¥5,400</small></div>
+            <div style="flex:none;width:92px"><div class="ph p-blue2" style="height:92px;border-radius:14px"></div><b style="display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-top:6px">痛バッグ</b><small style="font-size:10px;color:var(--muted);font-weight:600">¥6,500</small></div>
+          </div>
+
+          <div class="h-sec" style="margin-top:4px">重複・非推しメンバー分 <span class="spk">✦</span></div>
+          <p style="margin:-6px 16px 0;font-size:11px;line-height:1.7;color:var(--ink-2)">同じものを2つ以上持っているアイテムと、推し登録していないメンバーのグッズです。</p>
+          <div class="card" style="padding:4px 0">
+            <div class="listrow"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-violet" style="width:42px;height:42px;border-radius:10px"></div><div class="nm"><b>アクスタ A</b><p>重複 2点</p></div><span class="chip">出品対象?</span></div>
+            <div class="listrow rowline"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-mint" style="width:42px;height:42px;border-radius:10px"></div><div class="nm"><b>缶バッジ B</b><p>非推しメンバー ・ 3点</p></div><span class="chip">出品対象?</span></div>
+            <div class="listrow rowline"><div class="check"></div><div class="thumb ph p-cream" style="width:42px;height:42px;border-radius:10px"></div><div class="nm"><b>ラバスト D</b><p>重複 2点</p></div><span class="chip">出品対象?</span></div>
+          </div>
+          <div class="fade-b" style="height:40px"></div>
+        </div>
+      </div>
+      <div style="flex:none;padding:6px 0 0;background:linear-gradient(to top,#fff 62%,transparent)">
+        <div class="cta" style="height:52px;font-size:15px"><span class="s1">✦</span>継承先を探す<span class="s2">✧</span></div>
+        <div class="foot-note">同じ推しを応援している人におすすめされます 💜</div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#5c">5c</a>整理のおすすめ — 重複・非推し分を継承候補に</figcaption>
+  </figure>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     06 マイページ
+     ============================================================ -->
+<section class="sec" id="t6">
+  <div class="sec-head"><a class="sec-no" href="#t6">06</a><span class="sec-name">マイページ(インスタ風プロフィール)</span></div>
+  <p class="sec-note">ワイヤー 5a〜5c。プロフィール、推しハイライト、資産サマリーの3案。投稿 / 出品中 / 資産 のタブで、SNS としての顔とマーケットとしての顔を切り替えます。</p>
+  <div class="rack">
+
+  <!-- 6a -->
+  <figure class="frame" id="6a">
+    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="appbar-title" style="font-size:16px">@oshikatsu_yuu</span><span class="appbar-act"><svg class="ic"><use href="#i-gear"/></svg><svg class="ic"><use href="#i-sort"/></svg></span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="gap:13px;padding-top:6px">
+          <div style="display:flex;align-items:center;gap:16px;padding:0 16px">
+            <div class="av ph p-lav" style="width:76px;height:76px;flex:none;box-shadow:0 0 0 3px #fff,0 0 0 5px #E9DEFB"></div>
+            <div class="stats">
+              <div><b>42</b><span>投稿</span></div><div><b>1,204</b><span>フォロワー</span></div><div><b>310</b><span>フォロー</span></div>
+            </div>
+          </div>
+          <div style="padding:0 16px">
+            <b style="display:block;font-size:13.5px;font-weight:800;color:var(--navy)">ゆあ 💙</b>
+            <p style="margin:4px 0 0;font-size:12px;line-height:1.7;color:var(--ink-2)">推し活記録 📷 / ブルー担当・2.5次元<br>現場コーデ多め ｜ 交換歓迎です</p>
+            <div style="display:flex;gap:6px;margin-top:9px"><span class="chip">#現場コーデ</span><span class="chip">#推し色ブルー</span><span class="chip">#交換歓迎</span></div>
+          </div>
+          <div style="display:flex;gap:8px;padding:0 16px">
+            <div class="btn-o" style="flex:1">プロフィール編集</div>
+            <div class="btn-o" style="width:52px;flex:none"><svg class="ic ic-s"><use href="#i-plus"/></svg></div>
+          </div>
+
+          <div class="tabs" style="justify-content:space-around;gap:0"><span class="on">投稿</span><span>出品中</span><span>資産</span></div>
+          <div class="grid3" style="margin-top:-2px">
+            <div class="cel ph p-blue2"></div><div class="cel ph p-violet"></div><div class="cel ph p-rose"></div>
+            <div class="cel ph p-lav"></div><div class="cel ph p-mint"></div><div class="cel ph p-sky"></div>
+            <div class="cel ph p-pink"></div><div class="cel ph p-dusk"></div><div class="cel ph p-cream"></div>
+          </div>
+          <div class="fade-b"></div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
+        <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
+        <div class="tab hole">•</div>
+        <div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
+        <div class="tab on"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
+        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#6a">6a</a>標準プロフィール + 投稿グリッド</figcaption>
+  </figure>
+
+  <!-- 6b -->
+  <figure class="frame" id="6b">
+    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="appbar-title" style="font-size:16px">@oshikatsu_yuu</span><span class="appbar-act"><svg class="ic"><use href="#i-gear"/></svg><svg class="ic"><use href="#i-sort"/></svg></span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="gap:13px;padding-top:6px">
+          <div style="display:flex;align-items:center;gap:16px;padding:0 16px">
+            <div class="av ph p-lav" style="width:76px;height:76px;flex:none;box-shadow:0 0 0 3px #fff,0 0 0 5px #E9DEFB"></div>
+            <div class="stats"><div><b>42</b><span>投稿</span></div><div><b>1,204</b><span>フォロワー</span></div><div><b>310</b><span>フォロー</span></div></div>
+          </div>
+          <div style="padding:0 16px"><b style="display:block;font-size:13.5px;font-weight:800;color:var(--navy)">ゆあ 💙</b><p style="margin:4px 0 0;font-size:12px;line-height:1.7;color:var(--ink-2)">推し活記録 📷 / ブルー担当・2.5次元</p></div>
+
+          <div class="h-sec" style="font-size:12.5px">推しハイライト <span class="spk">✦</span><span class="more">編集<svg class="ic ic-xs"><use href="#i-chev"/></svg></span></div>
+          <div class="hilite">
+            <div class="hl"><div class="ring"><div class="in ph p-blue"></div></div><small>ブルー担当</small></div>
+            <div class="hl"><div class="ring"><div class="in ph p-violet"></div></div><small>2.5次元</small></div>
+            <div class="hl"><div class="ring"><div class="in ph p-pink"></div></div><small>K-POP</small></div>
+            <div class="hl"><div class="ring"><div class="in ph p-mint"></div></div><small>少年漫画</small></div>
+            <div class="hl"><div class="ring" style="background:var(--line-2)"><div class="in" style="background:var(--primary-soft);display:flex;align-items:center;justify-content:center;color:var(--primary)"><svg class="ic ic-s"><use href="#i-plus"/></svg></div></div><small>追加</small></div>
+          </div>
+
+          <div class="tabs" style="justify-content:space-around;gap:0"><span class="on">投稿</span><span>出品中</span><span>資産</span></div>
+          <div class="grid3" style="margin-top:-2px">
+            <div class="cel ph p-violet"></div><div class="cel ph p-blue2"></div><div class="cel ph p-cream"></div>
+            <div class="cel ph p-rose"></div><div class="cel ph p-sky"></div><div class="cel ph p-mint"></div>
+            <div class="cel ph p-dusk"></div><div class="cel ph p-lav"></div><div class="cel ph p-pink"></div>
+          </div>
+          <div class="fade-b"></div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div><div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div><div class="tab hole">•</div><div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div><div class="tab on"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
+        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#6b">6b</a>推しハイライト付き — 担当ごとにストーリーを束ねる</figcaption>
+  </figure>
+
+  <!-- 6c -->
+  <figure class="frame" id="6c">
+    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
+      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
+      <div class="appbar"><span class="appbar-title" style="font-size:16px">@oshikatsu_yuu</span><span class="appbar-act"><svg class="ic"><use href="#i-gear"/></svg><svg class="ic"><use href="#i-sort"/></svg></span></div>
+      <div class="scroll">
+        <div class="scroll-inner" style="gap:13px;padding-top:6px">
+          <div style="display:flex;align-items:center;gap:16px;padding:0 16px">
+            <div class="av ph p-lav" style="width:76px;height:76px;flex:none;box-shadow:0 0 0 3px #fff,0 0 0 5px #E9DEFB"></div>
+            <div class="stats"><div><b>42</b><span>投稿</span></div><div><b>1,204</b><span>フォロワー</span></div><div><b>310</b><span>フォロー</span></div></div>
+          </div>
+
+          <div class="assetbanner">
+            <div><div class="lb">祭壇の資産価値</div><div class="val">¥312,800</div></div>
+            <div class="up">+¥12,400</div>
+          </div>
+
+          <div style="display:flex;gap:8px;padding:0 16px">
+            <div class="btn-o" style="flex:1">プロフィール編集</div>
+            <div class="btn-o" style="width:52px;flex:none"><svg class="ic ic-s"><use href="#i-gear"/></svg></div>
+          </div>
+
+          <div class="tabs" style="justify-content:space-around;gap:0"><span>投稿</span><span class="on">出品中</span><span>資産</span></div>
+
+          <div style="padding:0 6px">
+            <div class="listrow"><div class="thumb ph p-blue2"></div><div class="nm"><b>痛バッグ</b><p>3日前に出品 ・ いいね 42</p></div><div><b style="display:block;font-size:14px;font-weight:800;color:var(--navy);text-align:right">¥6,500</b><span class="chip mint" style="margin-top:4px;font-size:9.5px;padding:3px 7px">公開中</span></div></div>
+            <div class="listrow rowline"><div class="thumb ph p-sky"></div><div class="nm"><b>ペンライト</b><p>3日前に出品 ・ いいね 18</p></div><div><b style="display:block;font-size:14px;font-weight:800;color:var(--navy);text-align:right">¥2,200</b><span class="chip mint" style="margin-top:4px;font-size:9.5px;padding:3px 7px">公開中</span></div></div>
+            <div class="listrow rowline"><div class="thumb ph p-violet"></div><div class="nm"><b>アクスタ A</b><p>1週間前 ・ コメント 3</p></div><div><b style="display:block;font-size:14px;font-weight:800;color:var(--navy);text-align:right">¥3,200</b><span class="chip" style="margin-top:4px;font-size:9.5px;padding:3px 7px">取引中</span></div></div>
+            <div class="listrow rowline"><div class="thumb ph p-mint"></div><div class="nm"><b>缶バッジ B</b><p>2週間前</p></div><div><b style="display:block;font-size:14px;font-weight:800;color:var(--navy);text-align:right">¥800</b><span class="chip o" style="margin-top:4px;font-size:9.5px;padding:3px 7px">売却済</span></div></div>
+          </div>
+          <div class="fade-b"></div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div><div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div><div class="tab hole">•</div><div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div><div class="tab on"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
+        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div></div>
+    <figcaption><a class="oid" href="#6c">6c</a>資産サマリー先頭 + 出品中タブ</figcaption>
+  </figure>
+
+  </div>
+</section>
+
+</div>
+</body>
+</html>
