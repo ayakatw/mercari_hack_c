@@ -267,6 +267,11 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
 .compose .settingrow{padding:9px 14px}
 .compose .card{box-shadow:0 3px 14px rgba(122,95,214,.08)}
 
+/* ---------- 資産タブ(1画面に収める) ---------- */
+.assets .kpi .val{font-size:30px}
+.assets .kpi .deltapill{margin-top:5px}
+.assets .nm b{font-size:13px}
+
 /* ---------- charts ---------- */
 .kpi{text-align:center;padding:4px 0 0}
 .kpi .lb{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.04em}
@@ -286,19 +291,9 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
 .stats div span{font-size:10.5px;color:var(--muted);font-weight:600}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
 .grid3 .cel{aspect-ratio:1/1;position:relative}
-.hilite{display:flex;gap:13px;padding:0 16px;overflow:hidden}
-.hilite .hl{display:flex;flex-direction:column;align-items:center;gap:5px;flex:none;width:58px}
-.hilite .ring{width:56px;height:56px;border-radius:50%;padding:2.5px;background:linear-gradient(140deg,#B49BF2,#F49BCC)}
-.hilite .ring .in{width:100%;height:100%;border-radius:50%;border:2px solid #fff}
-.hilite small{font-size:9.5px;font-weight:700;color:var(--ink-2)}
-.assetbanner{margin:0 16px;border-radius:16px;background:var(--grad-asset);color:#fff;padding:13px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px rgba(150,110,220,.32)}
-.assetbanner .lb{font-size:10.5px;font-weight:700;opacity:.9}
-.assetbanner .val{font-size:21px;font-weight:800;letter-spacing:.01em}
-.assetbanner .up{margin-left:auto;text-align:right;font-size:11px;font-weight:800;background:rgba(255,255,255,.22);padding:6px 10px;border-radius:999px}
 
 /* ---------- search ---------- */
 .searchbar{margin:0 16px;height:42px;border-radius:999px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;gap:9px;padding:0 15px;color:var(--muted);font-size:13px;font-weight:500;box-shadow:var(--sh-card)}
-.chiprail{display:flex;gap:7px;padding:0 16px;overflow:hidden}
 .masonry{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px}
 .mcard{border-radius:14px;overflow:hidden;background:#fff;box-shadow:var(--sh-card)}
 .mcard .mth{position:relative}
@@ -307,15 +302,6 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
 .mcard .cap{padding:9px 10px 11px}
 .mcard .cap b{font-size:12px;font-weight:700;color:var(--navy);display:block}
 .mcard .cap p{margin:4px 0 0;font-size:10px;color:var(--muted);font-weight:600}
-
-/* ---------- talk ---------- */
-.talkrow{display:flex;align-items:center;gap:11px;padding:11px 16px}
-.talkrow .tx{flex:1;min-width:0}
-.talkrow .tx b{font-size:13.5px;font-weight:800;color:var(--navy)}
-.talkrow .tx p{margin:3px 0 0;font-size:11.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.talkrow .rt{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:none}
-.talkrow .rt small{font-size:10px;color:var(--muted);font-weight:600}
-.unread{min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--pink);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
 
 /* ---------- foundations ---------- */
 .tok{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
@@ -338,7 +324,6 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.4 12 3.6l8.5 6.8V19a1.6 1.6 0 0 1-1.6 1.6h-4.2v-5.7H9.3v5.7H5.1A1.6 1.6 0 0 1 3.5 19z"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.9"/><path d="M15.9 15.9 20.6 20.6"/></symbol>
   <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8.8a6 6 0 1 0-12 0c0 6.4-2.6 8-2.6 8h17.2S18 15.2 18 8.8z"/><path d="M13.7 20.3a2 2 0 0 1-3.4 0"/></symbol>
-  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20.5 11.6c0 4-3.8 7.2-8.5 7.2a10 10 0 0 1-2.6-.34L4.2 20.2l1.3-3.5A6.9 6.9 0 0 1 3.5 11.6c0-4 3.8-7.2 8.5-7.2s8.5 3.2 8.5 7.2z"/><circle cx="8.6" cy="11.6" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="11.6" r=".9" fill="currentColor" stroke="none"/><circle cx="15.4" cy="11.6" r=".9" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="4"/><path d="M4.6 20.4c.6-4 3.7-6.2 7.4-6.2s6.8 2.2 7.4 6.2"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></symbol>
   <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.3S3.6 15.5 3.6 9.7A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8.4 2.7c0 5.8-8.4 10.6-8.4 10.6z"/></symbol>
@@ -359,6 +344,7 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
   <symbol id="i-badge" viewBox="0 0 24 24"><path d="m12 3.2 2.2 1.7 2.8-.2 1 2.6 2.4 1.4-.8 2.7.8 2.7-2.4 1.4-1 2.6-2.8-.2L12 19.6l-2.2-1.7-2.8.2-1-2.6-2.4-1.4.8-2.7-.8-2.7 2.4-1.4 1-2.6 2.8.2z"/><path d="m8.9 11.9 2.2 2.2 4-4.4"/></symbol>
   <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.2" y="10.4" width="13.6" height="9.6" rx="2.4"/><path d="M8.4 10.4V7.8a3.6 3.6 0 0 1 7.2 0v2.6"/></symbol>
   <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.1"/><path d="M19.2 14.6a1.5 1.5 0 0 0 .3 1.6l.1.1a1.8 1.8 0 1 1-2.6 2.6l-.1-.1a1.5 1.5 0 0 0-2.5 1v.3a1.8 1.8 0 1 1-3.6 0v-.2a1.5 1.5 0 0 0-2.6-1l-.1.1a1.8 1.8 0 1 1-2.6-2.6l.1-.1a1.5 1.5 0 0 0-1-2.5H4.3a1.8 1.8 0 1 1 0-3.6h.2a1.5 1.5 0 0 0 1-2.6l-.1-.1A1.8 1.8 0 1 1 8 5l.1.1a1.5 1.5 0 0 0 2.5-1V3.8a1.8 1.8 0 1 1 3.6 0V4a1.5 1.5 0 0 0 2.6 1l.1-.1A1.8 1.8 0 1 1 19.5 7.5l-.1.1a1.5 1.5 0 0 0 1 2.5h.3a1.8 1.8 0 1 1 0 3.6h-.2a1.5 1.5 0 0 0-1.3 .9z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4.2 3.6v16.8h16.2"/><path d="m7.6 15.8 3.8-4.6 3 2.6 4.6-6.4"/></symbol>
   <symbol id="i-trend" viewBox="0 0 24 24"><path d="m3.6 16.6 5.2-5.4 3.6 3.2 8-8.2"/><path d="M15.6 6.2h4.8V11"/></symbol>
   <symbol id="i-sort" viewBox="0 0 24 24"><path d="M4.4 7h15.2M7 12h10M10 17h4"/></symbol>
   <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20.4 4.2v4.6h-4.6"/></symbol>
@@ -372,9 +358,9 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
 <header class="doc-head">
   <span class="doc-kicker">✦ HI-FI DESIGN &nbsp;/&nbsp; 推しかつSNS wireframe → design</span>
   <h1 class="doc-title">推しかつ / OSHI MARKET</h1>
-  <p class="doc-sub">ワイヤーフレームの全画面を、ビジュアルカンプの配色・書体・角丸・余白でそのまま高精細化したものです。抜けていた <b>推しを探す</b>・<b>トーク</b> を追加し、タブバーの5導線をすべて実画面で埋めています。写真は使わず、すべて CSS のグラデーションで再現しています。</p>
+  <p class="doc-sub">ワイヤーフレームを、ビジュアルカンプの配色・書体・角丸・余白でそのまま高精細化したものです。タブバーは <b>ホーム / 推しを探す / 投稿・出品 / 資産 / マイページ</b> の5導線で、それぞれ実画面が対応しています。写真は使わず、すべて CSS のグラデーションで再現しています。</p>
   <div class="doc-meta">
-    <span>375 × 812 (iPhone)</span><span>M PLUS Rounded 1c / Shippori Mincho B1</span><span>14 screens</span><span>画像アセット 0</span><span>単一HTML・依存なし</span>
+    <span>375 × 812 (iPhone)</span><span>M PLUS Rounded 1c / Shippori Mincho B1</span><span>8 screens</span><span>画像アセット 0</span><span>単一HTML・依存なし</span>
   </div>
 </header>
 
@@ -434,7 +420,7 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
      01 ホーム
      ============================================================ -->
 <section class="sec" id="t1">
-  <div class="sec-head"><a class="sec-no" href="#t1">01</a><span class="sec-name">トップ(インスタ風フィード)</span></div>
+  <div class="sec-head"><a class="sec-no" href="#t1">01</a><span class="sec-name">ホーム(タブ1)</span></div>
   <p class="sec-note">ワイヤー 1b。ヒーロー → 推し棚 → あなたへのおすすめ → いま盛り上がっているタグ の縦積み。おすすめカードは写真上に価格ピンを重ね、SNS の投稿とマーケットの出品を1枚に同居させています。</p>
   <div class="rack">
 
@@ -525,7 +511,7 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
         <div class="tab on"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
         <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
         <div class="tab hole">•</div>
-        <div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
+        <div class="tab"><svg class="ic"><use href="#i-chart"/></svg>資産</div>
         <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
         <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
       </div>
@@ -534,52 +520,6 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
     <figcaption><a class="oid" href="#1b">1b</a>ホーム — ヒーロー / 推し棚 / おすすめ / タグ</figcaption>
   </figure>
 
-  <figure class="frame" id="1c">
-    <div class="device"><div class="island"></div><div class="app">
-      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
-      <div class="appbar"><span class="logo">OSHI MARKET</span><span class="appbar-act"><svg class="ic"><use href="#i-search"/></svg><span class="bell"><svg class="ic"><use href="#i-bell"/></svg><b></b></span></span></div>
-      <div class="scroll" style="background:#fff">
-        <div class="scroll-inner" style="padding-top:12px">
-          <div class="h-sec">フォロー中 <span class="spk">✦</span><span class="more">すべて<svg class="ic ic-xs"><use href="#i-chev"/></svg></span></div>
-          <div class="hilite">
-            <div class="hl"><div class="ring"><div class="in ph p-violet"></div></div><small>みお</small></div>
-            <div class="hl"><div class="ring"><div class="in ph p-blue"></div></div><small>りん</small></div>
-            <div class="hl"><div class="ring"><div class="in ph p-pink"></div></div><small>あお</small></div>
-            <div class="hl"><div class="ring"><div class="in ph p-mint"></div></div><small>ここ</small></div>
-            <div class="hl"><div class="ring"><div class="in ph p-cream"></div></div><small>なな</small></div>
-          </div>
-
-          <div style="border-top:1px solid var(--line);margin:2px 0 0"></div>
-
-          <div style="display:flex;align-items:center;gap:9px;padding:0 16px">
-            <div class="av ph p-blue" style="width:36px;height:36px"></div>
-            <div style="flex:1"><b style="display:block;font-size:13px;font-weight:800;color:var(--navy)">みお ✧</b><small style="font-size:10.5px;color:var(--muted);font-weight:600">#2.5次元 ・ 3時間前</small></div>
-            <svg class="ic ic-s" style="color:#C6C2DC"><use href="#i-sort"/></svg>
-          </div>
-          <div class="ph p-violet" style="height:250px;margin:0 0;position:relative">
-            <div class="pricepill" style="left:14px;bottom:14px"><div class="t"><b>アクスタ 2種</b><i>¥3,200</i></div><div class="dotbtn"><svg class="ic ic-xs"><use href="#i-bag"/></svg></div></div>
-          </div>
-          <div style="display:flex;align-items:center;gap:16px;padding:0 16px;color:var(--navy)">
-            <span style="display:flex;align-items:center;gap:5px"><svg class="ic" style="color:#FF6B9D"><use href="#i-heart-f"/></svg><b style="font-size:12.5px">342</b></span>
-            <span style="display:flex;align-items:center;gap:5px"><svg class="ic"><use href="#i-chat"/></svg><b style="font-size:12.5px">28</b></span>
-            <span style="margin-left:auto" class="chip">交換歓迎</span>
-          </div>
-          <p style="margin:0;padding:0 16px;font-size:12px;line-height:1.6;color:var(--ink-2)"><b style="color:var(--navy)">みお</b> 今回のブラインド、被り出たので譲れます🕊 コメントください〜</p>
-          <div class="fade-b"></div>
-        </div>
-      </div>
-      <div class="tabbar">
-        <div class="tab on"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
-        <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
-        <div class="tab hole">•</div>
-        <div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
-        <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
-        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
-      </div>
-      <div class="homebar"><i></i></div>
-    </div></div>
-    <figcaption><a class="oid" href="#1c">1c</a>フォロー中フィード — 投稿に価格が付いた状態</figcaption>
-  </figure>
 
   </div>
 </section>
@@ -589,7 +529,7 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
      ============================================================ -->
 <section class="sec" id="t2">
   <div class="sec-head"><a class="sec-no" href="#t2">02</a><span class="sec-name">推しを探す(タブ2)</span></div>
-  <p class="sec-note">ワイヤーに無かった画面。タブバーの「推しを探す」導線を埋めるための検索・発見画面です。ジャンルチップ → 急上昇タグ → 2列グリッドの順。</p>
+  <p class="sec-note">ワイヤーに無かった画面。タブバーの「推しを探す」導線を埋めるための検索・発見画面です。絞り込みやランキングは置かず、検索バーのすぐ下から出品グリッドが始まる構成にしています。</p>
   <div class="rack">
 
   <figure class="frame" id="2s">
@@ -599,24 +539,15 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
       <div class="scroll">
         <div class="scroll-inner" style="padding-top:6px">
           <div class="searchbar"><svg class="ic ic-s"><use href="#i-search"/></svg>アイテム・タグ・ユーザーを検索</div>
-          <div class="chiprail">
-            <span class="chip on">すべて</span><span class="chip">アクスタ</span><span class="chip">トレカ</span><span class="chip">缶バッジ</span><span class="chip">ペンライト</span>
-          </div>
-
-          <div class="h-sec">急上昇タグ <span class="spk">✦</span></div>
-          <div class="tagrail">
-            <div class="tg ph p-rose">#交換歓迎</div>
-            <div class="tg ph p-blue2">#推し色ブルー</div>
-            <div class="tg ph p-lav">#現場コーデ</div>
-            <div class="railnext"><svg class="ic ic-s"><use href="#i-chev"/></svg></div>
-          </div>
-
-          <div class="h-sec">おすすめの出品 <span class="spk">✦</span><span class="more">並び替え<svg class="ic ic-xs"><use href="#i-chev"/></svg></span></div>
           <div class="masonry">
             <div class="mcard"><div class="mth"><div class="ph p-blue" style="height:126px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥6,500</div></div><div class="cap"><b>痛バッグ・ブルー</b><p>ゆあ ・ 3分前</p></div></div>
             <div class="mcard"><div class="mth"><div class="ph p-pink" style="height:126px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥2,200</div></div><div class="cap"><b>ペンライト</b><p>みお ・ 12分前</p></div></div>
             <div class="mcard"><div class="mth"><div class="ph p-violet" style="height:110px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥3,200</div></div><div class="cap"><b>アクスタ A</b><p>りん ・ 1時間前</p></div></div>
             <div class="mcard"><div class="mth"><div class="ph p-mint" style="height:110px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥800</div></div><div class="cap"><b>缶バッジ B</b><p>ここ ・ 2時間前</p></div></div>
+            <div class="mcard"><div class="mth"><div class="ph p-lav" style="height:120px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥1,800</div></div><div class="cap"><b>ラバスト D</b><p>なな ・ 4時間前</p></div></div>
+            <div class="mcard"><div class="mth"><div class="ph p-sky" style="height:120px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥4,400</div></div><div class="cap"><b>トレカ C</b><p>あお ・ 5時間前</p></div></div>
+            <div class="mcard"><div class="mth"><div class="ph p-rose" style="height:120px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥980</div></div><div class="cap"><b>アクリルキーホルダー</b><p>ゆき ・ 6時間前</p></div></div>
+            <div class="mcard"><div class="mth"><div class="ph p-dusk" style="height:120px"></div><div class="fv"><svg class="ic ic-xs"><use href="#i-heart"/></svg></div><div class="pv">¥12,000</div></div><div class="cap"><b>推し色ワンピース</b><p>みお ・ 昨日</p></div></div>
           </div>
           <div class="fade-b"></div>
         </div>
@@ -625,13 +556,13 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
         <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
         <div class="tab on"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
         <div class="tab hole">•</div>
-        <div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
+        <div class="tab"><svg class="ic"><use href="#i-chart"/></svg>資産</div>
         <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
         <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
       </div>
       <div class="homebar"><i></i></div>
     </div></div>
-    <figcaption><a class="oid" href="#2s">2s</a>推しを探す — 検索 / ジャンル / 急上昇タグ / グリッド</figcaption>
+    <figcaption><a class="oid" href="#2s">2s</a>推しを探す — 検索バー + 出品グリッド</figcaption>
   </figure>
 
   </div>
@@ -664,7 +595,7 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
           <div class="feed"><div class="shot ph p-blue2" style="height:150px"></div></div>
         </div>
       </div>
-      <div class="tabbar"><div class="tab on"><svg class="ic"><use href="#i-home"/></svg>ホーム</div><div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div><div class="tab hole">•</div><div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div><div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div></div>
+      <div class="tabbar"><div class="tab on"><svg class="ic"><use href="#i-home"/></svg>ホーム</div><div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div><div class="tab hole">•</div><div class="tab"><svg class="ic"><use href="#i-chart"/></svg>資産</div><div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div></div>
       <div class="homebar"><i></i></div>
 
       <div class="dim"></div>
@@ -822,100 +753,36 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
   </div>
 </section>
 
+
 <!-- ============================================================
-     04 トーク
+     04 資産
      ============================================================ -->
 <section class="sec" id="t4">
-  <div class="sec-head"><a class="sec-no" href="#t4">04</a><span class="sec-name">トーク(タブ4)</span></div>
-  <p class="sec-note">ワイヤーで欠番だった導線。取引と譲渡・交換のやり取りが同じ受信箱に並びます。行の右肩に取引ステータスを出し、「話しているだけ」と「お金が動いている」を見分けられるようにしています。</p>
-  <div class="rack">
-
-  <figure class="frame" id="4a">
-    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
-      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
-      <div class="appbar"><span class="appbar-title">トーク</span><span class="appbar-act"><svg class="ic"><use href="#i-search"/></svg></span></div>
-      <div class="scroll">
-        <div class="scroll-inner" style="gap:0">
-          <div class="tabs" style="margin-bottom:8px"><span class="on">すべて</span><span>取引中</span><span>交換</span><span>コメント</span></div>
-
-          <div class="talkrow">
-            <div class="av ph p-violet" style="width:46px;height:46px"></div>
-            <div class="tx"><b>みお ✧</b><p>アクスタの件、お譲りできます！住所を…</p></div>
-            <div class="rt"><small>9:12</small><span class="unread">2</span></div>
-          </div>
-          <div class="talkrow rowline">
-            <div class="av ph p-blue" style="width:46px;height:46px"></div>
-            <div class="tx"><b>りん 💙</b><p>痛バッグ、発送完了しました〜</p></div>
-            <div class="rt"><small>昨日</small><span class="chip mint" style="font-size:9.5px;padding:3px 7px">発送済</span></div>
-          </div>
-          <div class="talkrow rowline">
-            <div class="av ph p-pink" style="width:46px;height:46px"></div>
-            <div class="tx"><b>あお 🩷</b><p>交換の候補、この2点でどうでしょう？</p></div>
-            <div class="rt"><small>昨日</small><span class="chip" style="font-size:9.5px;padding:3px 7px">交換中</span></div>
-          </div>
-          <div class="talkrow rowline">
-            <div class="av ph p-mint" style="width:46px;height:46px"></div>
-            <div class="tx"><b>ここ 🌿</b><p>ペンライトまだ在庫ありますか？</p></div>
-            <div class="rt"><small>2日前</small></div>
-          </div>
-          <div class="talkrow rowline">
-            <div class="av ph p-cream" style="width:46px;height:46px"></div>
-            <div class="tx"><b>なな ✿</b><p>ありがとうございました！また買います🙌</p></div>
-            <div class="rt"><small>3日前</small><span class="chip o" style="font-size:9.5px;padding:3px 7px">完了</span></div>
-          </div>
-          <div class="talkrow rowline">
-            <div class="av ph p-sky" style="width:46px;height:46px"></div>
-            <div class="tx"><b>ゆき ❄</b><p>缶バッジのタグ、#限定 も付けてほしいです</p></div>
-            <div class="rt"><small>先週</small></div>
-          </div>
-          <div class="fade-b"></div>
-        </div>
-      </div>
-      <div class="tabbar">
-        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
-        <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
-        <div class="tab hole">•</div>
-        <div class="tab on"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
-        <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
-        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
-      </div>
-      <div class="homebar"><i></i></div>
-    </div></div>
-    <figcaption><a class="oid" href="#4a">4a</a>トーク一覧 — 取引・交換・コメントを1つの受信箱に</figcaption>
-  </figure>
-
-  </div>
-</section>
-
-<!-- ============================================================
-     05 資産ポートフォリオ
-     ============================================================ -->
-<section class="sec" id="t5">
-  <div class="sec-head"><a class="sec-no" href="#t5">05</a><span class="sec-name">資産ポートフォリオ(チャート)</span></div>
-  <p class="sec-note">ワイヤー 3a〜3c。「祭壇」に積み上がったグッズを時価で見せ、重複や非推しメンバー分を売却・継承の候補として抽出します。金融ダッシュボードの厳しさが出ないよう、ラインは紫、上昇はミント色で。</p>
+  <div class="sec-head"><a class="sec-no" href="#t4">04</a><span class="sec-name">資産(タブ4)</span></div>
+  <p class="sec-note">ワイヤー 3a。旧「トーク」の位置をこの画面に置き換えました。「祭壇」に積み上がったグッズを時価で見せ、チェックした重複分をそのまま まとめ売り に流せます。金融ダッシュボードの厳しさが出ないよう、ラインは紫、上昇はミント色で。</p>
   <div class="rack">
 
   <!-- 5a -->
   <figure class="frame" id="5a">
-    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
+    <div class="device"><div class="island"></div><div class="app assets" style="background:#fff">
       <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
-      <div class="appbar"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">祭壇の資産</span><span class="appbar-act"><svg class="ic"><use href="#i-refresh"/></svg></span></div>
+      <div class="appbar"><span class="appbar-title">資産</span><span class="appbar-act"><svg class="ic"><use href="#i-refresh"/></svg><svg class="ic"><use href="#i-sort"/></svg></span></div>
       <div class="scroll">
-        <div class="scroll-inner" style="gap:12px;padding-top:6px">
+        <div class="scroll-inner" style="gap:11px;padding-top:4px">
           <div class="kpi">
             <div class="lb">祭壇の時価総額</div>
             <div class="val">¥312,800</div>
             <div class="deltapill"><svg class="ic ic-xs"><use href="#i-trend"/></svg>+¥12,400 (今週)</div>
           </div>
 
-          <svg viewBox="0 0 343 92" style="width:343px;height:92px;margin:0 16px;display:block">
+          <svg viewBox="0 0 343 76" style="width:343px;height:76px;margin:0 16px;display:block">
             <defs>
               <linearGradient id="ln" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7B8EFE"/><stop offset="1" stop-color="#DA7ED2"/></linearGradient>
               <linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A98BEE" stop-opacity=".28"/><stop offset="1" stop-color="#A98BEE" stop-opacity="0"/></linearGradient>
             </defs>
-            <path d="M0 72 L37 64 L75 68 L112 46 L150 50 L187 30 L225 34 L262 14 L300 22 L337 9 L337 92 L0 92 Z" fill="url(#fl)"/>
-            <path d="M0 72 L37 64 L75 68 L112 46 L150 50 L187 30 L225 34 L262 14 L300 22 L337 9" fill="none" stroke="url(#ln)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="337" cy="9" r="4.5" fill="#fff" stroke="#DA7ED2" stroke-width="2.8"/>
+            <path d="M0 59 L37 53 L75 56 L112 38 L150 41 L187 25 L225 28 L262 12 L300 18 L337 8 L337 76 L0 76 Z" fill="url(#fl)"/>
+            <path d="M0 59 L37 53 L75 56 L112 38 L150 41 L187 25 L225 28 L262 12 L300 18 L337 8" fill="none" stroke="url(#ln)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="337" cy="8" r="4.5" fill="#fff" stroke="#DA7ED2" stroke-width="2.8"/>
           </svg>
           <div style="display:flex;gap:6px;padding:0 16px;justify-content:center">
             <span class="chip o" style="font-size:10px">1M</span><span class="chip on" style="font-size:10px">6M</span><span class="chip o" style="font-size:10px">1Y</span><span class="chip o" style="font-size:10px">全期間</span>
@@ -923,119 +790,49 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
 
           <div class="grouphead">ブルー担当</div>
           <div style="padding:0 6px">
-            <div class="listrow" style="padding:8px 10px"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-violet" style="width:38px;height:38px;border-radius:9px"></div><div class="nm"><b>アクスタ A</b><p>2点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 17 L11 10 L21 13 L31 6 L41 3" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥3,200</b></div>
-            <div class="listrow" style="padding:8px 10px"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-pink" style="width:38px;height:38px;border-radius:9px"></div><div class="nm"><b>トレカ C</b><p>1点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 15 L11 11 L21 5 L31 6 L41 2" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥5,400</b></div>
+            <div class="listrow" style="padding:7px 10px"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-violet" style="width:34px;height:34px;border-radius:8px"></div><div class="nm"><b>アクスタ A</b><p>2点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 17 L11 10 L21 13 L31 6 L41 3" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥3,200</b></div>
+            <div class="listrow" style="padding:7px 10px"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-pink" style="width:34px;height:34px;border-radius:8px"></div><div class="nm"><b>トレカ C</b><p>1点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 15 L11 11 L21 5 L31 6 L41 2" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥5,400</b></div>
           </div>
 
           <div class="grouphead">2.5次元</div>
           <div style="padding:0 6px">
-            <div class="listrow" style="padding:8px 10px"><div class="check"></div><div class="thumb ph p-mint" style="width:38px;height:38px;border-radius:9px"></div><div class="nm"><b>缶バッジ B</b><p>4点保有 ・ 重複3</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 5 L11 11 L21 8 L31 14 L41 17" fill="none" stroke="#EF88B4" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥800</b></div>
+            <div class="listrow" style="padding:7px 10px"><div class="check"></div><div class="thumb ph p-mint" style="width:34px;height:34px;border-radius:8px"></div><div class="nm"><b>缶バッジ B</b><p>4点保有 ・ 重複3</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 5 L11 11 L21 8 L31 14 L41 17" fill="none" stroke="#EF88B4" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥800</b></div>
           </div>
 
           <div class="grouphead">現場コーデ</div>
           <div style="padding:0 6px">
-            <div class="listrow" style="padding:8px 10px"><div class="check"></div><div class="thumb ph p-blue2" style="width:38px;height:38px;border-radius:9px"></div><div class="nm"><b>痛バッグ</b><p>1点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 15 L11 9 L21 11 L31 5 L41 4" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥6,500</b></div>
+            <div class="listrow" style="padding:7px 10px"><div class="check"></div><div class="thumb ph p-blue2" style="width:34px;height:34px;border-radius:8px"></div><div class="nm"><b>痛バッグ</b><p>1点保有</p></div><svg width="42" height="20" viewBox="0 0 42 20"><path d="M1 15 L11 9 L21 11 L31 5 L41 4" fill="none" stroke="#6FBFA8" stroke-width="2" stroke-linecap="round"/></svg><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥6,500</b></div>
           </div>
         </div>
-        <div class="fade-b" style="height:40px"></div>
       </div>
-      <div style="flex:none;padding:6px 0 0;background:linear-gradient(to top,#fff 62%,transparent)">
+      <div style="position:absolute;left:0;right:0;bottom:82px;z-index:15;padding:22px 0 0;background:linear-gradient(to top,#fff 56%,rgba(255,255,255,0))">
         <div class="cta" style="height:52px;font-size:15px"><span class="s1">✦</span>選択した2点を売る(¥6,200)<span class="s2">✧</span></div>
         <div class="foot-note">相場は直近30日の成約価格から算出しています</div>
       </div>
-      <div class="homebar"><i></i></div>
-    </div></div>
-    <figcaption><a class="oid" href="#5a">5a</a>ダッシュボード — 時価総額 / 推し別内訳 / まとめ売り</figcaption>
-  </figure>
-
-  <!-- 5b -->
-  <figure class="frame" id="5b">
-    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
-      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
-      <div class="appbar"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">祭壇の資産</span><span class="appbar-act"><svg class="ic"><use href="#i-refresh"/></svg></span></div>
-      <div class="scroll">
-        <div class="scroll-inner" style="gap:14px">
-          <div class="tabs"><span class="on">全体</span><span>アイテム別</span><span>推し別</span></div>
-          <div class="kpi" style="padding-top:0"><div class="val" style="font-size:30px">¥312,800</div><div class="deltapill"><svg class="ic ic-xs"><use href="#i-trend"/></svg>+120% (イベント後)</div></div>
-
-          <svg viewBox="0 0 343 128" style="width:343px;height:128px;margin:0 16px;display:block">
-            <defs><linearGradient id="fl2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A98BEE" stop-opacity=".26"/><stop offset="1" stop-color="#A98BEE" stop-opacity="0"/></linearGradient></defs>
-            <g stroke="#F1EDFA" stroke-width="1">
-              <line x1="0" y1="24" x2="343" y2="24"/><line x1="0" y1="56" x2="343" y2="56"/><line x1="0" y1="88" x2="343" y2="88"/>
-            </g>
-            <path d="M0 100 L49 92 L98 95 L147 82 L172 20 L196 76 L245 40 L294 30 L343 44 L343 128 L0 128 Z" fill="url(#fl2)"/>
-            <path d="M0 100 L49 92 L98 95 L147 82 L172 20 L196 76 L245 40 L294 30 L343 44" fill="none" stroke="url(#ln)" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
-            <line x1="172" y1="4" x2="172" y2="124" stroke="#E28CC6" stroke-width="1.4" stroke-dasharray="4 4"/>
-            <circle cx="172" cy="20" r="5" fill="#fff" stroke="#E28CC6" stroke-width="2.8"/>
-            <text x="0" y="14" font-family="M PLUS Rounded 1c" font-size="9" font-weight="700" fill="#9A98B6">¥400k</text>
-          </svg>
-
-          <div class="card" style="padding:12px 14px;display:flex;align-items:flex-start;gap:10px;background:#FDF4FA;box-shadow:none;border:1px solid #F7E2F0">
-            <span style="width:9px;height:9px;border-radius:50%;background:#E28CC6;margin-top:4px;flex:none"></span>
-            <div><b style="display:block;font-size:12.5px;font-weight:800;color:#B84E8D">○○ 卒業発表 → 相場 +120%</b><p style="margin:4px 0 0;font-size:11px;line-height:1.6;color:var(--ink-2)">2月14日。関連アクスタ・トレカが急騰しました。売り時の通知を受け取りますか？</p></div>
-          </div>
-
-          <div class="h-sec" style="margin-top:2px">値上がりしたアイテム <span class="spk">✦</span></div>
-          <div style="padding:0 6px">
-            <div class="listrow" style="padding:8px 10px"><div class="thumb ph p-pink" style="width:40px;height:40px;border-radius:10px"></div><div class="nm"><b>トレカ C</b><p>取得 ¥1,800</p></div><span class="chip mint">+200%</span><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥5,400</b></div>
-            <div class="listrow" style="padding:8px 10px"><div class="thumb ph p-violet" style="width:40px;height:40px;border-radius:10px"></div><div class="nm"><b>アクスタ A</b><p>取得 ¥2,000</p></div><span class="chip mint">+60%</span><b style="font-size:14px;font-weight:800;color:var(--navy);width:56px;text-align:right">¥3,200</b></div>
-          </div>
-          <div style="padding:0 16px"><div class="btn-o">アイテム別を見る</div></div>
-          <div class="fade-b"></div>
-        </div>
+      <div class="tabbar">
+        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
+        <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
+        <div class="tab hole">•</div>
+        <div class="tab on"><svg class="ic"><use href="#i-chart"/></svg>資産</div>
+        <div class="tab"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
+        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
       </div>
       <div class="homebar"><i></i></div>
     </div></div>
-    <figcaption><a class="oid" href="#5b">5b</a>タブ切替 — イベントで相場が動いた瞬間を可視化</figcaption>
+    <figcaption><a class="oid" href="#5a">5a</a>資産 — 時価総額 / 推し別内訳 / まとめ売り</figcaption>
   </figure>
 
-  <!-- 5c -->
-  <figure class="frame" id="5c">
-    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
-      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
-      <div class="appbar"><svg class="ic" style="stroke-width:2.4;color:var(--navy)"><use href="#i-chev-l"/></svg><span class="appbar-title">整理のおすすめ</span><span class="appbar-act"><svg class="ic"><use href="#i-sort"/></svg></span></div>
-      <div class="scroll">
-        <div class="scroll-inner" style="gap:14px;padding-top:6px">
-          <div class="assetbanner">
-            <div><div class="lb">合計</div><div class="val">¥312,800</div></div>
-            <div class="up">今週 +¥12,400</div>
-          </div>
 
-          <div class="h-sec">最近ふえた推し <span class="spk">✦</span></div>
-          <div class="shelf">
-            <div style="flex:none;width:92px"><div class="ph p-violet" style="height:92px;border-radius:14px"></div><b style="display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-top:6px">アクスタ A</b><small style="font-size:10px;color:var(--muted);font-weight:600">¥3,200</small></div>
-            <div style="flex:none;width:92px"><div class="ph p-pink" style="height:92px;border-radius:14px"></div><b style="display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-top:6px">トレカ C</b><small style="font-size:10px;color:var(--muted);font-weight:600">¥5,400</small></div>
-            <div style="flex:none;width:92px"><div class="ph p-blue2" style="height:92px;border-radius:14px"></div><b style="display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-top:6px">痛バッグ</b><small style="font-size:10px;color:var(--muted);font-weight:600">¥6,500</small></div>
-          </div>
-
-          <div class="h-sec" style="margin-top:4px">重複・非推しメンバー分 <span class="spk">✦</span></div>
-          <p style="margin:-6px 16px 0;font-size:11px;line-height:1.7;color:var(--ink-2)">同じものを2つ以上持っているアイテムと、推し登録していないメンバーのグッズです。</p>
-          <div class="card" style="padding:4px 0">
-            <div class="listrow"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-violet" style="width:42px;height:42px;border-radius:10px"></div><div class="nm"><b>アクスタ A</b><p>重複 2点</p></div><span class="chip">出品対象?</span></div>
-            <div class="listrow rowline"><div class="check on"><svg class="ic ic-xs"><use href="#i-check"/></svg></div><div class="thumb ph p-mint" style="width:42px;height:42px;border-radius:10px"></div><div class="nm"><b>缶バッジ B</b><p>非推しメンバー ・ 3点</p></div><span class="chip">出品対象?</span></div>
-            <div class="listrow rowline"><div class="check"></div><div class="thumb ph p-cream" style="width:42px;height:42px;border-radius:10px"></div><div class="nm"><b>ラバスト D</b><p>重複 2点</p></div><span class="chip">出品対象?</span></div>
-          </div>
-          <div class="fade-b" style="height:40px"></div>
-        </div>
-      </div>
-      <div style="flex:none;padding:6px 0 0;background:linear-gradient(to top,#fff 62%,transparent)">
-        <div class="cta" style="height:52px;font-size:15px"><span class="s1">✦</span>継承先を探す<span class="s2">✧</span></div>
-        <div class="foot-note">同じ推しを応援している人におすすめされます 💜</div>
-      </div>
-      <div class="homebar"><i></i></div>
-    </div></div>
-    <figcaption><a class="oid" href="#5c">5c</a>整理のおすすめ — 重複・非推し分を継承候補に</figcaption>
-  </figure>
 
   </div>
 </section>
 
 <!-- ============================================================
-     06 マイページ
+     05 マイページ
      ============================================================ -->
-<section class="sec" id="t6">
-  <div class="sec-head"><a class="sec-no" href="#t6">06</a><span class="sec-name">マイページ(インスタ風プロフィール)</span></div>
-  <p class="sec-note">ワイヤー 5a〜5c。プロフィール、推しハイライト、資産サマリーの3案。投稿 / 出品中 / 資産 のタブで、SNS としての顔とマーケットとしての顔を切り替えます。</p>
+<section class="sec" id="t5">
+  <div class="sec-head"><a class="sec-no" href="#t5">05</a><span class="sec-name">マイページ(タブ5)</span></div>
+  <p class="sec-note">ワイヤー 5a。プロフィール + 投稿グリッド。投稿 / 出品中 / 資産 のタブで、SNS としての顔とマーケットとしての顔を切り替えます。</p>
   <div class="rack">
 
   <!-- 6a -->
@@ -1074,96 +871,16 @@ figure.frame:target .oid{background:var(--primary);color:#fff;border-color:var(-
         <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div>
         <div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div>
         <div class="tab hole">•</div>
-        <div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div>
+        <div class="tab"><svg class="ic"><use href="#i-chart"/></svg>資産</div>
         <div class="tab on"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
         <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
       </div>
       <div class="homebar"><i></i></div>
     </div></div>
-    <figcaption><a class="oid" href="#6a">6a</a>標準プロフィール + 投稿グリッド</figcaption>
+    <figcaption><a class="oid" href="#6a">6a</a>マイページ — プロフィール + 投稿グリッド</figcaption>
   </figure>
 
-  <!-- 6b -->
-  <figure class="frame" id="6b">
-    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
-      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
-      <div class="appbar"><span class="appbar-title" style="font-size:16px">@oshikatsu_yuu</span><span class="appbar-act"><svg class="ic"><use href="#i-gear"/></svg><svg class="ic"><use href="#i-sort"/></svg></span></div>
-      <div class="scroll">
-        <div class="scroll-inner" style="gap:13px;padding-top:6px">
-          <div style="display:flex;align-items:center;gap:16px;padding:0 16px">
-            <div class="av ph p-lav" style="width:76px;height:76px;flex:none;box-shadow:0 0 0 3px #fff,0 0 0 5px #E9DEFB"></div>
-            <div class="stats"><div><b>42</b><span>投稿</span></div><div><b>1,204</b><span>フォロワー</span></div><div><b>310</b><span>フォロー</span></div></div>
-          </div>
-          <div style="padding:0 16px"><b style="display:block;font-size:13.5px;font-weight:800;color:var(--navy)">ゆあ 💙</b><p style="margin:4px 0 0;font-size:12px;line-height:1.7;color:var(--ink-2)">推し活記録 📷 / ブルー担当・2.5次元</p></div>
 
-          <div class="h-sec" style="font-size:12.5px">推しハイライト <span class="spk">✦</span><span class="more">編集<svg class="ic ic-xs"><use href="#i-chev"/></svg></span></div>
-          <div class="hilite">
-            <div class="hl"><div class="ring"><div class="in ph p-blue"></div></div><small>ブルー担当</small></div>
-            <div class="hl"><div class="ring"><div class="in ph p-violet"></div></div><small>2.5次元</small></div>
-            <div class="hl"><div class="ring"><div class="in ph p-pink"></div></div><small>K-POP</small></div>
-            <div class="hl"><div class="ring"><div class="in ph p-mint"></div></div><small>少年漫画</small></div>
-            <div class="hl"><div class="ring" style="background:var(--line-2)"><div class="in" style="background:var(--primary-soft);display:flex;align-items:center;justify-content:center;color:var(--primary)"><svg class="ic ic-s"><use href="#i-plus"/></svg></div></div><small>追加</small></div>
-          </div>
-
-          <div class="tabs" style="justify-content:space-around;gap:0"><span class="on">投稿</span><span>出品中</span><span>資産</span></div>
-          <div class="grid3" style="margin-top:-2px">
-            <div class="cel ph p-violet"></div><div class="cel ph p-blue2"></div><div class="cel ph p-cream"></div>
-            <div class="cel ph p-rose"></div><div class="cel ph p-sky"></div><div class="cel ph p-mint"></div>
-            <div class="cel ph p-dusk"></div><div class="cel ph p-lav"></div><div class="cel ph p-pink"></div>
-          </div>
-          <div class="fade-b"></div>
-        </div>
-      </div>
-      <div class="tabbar">
-        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div><div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div><div class="tab hole">•</div><div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div><div class="tab on"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
-        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
-      </div>
-      <div class="homebar"><i></i></div>
-    </div></div>
-    <figcaption><a class="oid" href="#6b">6b</a>推しハイライト付き — 担当ごとにストーリーを束ねる</figcaption>
-  </figure>
-
-  <!-- 6c -->
-  <figure class="frame" id="6c">
-    <div class="device"><div class="island"></div><div class="app" style="background:#fff">
-      <div class="statusbar" style="background:#fff"><span class="time">9:41</span><span class="sysic"><svg width="18" height="11" viewBox="0 0 20 12"><use href="#i-signal"/></svg><svg width="16" height="12" viewBox="0 0 18 13"><use href="#i-wifi"/></svg><svg width="25" height="12" viewBox="0 0 27 13"><use href="#i-battery"/></svg></span></div>
-      <div class="appbar"><span class="appbar-title" style="font-size:16px">@oshikatsu_yuu</span><span class="appbar-act"><svg class="ic"><use href="#i-gear"/></svg><svg class="ic"><use href="#i-sort"/></svg></span></div>
-      <div class="scroll">
-        <div class="scroll-inner" style="gap:13px;padding-top:6px">
-          <div style="display:flex;align-items:center;gap:16px;padding:0 16px">
-            <div class="av ph p-lav" style="width:76px;height:76px;flex:none;box-shadow:0 0 0 3px #fff,0 0 0 5px #E9DEFB"></div>
-            <div class="stats"><div><b>42</b><span>投稿</span></div><div><b>1,204</b><span>フォロワー</span></div><div><b>310</b><span>フォロー</span></div></div>
-          </div>
-
-          <div class="assetbanner">
-            <div><div class="lb">祭壇の資産価値</div><div class="val">¥312,800</div></div>
-            <div class="up">+¥12,400</div>
-          </div>
-
-          <div style="display:flex;gap:8px;padding:0 16px">
-            <div class="btn-o" style="flex:1">プロフィール編集</div>
-            <div class="btn-o" style="width:52px;flex:none"><svg class="ic ic-s"><use href="#i-gear"/></svg></div>
-          </div>
-
-          <div class="tabs" style="justify-content:space-around;gap:0"><span>投稿</span><span class="on">出品中</span><span>資産</span></div>
-
-          <div style="padding:0 6px">
-            <div class="listrow"><div class="thumb ph p-blue2"></div><div class="nm"><b>痛バッグ</b><p>3日前に出品 ・ いいね 42</p></div><div><b style="display:block;font-size:14px;font-weight:800;color:var(--navy);text-align:right">¥6,500</b><span class="chip mint" style="margin-top:4px;font-size:9.5px;padding:3px 7px">公開中</span></div></div>
-            <div class="listrow rowline"><div class="thumb ph p-sky"></div><div class="nm"><b>ペンライト</b><p>3日前に出品 ・ いいね 18</p></div><div><b style="display:block;font-size:14px;font-weight:800;color:var(--navy);text-align:right">¥2,200</b><span class="chip mint" style="margin-top:4px;font-size:9.5px;padding:3px 7px">公開中</span></div></div>
-            <div class="listrow rowline"><div class="thumb ph p-violet"></div><div class="nm"><b>アクスタ A</b><p>1週間前 ・ コメント 3</p></div><div><b style="display:block;font-size:14px;font-weight:800;color:var(--navy);text-align:right">¥3,200</b><span class="chip" style="margin-top:4px;font-size:9.5px;padding:3px 7px">取引中</span></div></div>
-            <div class="listrow rowline"><div class="thumb ph p-mint"></div><div class="nm"><b>缶バッジ B</b><p>2週間前</p></div><div><b style="display:block;font-size:14px;font-weight:800;color:var(--navy);text-align:right">¥800</b><span class="chip o" style="margin-top:4px;font-size:9.5px;padding:3px 7px">売却済</span></div></div>
-          </div>
-          <div class="fade-b"></div>
-        </div>
-      </div>
-      <div class="tabbar">
-        <div class="tab"><svg class="ic"><use href="#i-home"/></svg>ホーム</div><div class="tab"><svg class="ic"><use href="#i-search"/></svg>推しを探す</div><div class="tab hole">•</div><div class="tab"><svg class="ic"><use href="#i-chat"/></svg>トーク</div><div class="tab on"><svg class="ic"><use href="#i-user"/></svg>マイページ</div>
-        <div class="fab"><svg class="ic ic-s" style="stroke-width:2.6"><use href="#i-plus"/></svg><span>投稿・出品</span></div>
-      </div>
-      <div class="homebar"><i></i></div>
-    </div></div>
-    <figcaption><a class="oid" href="#6c">6c</a>資産サマリー先頭 + 出品中タブ</figcaption>
-  </figure>
 
   </div>
 </section>
