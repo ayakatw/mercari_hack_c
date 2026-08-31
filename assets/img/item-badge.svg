@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="title">
+  <title id="title">ステラ 缶バッジのプレースホルダ</title>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5d9ff"/><stop offset=".52" stop-color="#b6c9f5"/><stop offset="1" stop-color="#efc7e6"/></linearGradient><radialGradient id="pin"><stop stop-color="#f4eaff"/><stop offset=".64" stop-color="#ae94e2"/><stop offset="1" stop-color="#7768b4"/></radialGradient><filter id="sh"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#51417d" flood-opacity=".24"/></filter></defs>
+  <rect width="600" height="600" fill="url(#bg)"/><circle cx="300" cy="273" r="190" fill="#fff" opacity=".16"/>
+  <g filter="url(#sh)"><circle cx="300" cy="270" r="169" fill="url(#pin)" stroke="#fff" stroke-width="13"/><circle cx="300" cy="270" r="138" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="5"/><path d="M300 364s-102-55-102-127c0-56 76-73 102-24 27-49 102-32 102 24 0 72-102 127-102 127z" fill="#fff" opacity=".78"/><path d="M300 332s-67-37-67-84c0-36 50-47 67-15 18-32 67-21 67 15 0 47-67 84-67 84z" fill="#8b78ca"/></g>
+  <g fill="#fff" opacity=".8"><text x="76" y="104" font-size="38">✦</text><text x="485" y="156" font-size="28">✧</text></g>
+  <rect x="80" y="493" width="440" height="76" rx="38" fill="#fff" opacity=".91"/><text x="300" y="525" fill="#8776be" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle" letter-spacing="5">STELLA GOODS</text><text x="300" y="553" fill="#554a7d" font-family="sans-serif" font-size="23" font-weight="700" text-anchor="middle">缶バッジ</text>
+</svg>
