@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: oshikatsu-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: oshikatsu
+      POSTGRES_PASSWORD: oshikatsu
+      POSTGRES_DB: oshikatsu
+      TZ: UTC
+      PGTZ: UTC
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U oshikatsu -d oshikatsu']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+
+volumes:
+  postgres-data:
