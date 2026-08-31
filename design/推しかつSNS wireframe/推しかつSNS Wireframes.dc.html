@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yomogi&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f0eee9;font-family:'Yomogi',sans-serif;color:#1a1a1a}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 15px/1.2 'Yomogi',sans-serif;color:#1a1a1a}
+.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 12px/1.3 'Yomogi',sans-serif;color:rgba(0,0,0,.6)}
+.dv-card{max-width:100%;background:#fff;border:2.5px solid #1a1a1a;border-radius:26px;box-shadow:3px 4px 0 rgba(0,0,0,.12);overflow:hidden}
+.dv-opt:target .dv-oid{background:#ec3013;color:#fff}
+.dv-next{margin:22px 0 0;font:12px/1.5 'Yomogi',sans-serif;color:rgba(0,0,0,.55)}
+.phone{width:300px;padding:10px 9px 16px;display:flex;flex-direction:column;gap:8px}
+.notch{width:70px;height:6px;border-radius:4px;background:#1a1a1a;margin:0 auto 2px}
+.screen{border:2px dashed #1a1a1a;border-radius:12px;padding:9px;display:flex;flex-direction:column;gap:8px;min-height:560px;font-size:12px}
+.ph{background:repeating-linear-gradient(45deg,#eee,#eee 6px,#fff 6px,#fff 12px);border:2px solid #1a1a1a;border-radius:6px}
+.row{display:flex;align-items:center;gap:6px}
+.between{display:flex;align-items:center;justify-content:space-between}
+.chip{border:1.5px solid #1a1a1a;border-radius:20px;padding:3px 9px;font-size:10.5px;white-space:nowrap}
+.tagred{background:#ec3013;color:#fff;border:none;border-radius:5px;padding:2px 6px;font-size:9.5px;font-weight:700}
+.navbar{display:flex;justify-content:space-around;border-top:2px solid #1a1a1a;padding-top:6px;font-size:9px;text-align:center}
+.navitem{display:flex;flex-direction:column;align-items:center;gap:2px}
+.dot{width:8px;height:8px;border-radius:50%;border:1.5px solid #1a1a1a}
+.circle{border-radius:50%}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
+.btn-line{border:2px solid #1a1a1a;border-radius:8px;padding:6px;text-align:center;font-size:11px;font-weight:700}
+.btn-red{border:none;background:#ec3013;color:#fff;border-radius:8px;padding:8px;text-align:center;font-size:12px;font-weight:700}
+h4.scr{margin:0 0 2px;font-size:13px;text-align:center}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">トップ(インスタ風フィード)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1b"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>ホーム(バナー+推し棚+おすすめ)</div>
+<div class="dv-card"><div class="phone"><div class="notch"></div><div class="screen" style="overflow-y:auto">
+<div class="between"><b style="font-size:15px;letter-spacing:1px">推しかつ</b><div class="row" style="gap:6px"><div class="dot circle" style="width:18px;height:18px"></div><div class="dot circle" style="width:18px;height:18px"></div></div></div>
+<div class="ph" style="height:80px;position:relative;display:flex;flex-direction:column;justify-content:center;padding-left:10px">
+<b style="font-size:14px">今日も推しが尊い。</b><span style="font-size:9.5px">好きから、次の出会いへ</span>
+</div>
+<div style="font-size:11px;font-weight:700">あなたへのおすすめ</div>
+<div class="grid3">
+<div style="position:relative"><div class="ph" style="height:75px"></div><span class="tagred" style="position:absolute;bottom:3px;right:3px;font-size:8px">¥6,500</span></div>
+<div style="position:relative"><div class="ph" style="height:75px"></div><span class="tagred" style="position:absolute;bottom:3px;right:3px;font-size:8px">¥2,200</span></div>
+<div style="position:relative"><div class="ph" style="height:75px"></div><span class="tagred" style="position:absolute;bottom:3px;right:3px;font-size:8px">¥1,800</span></div>
+</div>
+<div style="font-size:11px;font-weight:700">いま盛り上がっているタグ</div>
+<div class="row" style="overflow:hidden">
+<div class="ph" style="width:70px;height:56px;flex:none;position:relative"><span class="tagred" style="position:absolute;bottom:3px;left:3px;font-size:8px">#現場コーデ</span></div>
+<div class="ph" style="width:70px;height:56px;flex:none;position:relative"><span class="tagred" style="position:absolute;bottom:3px;left:3px;font-size:8px">#推し色ブルー</span></div>
+<div class="ph" style="width:70px;height:56px;flex:none;position:relative"><span class="tagred" style="position:absolute;bottom:3px;left:3px;font-size:8px">#交換歓迎</span></div>
+</div>
+<div class="navbar">
+<div class="navitem"><div class="dot"></div>ホーム</div><div class="navitem"><div class="dot"></div>推しを探す</div>
+<div class="navitem"><div class="dot" style="background:#ec3013;border-color:#ec3013"></div>作成・出品</div>
+<div class="navitem"><div class="dot"></div>トーク</div><div class="navitem"><div class="dot"></div>マイページ</div>
+</div>
+</div></div></div>
+</div>
+
+</div>
+<p class="dv-next">次に試せそう: 「<a class="dv-oid" href="#1b">1b</a>のハイライトを推しグループごとに分ける」・「新しい方向性も見たい」</p>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">投稿作成(写真選択→出品フォーム)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a"><div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>写真選択(カメラ or ファイル)</div>
+<div class="dv-card"><div class="phone"><div class="notch"></div><div class="screen" style="justify-content:flex-end;background:#f6f5f2">
+<div style="flex:1"></div>
+<div style="border:2px solid #1a1a1a;border-radius:14px 14px 0 0;padding:14px;display:flex;flex-direction:column;gap:10px;background:#fff">
+<b style="text-align:center;font-size:12px">写真を追加</b>
+<div class="btn-line" style="text-align:left;padding:12px">📷 カメラを起動</div>
+<div class="btn-line" style="text-align:left;padding:12px">🖼 ファイルから選択</div>
+<div style="text-align:center;font-size:10px;color:rgba(0,0,0,.5)">キャンセル</div>
+</div>
+</div></div></div>
+</div>
+
+<div class="dv-opt" id="2b"><div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>新しい投稿(写真+商品+タグ)</div>
+<div class="dv-card"><div class="phone"><div class="notch"></div><div class="screen" style="overflow-y:auto">
+<div class="between"><span>‹</span><b style="font-size:12px">新しい投稿</b><span style="font-size:10px">プレビュー</span></div>
+<div class="ph" style="height:130px;position:relative">
+<span class="chip" style="position:absolute;bottom:6px;right:6px;background:#fff">🖼 写真を追加</span>
+</div>
+<div class="row" style="border:2px solid #1a1a1a;border-radius:10px;padding:8px;gap:6px">
+<div class="ph circle" style="width:26px;height:26px;flex:none"></div>
+<span style="font-size:10px;color:rgba(0,0,0,.45)">今日の推し活をシェアしよう...</span>
+</div>
+<div style="border:2px solid #1a1a1a;border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px">
+<div style="font-size:11px;font-weight:700">🛍 推し商品</div>
+<div class="row" style="gap:6px"><div class="ph" style="width:30px;height:30px;flex:none"></div><span style="flex:1;font-size:10.5px">痛バッグ <span style="color:rgba(0,0,0,.5)">×1</span></span><span class="tagred">所有中</span><span>✎</span></div>
+<div style="font-size:9px;color:rgba(0,0,0,.55);padding-left:36px">・A担 ・現場コーデ ・限定</div>
+<div class="row" style="gap:6px"><div class="ph" style="width:30px;height:30px;flex:none"></div><span style="flex:1;font-size:10.5px">ペンライト <span style="color:rgba(0,0,0,.5)">×1</span></span><span class="chip" style="padding:2px 6px;font-size:9px">新規</span><span>✎</span></div>
+<div style="font-size:9px;color:rgba(0,0,0,.55);padding-left:36px">・B担 ・応援グッズ</div>
+<div class="btn-line" style="border-style:dashed">+ 商品を追加</div>
+</div>
+<div style="flex:1"></div>
+<div class="btn-red">投稿して出品する</div>
+<div style="text-align:center;font-size:9px;color:rgba(0,0,0,.5)">商品が売れた後も投稿は残ります</div>
+</div></div></div>
+</div>
+
+<div class="dv-opt" id="2c"><div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>「商品を追加」モーダル</div>
+<div class="dv-card"><div class="phone"><div class="notch"></div><div class="screen" style="justify-content:flex-end;background:rgba(0,0,0,.15)">
+<div style="flex:1"></div>
+<div style="border:2px solid #1a1a1a;border-radius:14px 14px 0 0;padding:14px;display:flex;flex-direction:column;gap:10px;background:#fff">
+<b style="text-align:center;font-size:12px">商品を追加</b>
+<div class="btn-line" style="text-align:left;padding:12px">📦 持ち物から選ぶ(既存の商品)</div>
+<div class="btn-line" style="text-align:left;padding:12px">✎ 新規で追加</div>
+<div style="text-align:center;font-size:10px;color:rgba(0,0,0,.5)">キャンセル</div>
+</div>
+</div></div></div>
+</div>
+
+<div class="dv-opt" id="2d"><div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>「✎ 編集」モーダル</div>
+<div class="dv-card"><div class="phone"><div class="notch"></div><div class="screen" style="justify-content:flex-end;background:rgba(0,0,0,.15)">
+<div style="flex:1"></div>
+<div style="border:2px solid #1a1a1a;border-radius:14px 14px 0 0;padding:14px;display:flex;flex-direction:column;gap:10px;background:#fff">
+<b style="text-align:center;font-size:12px">商品を編集</b>
+<div class="row" style="gap:8px"><div class="ph" style="width:44px;height:44px;flex:none"></div><b style="font-size:12px">痛バッグ</b></div>
+<div class="chip" style="text-align:left">名前: 痛バッグ</div>
+<div class="row" style="gap:8px;font-size:10.5px"><span>状態:</span><span class="tagred">所有中</span><span class="chip" style="padding:2px 6px;font-size:9px">新規</span></div>
+<div class="chip" style="text-align:left">写真を変更</div>
+<div class="btn-red">保存</div>
+<div class="btn-line" style="color:#ec3013;border-color:#ec3013">この商品を削除</div>
+</div>
+</div></div></div>
+</div>
+
+</div>
+<p class="dv-next">次に試せそう: 「<a class="dv-oid" href="#2d">2d</a>の状態タグを切り替え可能にする」・「<a class="dv-oid" href="#2c">2c</a>の持ち物リストの中身も見せる」・「新しい方向性も見たい」</p>
+</section>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">資産ポートフォリオ(チャート)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="3a"><div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>ダッシュボード1画面</div>
+<div class="dv-card"><div class="phone"><div class="notch"></div><div class="screen">
+<div style="text-align:center"><span style="font-size:10px;color:rgba(0,0,0,.55)">祭壇の時価総額</span><div style="font-size:24px;font-weight:700">¥312,800</div><span class="tagred">+¥12,400 (今週)</span></div>
+<svg viewBox="0 0 260 60" style="width:100%;height:60px"><polyline points="0,45 30,40 60,42 90,30 120,32 150,20 180,22 210,10 240,15 260,8" fill="none" stroke="#ec3013" stroke-width="2.5"></polyline></svg>
+<div style="font-size:10px;font-weight:700;border-bottom:1.5px solid #1a1a1a;padding-bottom:2px">・A担</div>
+<div class="row"><div class="dot" style="border-radius:3px"></div><div class="ph" style="width:28px;height:28px"></div><span style="flex:1">アクスタA</span><svg width="30" height="16"><polyline points="0,14 10,8 20,10 30,3" fill="none" stroke="#1a1a1a" stroke-width="1.5"></polyline></svg><b>¥3,200</b></div>
+<div class="row"><div class="dot" style="border-radius:3px;background:#ec3013;border-color:#ec3013"></div><div class="ph" style="width:28px;height:28px"></div><span style="flex:1">トレカC</span><svg width="30" height="16"><polyline points="0,12 10,9 20,4 30,2" fill="none" stroke="#1a1a1a" stroke-width="1.5"></polyline></svg><b>¥5,400</b></div>
+<div style="font-size:10px;font-weight:700;border-bottom:1.5px solid #1a1a1a;padding-bottom:2px">・B担</div>
+<div class="row"><div class="dot" style="border-radius:3px;background:#ec3013;border-color:#ec3013"></div><div class="ph" style="width:28px;height:28px"></div><span style="flex:1">缶バッジB</span><svg width="30" height="16"><polyline points="0,4 10,10 20,6 30,13" fill="none" stroke="#ec3013" stroke-width="1.5"></polyline></svg><b>¥800</b></div>
+<div style="font-size:10px;font-weight:700;border-bottom:1.5px solid #1a1a1a;padding-bottom:2px">・現場コーデ</div>
+<div class="row"><div class="dot" style="border-radius:3px"></div><div class="ph" style="width:28px;height:28px"></div><span style="flex:1">痛バッグ</span><svg width="30" height="16"><polyline points="0,12 10,7 20,9 30,4" fill="none" stroke="#1a1a1a" stroke-width="1.5"></polyline></svg><b>¥6,500</b></div>
+<div style="flex:1"></div>
+<div class="btn-red">選択した2点を売る(¥6,200)</div>
+</div></div></div>
+</div>
+
+
+
+
+
+</div>
+<p class="dv-next">次に試せそう: 「<a class="dv-oid" href="#3a">3a</a>にアイテム詳細タップの画面を追加」・「<a class="dv-oid" href="#3b">3b</a>のイベント通知を一覧化」・「新しい方向性も見たい」</p>
+</section>
+
+<section class="dv-turn" id="t5">
+<div class="dv-thd"><a class="dv-tid" href="#t5">5</a><span class="dv-tname">マイページ(インスタ風プロフィール)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="5a"><div class="dv-olabel"><a class="dv-oid" href="#5a">5a</a>標準プロフィール+投稿グリッド</div>
+<div class="dv-card"><div class="phone"><div class="notch"></div><div class="screen">
+<div class="between"><b style="font-size:14px">@oshikatsu_yuu</b><span>☰</span></div>
+<div class="row" style="gap:14px">
+<div class="ph circle" style="width:64px;height:64px;flex:none"></div>
+<div class="row" style="flex:1;justify-content:space-around;text-align:center;font-size:11px">
+<div><b>42</b><br>投稿</div><div><b>1,204</b><br>フォロワー</div><div><b>310</b><br>フォロー</div>
+</div>
+</div>
+<div style="font-size:10.5px;line-height:1.5">推し活記録📷 / A担・B担<br></div>
+<div class="row" style="gap:6px"><div class="btn-line" style="flex:1;padding:6px">プロフィール編集</div><div class="btn-line" style="padding:6px 10px">⚙</div></div>
+<div class="row" style="justify-content:center;gap:20px;border-top:2px solid #1a1a1a;padding-top:6px;font-size:10px">
+<b style="border-bottom:2px solid #ec3013;padding-bottom:2px">投稿</b><span>出品中</span><span>資産</span>
+</div>
+<div class="grid3">
+<div class="ph" style="height:75px"></div><div class="ph" style="height:75px"></div><div class="ph" style="height:75px"></div>
+<div class="ph" style="height:75px"></div><div class="ph" style="height:75px"></div><div class="ph" style="height:75px"></div>
+<div class="ph" style="height:75px"></div><div class="ph" style="height:75px"></div><div class="ph" style="height:75px"></div>
+</div>
+</div></div></div>
+</div>
+
+<div class="dv-opt" id="5b">
+
+</div>
+
+<div class="dv-opt" id="5c">
+
+</div>
+
+</div>
+<p class="dv-next">次に試せそう: 「<a class="dv-oid" href="#5a">5a</a>の投稿グリッドをタップした詳細を追加」・「<a class="dv-oid" href="#5b">5b</a>のハイライトを編集可能に」・「新しい方向性も見たい」</p>
+</section>
+
+</x-dc>
+</body>
+</html>
