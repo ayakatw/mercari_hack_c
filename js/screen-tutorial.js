@@ -131,11 +131,8 @@
         var estimated = Theme.find(Theme.DEFAULT_THEME);
         return [
             '<section class="tutorial-screen tutorial-review">',
-            '<header class="review-head"><div><span>7件を認識しました ✦</span><h1>個数を確認してください</h1></div><div class="ai-badge">AI</div></header>',
-            backButton('capture'),
-            '<div class="review-hint" role="button" tabindex="0" data-apply-estimated-theme aria-label="AI推定の推しカラー「' +
-                estimated.name +
-                '」を適用"><span>🎨</span><p>祭壇の色味から、あなたの推しカラーは<strong>' +
+            '<header class="review-head"><div><span>7件を認識しました ✦</span><h1>個数を確認してください</h1></div></header>',
+            '<div class="review-hint"><span>🎨</span><p>祭壇の色味から、あなたの推しカラーは<strong>' +
                 estimated.hue +
                 '「' +
                 estimated.name +
