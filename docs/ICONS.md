@@ -21,12 +21,14 @@ Ionicons は **MIT License**（Copyright (c) 2015-present Ionic, http://ionic.io
 
 **タブバーの 5 つだけ。** 定義は `js/router.js` の `ICONS`、描画は同ファイルの `icon(name, solid)`。
 
+`ICONS` のキーは Ionicons 名に合わせてあり、ルート名（`assets` など）とは独立している。`tabButton(route, iconName, label, current)` の第 2 引数で紐づける。
+
 | タブ | Ionicons 名 | 非アクティブ | アクティブ |
 | --- | --- | --- | --- |
 | ホーム | `home` | `home-outline` | `home`（塗り） |
 | 探す | `search` | `search-outline` | `search`（塗り） |
 | 投稿 | `add` | `add` | 同じ（丸ボタンの中身） |
-| 資産 | `stats-chart` | `stats-chart-outline` | `stats-chart`（塗り） |
+| グッズ | `cube` | `cube-outline` | `cube`（塗り） |
 | マイページ | `person` | `person-outline` | `person`（塗り） |
 
 **非アクティブ = outline / アクティブ = solid** は Ionicons 本来の使い分け。`tabButton()` が `is-active` と同じ判定で出し分ける。

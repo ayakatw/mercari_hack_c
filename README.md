@@ -54,18 +54,18 @@ npm start
 `[req] POST /api/analyze` と `[analyze] ...`。何も出ないならブラウザがこのサーバを見ていない。**
 
 リロードすると**必ずチュートリアルの最初から**始まる（状態を永続化していない）。
-チュートリアルは「ステラ 缶バッジ」を 2 個にしないと先へ進めない（合計 ¥81,000 が条件）。
+チュートリアルは「ステラ 缶バッジ」を 2 個にしないと先へ進めない（他のグッズは 1 個のままにする）。
 開発中はこれを飛ばせる:
 
 ```
 http://localhost:3000/?screen=post      # 投稿画面から。チュートリアル済みの状態になる
-http://localhost:3000/?screen=assets    # 資産タブから
+http://localhost:3000/?screen=goods     # グッズ一覧タブから
 ```
 
 DevTools の Console からも操作できる:
 
 ```js
-AppState.setRoute('assets')              // 資産タブへ
+AppState.setRoute('goods')               // グッズ一覧タブへ
 AppState.prepareListing('stella-acsta')  // 出品モックへ
 AppState.getState()                      // 現在の状態を確認
 ```

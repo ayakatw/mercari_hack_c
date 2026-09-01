@@ -32,8 +32,8 @@ description: Use when implementing a new feature or screen in the 推しポー�
 | --- | --- |
 | 新しい画面 | `js/screen-mypage.js`（最も小さい。render + bind の最小形） |
 | 多段階フロー（stage で分岐） | `js/screen-post.js` / `js/screen-tutorial.js` |
-| モーダル | `js/screen-assets.js` の `detailModal` と bind のオーバーレイ処理 |
-| チャート描画 | `js/screen-assets.js` の `afterRender`（**`render` ではなく `afterRender`**） |
+| モーダル | `js/screen-mypage.js` の `shrineModal` と bind のオーバーレイ処理 |
+| 一覧の行 | `js/screen-goods.js` の `goodsRow`（金額の出し分けはここ） |
 | 状態の追加 | `js/state.js` の `state` オブジェクトとミューテータ群 |
 
 ### 3. 実装計画を立てる
@@ -80,8 +80,8 @@ npm start                     # → http://localhost:3000
 ブラウザでは次を必ず見る。
 
 1. 作った画面が表示され、置いたボタンが反応するか
-2. **デモの核が壊れていないか**: 投稿タブ → 画像選択 → 投稿 → 「2個目を検出」通知 → 出品ドラフト → 出品する → 資産タブに「出品中」バッジ
-3. 資産タブの総額が仕様どおりか（チュートリアル後 ¥81,000 → 投稿後 ¥84,200）
+2. **デモの核が壊れていないか**: 投稿タブ → 画像選択 → 投稿 → 「2個目を検出」通知 → 継承ドラフト → 出品する → グッズ一覧に「出品中」バッジ
+3. グッズ一覧の点数が仕様どおりか（チュートリアル後 8 点 → 投稿後 9 点）
 4. DevTools の Console にエラーが出ていないか
 
 リロードすると必ずチュートリアルから始まる。特定画面へ飛ぶには Console で `AppState.setRoute('assets')`。

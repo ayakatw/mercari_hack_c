@@ -1,5 +1,5 @@
 (function (global) {
-    'use strict';
+  'use strict';
 
     // 確定前のステップ後退用。state.tutorial.stage を汚さずに表示だけ戻す。
     var localStage = null;
@@ -16,7 +16,7 @@
         );
     }
 
-    function progress(active) {
+  function progress(active) {
         return (
             '<div class="tutorial-progress" aria-label="チュートリアル ' +
             active +
@@ -28,72 +28,58 @@
             (active >= 3 ? 'on' : '') +
             '"></i></div>'
         );
-    }
+  }
 
-    function renderWelcome() {
-        return [
-            '<section class="tutorial-screen tutorial-welcome">',
-            '<div class="welcome-sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>⋆</span><span>✦</span></div>',
-            '<div class="welcome-logo">推しポート <b>✦</b></div>',
-            '<div class="welcome-visual"><div class="orb orb-one"></div><div class="orb orb-two"></div><img src="assets/img/saidan.png" alt="ステライトの祭壇"></div>',
-            '<div class="welcome-copy"><span class="mini-pill">推し活が資産になるSNS</span><h1>その祭壇、<br><em>いくら</em>か知ってる?</h1><p>投稿するだけで、あなたの「好き」が<br>ポートフォリオになります。</p></div>',
-            '<button type="button" class="primary-button tutorial-cta" data-start-tutorial>はじめる <span>›</span></button>',
-            progress(1),
+  function renderWelcome() {
+    return [
+      '<section class="tutorial-screen tutorial-welcome">',
+        '<div class="welcome-sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>⋆</span><span>✦</span></div>',
+        '<div class="welcome-logo">推しポート <b>✦</b></div>',
+        '<div class="welcome-visual"><div class="orb orb-one"></div><div class="orb orb-two"></div><img src="assets/img/saidan.png" alt="ステライトの祭壇"></div>',
+        '<div class="welcome-copy"><span class="mini-pill">推し活が資産になるSNS</span><h1>その祭壇、<br><em>ちゃんと</em>記録してる?</h1><p>投稿するだけで、あなたの「好き」が<br>ポートフォリオになります。</p></div>',
+        '<button type="button" class="primary-button tutorial-cta" data-start-tutorial>はじめる <span>›</span></button>',
+        progress(1),
             '</section>',
-        ].join('');
-    }
+    ].join('');
+  }
 
-    function renderCapture() {
-        return [
-            '<section class="tutorial-screen tutorial-capture">',
+  function renderCapture() {
+    return [
+      '<section class="tutorial-screen tutorial-capture">',
             '<header class="tutorial-head"><span>STEP 2</span><h1>この祭壇を送信しますか？</h1><p>全体画像を確認してから送信してください</p></header>',
             '<div class="shrine-preview"><img src="assets/img/saidan.png" alt="登録する祭壇の全体画像"><span class="shrine-preview-badge">全体画像</span></div>',
             '<div class="tutorial-capture-actions"><button type="button" class="tutorial-no-button" data-tutorial-no>いいえ</button><button type="button" class="primary-button tutorial-yes-button" data-tutorial-yes>はい、送信する</button></div>',
-            progress(2),
+        progress(2),
             '</section>',
-        ].join('');
-    }
+    ].join('');
+  }
 
-    function renderAnalyzing() {
-        return [
-            '<section class="tutorial-screen tutorial-analysis">',
-            '<header class="tutorial-head"><span>AI SCANNING</span><h1>祭壇を解析中…</h1><p>グッズとメルカリ相場を照合しています</p></header>',
+  function renderAnalyzing() {
+    return [
+      '<section class="tutorial-screen tutorial-analysis">',
+        '<header class="tutorial-head"><span>AI SCANNING</span><h1>祭壇を解析中…</h1><p>グッズとメルカリ相場を照合しています</p></header>',
             '<div class="shrine-scan"><img src="assets/img/saidan.png" alt="解析中のステライト祭壇"><div class="scan-beam"></div><span class="detect-box box-a">アクスタ ✓</span><span class="detect-box box-b">トレカ ✓</span><span class="detect-box box-c">ぬい ✓</span></div>',
-            '<div class="recognition-status"><span class="ai-spinner"><i></i></span><div><strong>AIが解析中…</strong><p>7件の候補を検出 ✦ 推しカラーを推定しています</p></div></div>',
+        '<div class="recognition-status"><span class="ai-spinner"><i></i></span><div><strong>AIが解析中…</strong><p>7件の候補を検出 ✦ 推しカラーを推定しています</p></div></div>',
             backButton('analyzing'),
-            progress(2),
+        progress(2),
             '</section>',
-        ].join('');
-    }
+    ].join('');
+  }
 
-    function reviewRow(result, count) {
-        var item = AppState.getItem(result.itemId);
-        return [
-            '<div class="recognition-row">',
-            '<img src="' + item.thumb + '" alt="">',
-            '<div class="recognition-copy"><h3>' +
-                result.name +
-                '</h3><p>相場 ' +
-                AppState.formatYen(result.price) +
-                '</p></div>',
-            '<div class="mini-stepper"><button type="button" data-tutorial-count="' +
-                result.itemId +
-                '" data-delta="-1" aria-label="' +
-                result.name +
-                'を減らす">−</button><strong>' +
-                count +
-                '</strong><button type="button" data-tutorial-count="' +
-                result.itemId +
-                '" data-delta="1" aria-label="' +
-                result.name +
-                'を増やす">＋</button></div>',
-            '</div>',
-        ].join('');
-    }
+  function reviewRow(result, count) {
+    var item = AppState.getItem(result.itemId);
+    return [
+      '<div class="recognition-row">',
+        '<img src="' + item.thumb + '" alt="">',
+        '<div class="recognition-copy"><h3>' + result.name + '</h3></div>',
+        '<div class="mini-stepper"><button type="button" data-tutorial-count="' + result.itemId + '" data-delta="-1" aria-label="' + result.name + 'を減らす"' + (count <= 1 ? ' disabled' : '') + '>−</button><strong>' + count + '</strong><button type="button" data-tutorial-count="' + result.itemId + '" data-delta="1" aria-label="' + result.name + 'を増やす">＋</button></div>',
+      '</div>'
+    ].join('');
+  }
 
-    function themeOption(theme, current) {
-        var active = theme.id === current;
-        return [
+  function themeOption(theme, current) {
+    var active = theme.id === current;
+    return [
             '<button type="button" class="theme-option' +
                 (active ? ' is-active' : '') +
                 '" data-set-theme="' +
@@ -108,10 +94,10 @@
             '<span class="theme-dots" data-theme="' +
                 theme.id +
                 '" aria-hidden="true"><i></i><i></i><i></i></span>',
-            '<strong>' + theme.name + '</strong>',
+        '<strong>' + theme.name + '</strong>',
             '</button>',
-        ].join('');
-    }
+    ].join('');
+  }
 
     function setThemeWithFeedback(themeId) {
         if (AppState.getState().theme === themeId) {
@@ -123,14 +109,17 @@
         AppState.setTheme(themeId);
     }
 
-    function renderReview(state) {
-        var results = AI_RESULTS['saidan.png'];
-        var total = AppState.getTutorialTotal();
-        var ready =
-            state.tutorial.counts['stella-badge'] === 2 && total === 81000;
-        var estimated = Theme.find(Theme.DEFAULT_THEME);
-        return [
-            '<section class="tutorial-screen tutorial-review">',
+  function renderReview(state) {
+    var results = AI_RESULTS['saidan.png'];
+    var ready = state.tutorial.counts['stella-badge'] === 2 && results.every(function (result) {
+      return result.itemId === 'stella-badge' || (state.tutorial.counts[result.itemId] || 1) === 1;
+    });
+    var confirmedCount = results.reduce(function (sum, result) {
+      return sum + (state.tutorial.counts[result.itemId] || 1);
+    }, 0);
+    var estimated = Theme.find(Theme.DEFAULT_THEME);
+    return [
+      '<section class="tutorial-screen tutorial-review">',
             '<header class="review-head"><div><span>7件を認識しました ✦</span><h1>個数を確認してください</h1></div></header>',
             '<div class="review-hint"><span>🎨</span><p>祭壇の色味から、あなたの推しカラーは<strong>' +
                 estimated.hue +
@@ -142,79 +131,61 @@
                     return themeOption(theme, state.theme);
                 }).join('') +
                 '</div>',
-            '<div class="review-hint"><span>☝</span><p>実物は<strong>「ステラ 缶バッジ」が2個</strong>。<br>＋を押してAIの候補を直してみよう</p></div>',
-            '<div class="recognition-list">' +
-                results
-                    .map(function (result) {
-                        return reviewRow(
-                            result,
-                            state.tutorial.counts[result.itemId] || 1,
-                        );
-                    })
-                    .join('') +
-                '</div>',
-            '<div class="review-footer"><div><span>現在の合計</span><strong>' +
-                AppState.formatYen(total) +
-                '</strong></div><button type="button" class="primary-button' +
-                (ready ? '' : ' is-muted') +
-                '" data-confirm-tutorial>この内容で確定</button></div>',
-            '</section>',
-        ].join('');
-    }
+        '<div class="review-hint"><span>☝</span><p>実物は<strong>「ステラ 缶バッジ」が2個</strong>。<br>＋を押してAIの候補を直してみよう</p></div>',
+        '<div class="recognition-list">' + results.map(function (result) { return reviewRow(result, state.tutorial.counts[result.itemId] || 1); }).join('') + '</div>',
+        '<div class="review-footer"><div><span>登録するグッズ</span><strong>' + confirmedCount + '点</strong></div><button type="button" class="primary-button' + (ready ? '' : ' is-muted') + '" data-confirm-tutorial>この内容で確定</button></div>',
+      '</section>'
+    ].join('');
+  }
 
-    function renderValue() {
-        return [
-            '<section class="tutorial-screen tutorial-value">',
-            '<div class="value-stars" aria-hidden="true">✦　⋆　✧</div>',
-            '<span class="value-kicker">解析が完了しました</span>',
-            '<div class="value-shrine"><img src="assets/img/saidan.png" alt="登録したステライト祭壇"><span>7アイテムを登録 ✓</span></div>',
-            '<div class="value-copy"><p>あなたの祭壇は</p><h1>¥81,000</h1><span>です</span></div>',
-            '<p class="value-note">今日から相場の変化を自動で追いかけます</p>',
-            backButton('confirmed'),
-            '<button type="button" class="primary-button tutorial-cta" data-complete-tutorial>資産を見てみる <span>›</span></button>',
-            progress(3),
+  function renderValue(state) {
+    var registered = AI_RESULTS['saidan.png'].reduce(function (sum, result) {
+      return sum + (state.tutorial.counts[result.itemId] || 1);
+    }, 0);
+    return [
+      '<section class="tutorial-screen tutorial-value">',
+        '<div class="value-stars" aria-hidden="true">✦　⋆　✧</div>',
+        '<span class="value-kicker">解析が完了しました</span>',
+        '<div class="value-shrine"><img src="assets/img/saidan.png" alt="登録したステライト祭壇"><span>' + AI_RESULTS['saidan.png'].length + '種類を登録 ✓</span></div>',
+        '<div class="value-copy"><p>あなたの祭壇に</p><h1>' + registered + '点</h1><span>を記録しました</span></div>',
+        '<p class="value-note">重複したグッズは、次のオタクへ継承できます</p>',
+        backButton('confirmed'),
+        '<button type="button" class="primary-button tutorial-cta" data-complete-tutorial>グッズを見てみる <span>›</span></button>',
+        progress(3),
             '</section>',
-        ].join('');
-    }
+    ].join('');
+  }
 
-    global.Screens.tutorial = {
+  global.Screens.tutorial = {
         key: function (state) {
             return visibleStage(state);
         },
 
-        render: function () {
-            var state = AppState.getState();
+    render: function () {
+      var state = AppState.getState();
             var stage = visibleStage(state);
-            if (stage === 'capture') {
-                return renderCapture();
-            }
-            if (stage === 'analyzing') {
-                return renderAnalyzing();
-            }
-            if (stage === 'review') {
-                return renderReview(state);
-            }
-            if (stage === 'value') {
-                return renderValue();
-            }
-            return renderWelcome();
-        },
+            if (stage === 'capture') { return renderCapture(); }
+            if (stage === 'analyzing') { return renderAnalyzing(); }
+            if (stage === 'review') { return renderReview(state); }
+            if (stage === 'value') { return renderValue(state); }
+      return renderWelcome();
+    },
 
-        bind: function (root) {
-            var start = root.querySelector('[data-start-tutorial]');
+    bind: function (root) {
+      var start = root.querySelector('[data-start-tutorial]');
             if (start) {
                 start.addEventListener('click', function () {
                     localStage = null;
                     AppState.startTutorialCapture();
-                });
-            }
+        });
+      }
             var yes = root.querySelector('[data-tutorial-yes]');
             if (yes) {
                 yes.addEventListener('click', function () {
                     localStage = null;
                     AppState.startTutorialAnalysis();
-                });
-            }
+        });
+    }
             var no = root.querySelector('[data-tutorial-no]');
             if (no) {
                 no.addEventListener('click', function () {
@@ -281,7 +252,7 @@
             if (estimatedTheme) {
                 var applyEstimatedTheme = function () {
                     setThemeWithFeedback(Theme.DEFAULT_THEME);
-                };
+  };
                 estimatedTheme.addEventListener('click', applyEstimatedTheme);
                 estimatedTheme.addEventListener('keydown', function (event) {
                     if (event.key === 'Enter' || event.key === ' ') {
