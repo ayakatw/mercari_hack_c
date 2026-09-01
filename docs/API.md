@@ -29,11 +29,11 @@ js/screen-post.js / js/screen-listing.js が描画
 
 ### 1.1 `POST /api/analyze`
 
-| 項目         | 内容                                                                                |
+| 項目 | 内容 |
 | ------------ | ----------------------------------------------------------------------------------- |
-| Content-Type | `multipart/form-data`                                                               |
-| `image`      | 商品画像。**複数可**（最大 4 枚、1 枚あたり 8MB）。同一商品の別カットとして扱われる |
-| `items`      | 任意。登録済みグッズの `[{id, name}]` を JSON 文字列で。既存グッズとの同定に使う    |
+| Content-Type | `multipart/form-data` |
+| `image` | 商品画像。**複数可**（最大 4 枚、1 枚あたり 8MB）。同一商品の別カットとして扱われる |
+| `items` | 任意。登録済みグッズの `[{id, name}]` を JSON 文字列で。既存グッズとの同定に使う |
 
 対応形式は JPEG / PNG / WebP / HEIC。**SVG は非対応**（Gemini が受け付けない）。
 
@@ -41,29 +41,29 @@ js/screen-post.js / js/screen-listing.js が描画
 
 ```json
 {
-    "success": true,
-    "data": {
-        "title": "Champion グレー プルオーバーパーカー",
-        "category": "トップス",
-        "brand": "Champion",
-        "color": "グレー",
-        "condition": "目立った傷や汚れなし",
-        "description": "Championのグレーのプルオーバーパーカーです。",
-        "missingFields": ["size"],
-        "confidence": 0.87,
-        "estimatedPrice": 4800,
-        "matchedItemId": null
-    }
+  "success": true,
+  "data": {
+    "title": "Champion グレー プルオーバーパーカー",
+    "category": "トップス",
+    "brand": "Champion",
+    "color": "グレー",
+    "condition": "目立った傷や汚れなし",
+    "description": "Championのグレーのプルオーバーパーカーです。",
+    "missingFields": ["size"],
+    "confidence": 0.87,
+    "estimatedPrice": 4800,
+    "matchedItemId": null
+  }
 }
 ```
 
-| フィールド       | 意味                                                                                    |
+| フィールド | 意味 |
 | ---------------- | --------------------------------------------------------------------------------------- |
-| `brand`          | 判別できない場合は `null`                                                               |
-| `missingFields`  | ユーザー確認が必要な項目キー（`size` / `condition` など）。画面では日本語に変換して表示 |
-| `confidence`     | 0〜1                                                                                    |
-| `estimatedPrice` | 想定売却価格（円）。**新規資産の相場に使う**。100〜1,000,000 に丸められる               |
-| `matchedItemId`  | 既存グッズと同一と判断された場合その id。**実在する id だけを通す検証がサーバ側にある** |
+| `brand` | 判別できない場合は `null` |
+| `missingFields` | ユーザー確認が必要な項目キー（`size` / `condition` など）。画面では日本語に変換して表示 |
+| `confidence` | 0〜1 |
+| `estimatedPrice` | 想定売却価格（円）。**新規資産の相場に使う**。100〜1,000,000 に丸められる |
+| `matchedItemId` | 既存グッズと同一と判断された場合その id。**実在する id だけを通す検証がサーバ側にある** |
 
 **失敗時**
 
@@ -71,11 +71,11 @@ js/screen-post.js / js/screen-listing.js が描画
 { "success": false, "error": "AI分析に失敗しました。手動で入力してください。" }
 ```
 
-| HTTP | 状況                              |
+| HTTP | 状況 |
 | ---- | --------------------------------- |
-| 400  | 画像なし / 非対応形式 / 8MB 超    |
-| 503  | `GEMINI_API_KEY` 未設定           |
-| 502  | Gemini 呼び出し失敗・タイムアウト |
+| 400 | 画像なし / 非対応形式 / 8MB 超 |
+| 503 | `GEMINI_API_KEY` 未設定 |
+| 502 | Gemini 呼び出し失敗・タイムアウト |
 
 **Gemini の生のエラー文はユーザーへ返さない。** サーバのログにのみ出す。
 
@@ -91,12 +91,12 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 自由文を `JSON.parse` する不安定さには依存しない。ただしサーバ側で
 値域チェックと正規化（`normalize()`）を通してからフロントへ返す。
 
-| 項目         | 値                                                   |
+| 項目 | 値 |
 | ------------ | ---------------------------------------------------- |
-| 主モデル     | `gemini-3.5-flash-lite`（`GEMINI_MODEL` で上書き可） |
-| 退避モデル   | `gemini-3.1-flash-lite`                              |
-| タイムアウト | 主 12 秒 → 退避 20 秒                                |
-| thinking     | `thinkingLevel: 'low'`                               |
+| 主モデル | `gemini-3.5-flash-lite`（`GEMINI_MODEL` で上書き可） |
+| 退避モデル | `gemini-3.1-flash-lite` |
+| タイムアウト | 主 12 秒 → 退避 20 秒 |
+| thinking | `thinkingLevel: 'low'` |
 
 モデル選定の理由と実測値は [DECISIONS.md](DECISIONS.md) を参照。**モデル名は陳腐化が速い。**
 
@@ -120,14 +120,15 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 
 ---
 
-## 2. 外部依存: CDN 2 本
+## 2. 外部依存: CDN 1 本
 
 `index.html` の `<head>` で読み込む。**データ取得ではなく描画の補助**にのみ使う。
 
-| #   | URL                                                                 | 用途                                           | 呼び出し箇所                                 | 失敗時の挙動                                                                                          |
-| --- | ------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| 1   | `https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js` | 資産タブの 30 日ライン、詳細モーダルのチャート | `js/screen-assets.js` の `createLineChart()` | **フォールバックあり。** `global.Chart` が未定義なら `drawFallback()` が Canvas 2D で簡易ラインを描く |
-| 2   | `https://cdn.tailwindcss.com`                                       | （実質未使用）                                 | なし                                         | **未検証。** 後述                                                                                     |
+| # | URL | 用途 | 呼び出し箇所 | 失敗時の挙動 |
+| --- | --- | --- | --- | --- |
+| 1 | `https://cdn.tailwindcss.com` | （実質未使用） | なし | **未検証。** 後述 |
+
+Chart.js は**撤去済み**（グッズ一覧からチャートを外したため）。
 
 ### Tailwind Play CDN について
 
@@ -147,38 +148,38 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 
 **購読・参照**
 
-| メソッド              | 返り値                                       | 用途                                         |
+| メソッド | 返り値 | 用途 |
 | --------------------- | -------------------------------------------- | -------------------------------------------- |
-| `subscribe(listener)` | 解除関数                                     | 状態変更時に呼ばれる。`router.js` のみが使用 |
-| `getState()`          | state オブジェクト（**参照。複製ではない**） | 描画時の読み取り                             |
-| `getItem(itemId)`     | item または `null`                           | 呼び出し側で null ガードが必要               |
-| `getUser(handle)`     | user または `null`                           | 同上                                         |
-| `getTotal()`          | number                                       | 保有総額                                     |
-| `getTutorialTotal()`  | number                                       | チュートリアル画面の合計                     |
-| `formatYen(value)`    | string                                       | `¥84,200` 形式。金額表示は必ずこれを通す     |
+| `subscribe(listener)` | 解除関数 | 状態変更時に呼ばれる。`router.js` のみが使用 |
+| `getState()` | state オブジェクト（**参照。複製ではない**） | 描画時の読み取り |
+| `getItem(itemId)` | item または `null` | 呼び出し側で null ガードが必要 |
+| `getUser(handle)` | user または `null` | 同上 |
+| `getTotal()` | number | 保有総額 |
+| `getTutorialTotal()` | number | チュートリアル画面の合計 |
+| `formatYen(value)` | string | `¥84,200` 形式。金額表示は必ずこれを通す |
 
 **ミューテータ**（呼ぶと `notify()` が走り全画面が再描画される）
 
-| メソッド                                                                      | 効果                                                                                                                                                                                                                                                                                                                                |
+| メソッド | 効果 |
 | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `setRoute(route)`                                                             | 画面遷移。詳細モーダルと祭壇カードを閉じる                                                                                                                                                                                                                                                                                          |
-| `openProfile(handle)`                                                         | `tappable: true` のユーザーのみプロフィールへ遷移                                                                                                                                                                                                                                                                                   |
-| `startTutorialCapture()` / `startTutorialAnalysis()`                          | チュートリアルの stage を進める（後者は 1.5 秒後に `review` へ）                                                                                                                                                                                                                                                                    |
-| `adjustTutorialCount(itemId, delta)`                                          | 個数を 1〜5 の範囲で増減                                                                                                                                                                                                                                                                                                            |
-| `confirmTutorialItems()`                                                      | 条件を満たせば `value` へ。満たさなければトースト                                                                                                                                                                                                                                                                                   |
-| `completeTutorial()`                                                          | `tutorial.counts` を `items[].count` に反映し資産タブへ                                                                                                                                                                                                                                                                             |
-| `toggleLike(postId)`                                                          | いいねのトグル                                                                                                                                                                                                                                                                                                                      |
-| `sendRequest()`                                                               | 「欲しい」送信。トーストのみ                                                                                                                                                                                                                                                                                                        |
-| `startPostAnalysis(file)`                                                     | 選択された `File` を `/api/analyze` へ POST し、結果を `post.analysis` に入れて `result` へ。**解析中の再呼び出しは無視する**（二重送信防止）。失敗時は `post.analysisError` を立てて仕込みデータへ退避。`file` 省略時や `fetch` 不在時は従来の `setTimeout` 演出のみ。スピナーが一瞬で消えないよう最低 1.2 秒は `analyzing` を保つ |
-| `adjustPostCount(delta)` / `togglePostGiveaway()` / `setPostCaption(caption)` | 投稿フォームの入力（`setPostCaption` のみ `notify()` を呼ばない。理由は明文化されていないが、再描画すると input の値と caret が失われるため意図的と思われる）                                                                                                                                                                       |
-| `submitPost()`                                                                | Gemini が既存グッズと同定（`matchedItemId`）していればその count を加算、していなければ**解析結果から新規アイテムを作って `items` に追加**。解析結果が無い場合は従来どおり `stella-acsta` に加算。投稿先を `postedItemId` に記録し、`createdPosts` に追加して `complete` へ                                                         |
-| `resetPost()`                                                                 | 投稿フォームを初期化                                                                                                                                                                                                                                                                                                                |
-| `prepareListing(itemId)`                                                      | 出品モックへ遷移。存在しない itemId なら何もしない                                                                                                                                                                                                                                                                                  |
-| `submitListing()`                                                             | 対象を `status: 'listed'` にして完了画面へ                                                                                                                                                                                                                                                                                          |
-| `finishListing()`                                                             | 資産タブへ戻る                                                                                                                                                                                                                                                                                                                      |
-| `openAssetDetail(itemId)`                                                     | **`stella-card` のときのみ**モーダルを開く（仕様どおり）                                                                                                                                                                                                                                                                            |
-| `closeAssetDetail()` / `setShrineCardOpen(isOpen)` / `shareShrineCard()`      | モーダル・シェアの制御                                                                                                                                                                                                                                                                                                              |
-| `showToast(message)`                                                          | 3.2 秒で自動的に消えるトースト                                                                                                                                                                                                                                                                                                      |
+| `setRoute(route)` | 画面遷移。詳細モーダルと祭壇カードを閉じる |
+| `openProfile(handle)` | `tappable: true` のユーザーのみプロフィールへ遷移 |
+| `startTutorialCapture()` / `startTutorialAnalysis()` | チュートリアルの stage を進める（後者は 1.5 秒後に `review` へ） |
+| `adjustTutorialCount(itemId, delta)` | 個数を 1〜5 の範囲で増減 |
+| `confirmTutorialItems()` | 「缶バッジ 2 個かつ他は 1 個」なら `value` へ。満たさなければトースト（**金額では判定しない**） |
+| `completeTutorial()` | `tutorial.counts` を `items[].count` に反映しグッズ一覧タブへ |
+| `toggleLike(postId)` | いいねのトグル |
+| `sendRequest()` | 「欲しい」送信。トーストのみ |
+| `startPostAnalysis(file)` | 選択された `File` を `/api/analyze` へ POST し、結果を `post.analysis` に入れて `result` へ。**解析中の再呼び出しは無視する**（二重送信防止）。失敗時は `post.analysisError` を立てて仕込みデータへ退避。`file` 省略時や `fetch` 不在時は従来の `setTimeout` 演出のみ。スピナーが一瞬で消えないよう最低 1.2 秒は `analyzing` を保つ |
+| `adjustPostCount(delta)` / `togglePostGiveaway()` / `setPostCaption(caption)` | 投稿フォームの入力（`setPostCaption` のみ `notify()` を呼ばない。理由は明文化されていないが、再描画すると input の値と caret が失われるため意図的と思われる） |
+| `submitPost()` | Gemini が既存グッズと同定（`matchedItemId`）していればその count を加算、していなければ**解析結果から新規アイテムを作って `items` に追加**。解析結果が無い場合は従来どおり `stella-acsta` に加算。投稿先を `postedItemId` に記録し、`createdPosts` に追加して `complete` へ |
+| `resetPost()` | 投稿フォームを初期化 |
+| `prepareListing(itemId)` | 出品モックへ遷移。存在しない itemId なら何もしない |
+| `submitListing()` | 対象を `status: 'listed'` にして完了画面へ |
+| `finishListing()` | グッズ一覧タブへ戻る |
+| `setShrineCardOpen(isOpen)` / `shareShrineCard()` | 祭壇カードモーダル・シェアの制御 |
+| `toggleShowPrices()` | グッズ一覧の相場トグル。ON かつ `status === 'listed'` のグッズにだけ金額が出る |
+| `showToast(message)` | 3.2 秒で自動的に消えるトースト |
 
 `state.post.analysis` は `/api/analyze` のレスポンス `data` がそのまま入る（失敗時は `null`）。
 形は §1.1 を参照。`screen-post.js` と `screen-listing.js` が読む。
@@ -187,24 +188,24 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 
 各画面は `Screens.<route> = { ... }` の形で自己登録する。router が route 名で引く。
 
-| キー                | 必須     | 契約                                                                                         |
+| キー | 必須 | 契約 |
 | ------------------- | -------- | -------------------------------------------------------------------------------------------- |
-| `render()`          | **必須** | HTML **文字列**を返す。DOM を組み立てない。この時点で要素はまだ DOM に無い                   |
-| `bind(root)`        | 任意     | `render` の結果が DOM に入った後に呼ばれる。イベント登録はここで                             |
-| `afterRender(root)` | 任意     | `bind` の後に呼ばれる。**Chart.js の生成はここ**（canvas が DOM に入っている必要があるため） |
+| `render()` | **必須** | HTML **文字列**を返す。DOM を組み立てない。この時点で要素はまだ DOM に無い |
+| `bind(root)` | 任意 | `render` の結果が DOM に入った後に呼ばれる。イベント登録はここで |
+| `afterRender(root)` | 任意 | `bind` の後に呼ばれる。DOM 挿入後でないとできない処理はここで。現在使っている画面は無い |
 
-登録済みの route: `home` / `explore` / `profile` / `post` / `assets` / `mypage` / `tutorial` / `listing`。
+登録済みの route: `home` / `explore` / `profile` / `post` / `goods` / `mypage` / `tutorial` / `listing`。
 未登録の route が指定された場合、router は `Screens.home` にフォールバックする。
 
-**開発用**: `?screen=post` のように URL クエリで初期画面を指定できる（`router.js` の `applyInitialScreen`）。
+**開発用**: `?screen=post` / `?screen=goods` のように URL クエリで初期画面を指定できる（`router.js` の `applyInitialScreen`）。
 チュートリアルを済ませた状態から始まる。クエリが無ければ従来どおりチュートリアルから。
 
 ### 3.3 `window.Router`（`js/router.js`）
 
-| メソッド    | 用途                                                   |
+| メソッド | 用途 |
 | ----------- | ------------------------------------------------------ |
-| `go(route)` | `AppState.setRoute` の薄いラッパ                       |
-| `render()`  | 強制再描画。通常は購読経由で走るので直接呼ぶ必要はない |
+| `go(route)` | `AppState.setRoute` の薄いラッパ |
+| `render()` | 強制再描画。通常は購読経由で走るので直接呼ぶ必要はない |
 
 ### 3.4 `data.js` が公開する定数
 
@@ -217,11 +218,11 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 
 **サーバプロセスのみが読む。ブラウザへは 1 つも渡らない。**
 
-| 変数             | 必須     | 用途                                                                            |
+| 変数 | 必須 | 用途 |
 | ---------------- | -------- | ------------------------------------------------------------------------------- |
 | `GEMINI_API_KEY` | **必須** | 画像解析。未設定だと `/api/analyze` が 503 を返し、画面は仕込みデータへ退避する |
-| `GEMINI_MODEL`   | 任意     | 解析モデルの上書き。省略時 `gemini-3.5-flash-lite`                              |
-| `PORT`           | 任意     | 待ち受けポート。省略時 3000                                                     |
+| `GEMINI_MODEL` | 任意 | 解析モデルの上書き。省略時 `gemini-3.5-flash-lite` |
+| `PORT` | 任意 | 待ち受けポート。省略時 3000 |
 
 キーの取得は https://aistudio.google.com/apikey 。雛形は [../.env.example](../.env.example)。
 
