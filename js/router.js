@@ -32,10 +32,10 @@
 
   function icon(name, solid) {
     var set = ICONS[name];
-    if (!set) { return ''; }
-    var paint = solid
-      ? 'fill="currentColor"'
-      : 'fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"';
+    if (!set) {
+      return '';
+    }
+    var paint = solid ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"';
     return '<svg class="tab-glyph" viewBox="0 0 512 512" ' + paint + ' aria-hidden="true" focusable="false">' + (solid ? set.solid : set.outline) + '</svg>';
   }
 
@@ -49,15 +49,7 @@
   }
 
   function tabBar(route) {
-    return [
-      '<nav class="tab-bar" aria-label="メインナビゲーション">',
-        tabButton('home', 'home', 'ホーム', route),
-        tabButton('explore', 'search', '探す', route),
-        '<button type="button" class="post-tab' + (route === 'post' ? ' is-active' : '') + '" data-nav="post" aria-current="' + (route === 'post' ? 'page' : 'false') + '"><span>' + icon('add', false) + '</span><strong>投稿</strong></button>',
-        tabButton('goods', 'goods', 'グッズ', route),
-        tabButton('mypage', 'person', 'マイページ', route),
-      '</nav>'
-    ].join('');
+    return ['<nav class="tab-bar" aria-label="メインナビゲーション">', tabButton('home', 'home', 'ホーム', route), tabButton('explore', 'search', '探す', route), '<button type="button" class="post-tab' + (route === 'post' ? ' is-active' : '') + '" data-nav="post" aria-current="' + (route === 'post' ? 'page' : 'false') + '"><span>' + icon('add', false) + '</span><strong>投稿</strong></button>', tabButton('goods', 'goods', 'グッズ', route), tabButton('mypage', 'person', 'マイページ', route), '</nav>'].join('');
   }
 
   function statusBar(isListing) {
@@ -70,12 +62,7 @@
 
   function themeOption(theme, current) {
     var active = theme.id === current;
-    return [
-      '<button type="button" class="theme-option' + (active ? ' is-active' : '') + '" data-set-theme="' + theme.id + '" aria-pressed="' + active + '" title="' + theme.hue + ' / ' + theme.desc + '">',
-        '<span class="theme-dots" data-theme="' + theme.id + '" aria-hidden="true"><i></i><i></i><i></i></span>',
-        '<strong>' + theme.name + '</strong>',
-      '</button>'
-    ].join('');
+    return ['<button type="button" class="theme-option' + (active ? ' is-active' : '') + '" data-set-theme="' + theme.id + '" aria-pressed="' + active + '" title="' + theme.hue + ' / ' + theme.desc + '">', '<span class="theme-dots" data-theme="' + theme.id + '" aria-hidden="true"><i></i><i></i><i></i></span>', '<strong>' + theme.name + '</strong>', '</button>'].join('');
   }
 
   function modeOption(mode, current) {
@@ -91,26 +78,32 @@
     }
     return [
       '<div class="settings-layer">',
-        '<button type="button" class="settings-scrim" data-close-settings aria-label="設定を閉じる"></button>',
-        '<section class="settings-sheet" role="dialog" aria-modal="false" aria-label="表示のカスタマイズ">',
-          '<header class="settings-head">',
-            '<h2>推しカラー</h2>',
-            '<div class="mode-options">' + Theme.MODES.map(function (mode) {
-              return modeOption(mode, state.mode);
-            }).join('') + '</div>',
-            '<button type="button" class="settings-close" data-close-settings aria-label="閉じる">✕</button>',
-          '</header>',
-          '<div class="theme-options">' + Theme.THEMES.map(function (theme) {
-            return themeOption(theme, state.theme);
-          }).join('') + '</div>',
-        '</section>',
+      '<button type="button" class="settings-scrim" data-close-settings aria-label="設定を閉じる"></button>',
+      '<section class="settings-sheet" role="dialog" aria-modal="false" aria-label="表示のカスタマイズ">',
+      '<header class="settings-head">',
+      '<h2>推しカラー</h2>',
+      '<div class="mode-options">' +
+        Theme.MODES.map(function (mode) {
+          return modeOption(mode, state.mode);
+        }).join('') +
+        '</div>',
+      '<button type="button" class="settings-close" data-close-settings aria-label="閉じる">✕</button>',
+      '</header>',
+      '<div class="theme-options">' +
+        Theme.THEMES.map(function (theme) {
+          return themeOption(theme, state.theme);
+        }).join('') +
+        '</div>',
+      '</section>',
       '</div>'
     ].join('');
   }
 
   function bindSettings(root) {
     root.querySelectorAll('[data-close-settings]').forEach(function (button) {
-      button.addEventListener('click', function () { AppState.setSettingsOpen(false); });
+      button.addEventListener('click', function () {
+        AppState.setSettingsOpen(false);
+      });
     });
     // 設定シート内に限定する。チュートリアルにも [data-set-theme] があり、
     // app 全体に張ると二重バインドで誤トーストが出る。
@@ -125,7 +118,9 @@
       });
     });
     root.querySelectorAll('[data-open-settings]').forEach(function (button) {
-      button.addEventListener('click', function () { AppState.setSettingsOpen(true); });
+      button.addEventListener('click', function () {
+        AppState.setSettingsOpen(true);
+      });
     });
   }
 
@@ -175,15 +170,7 @@
     }
 
     app.setAttribute('data-route', route);
-    app.innerHTML = [
-      '<div class="app-runtime' + (route === 'listing' ? ' mercari-runtime' : '') + '">',
-        statusBar(route === 'listing'),
-        '<div class="screen-host' + (entering ? ' is-entering' : '') + '" id="screen-host" role="main">' + markup + '</div>',
-        chromeFree ? '' : tabBar(route),
-        '<div class="home-indicator" aria-hidden="true"><span></span></div>',
-        settingsSheet(state),
-      '</div>'
-    ].join('');
+    app.innerHTML = ['<div class="app-runtime' + (route === 'listing' ? ' mercari-runtime' : '') + '">', statusBar(route === 'listing'), '<div class="screen-host' + (entering ? ' is-entering' : '') + '" id="screen-host" role="main">' + markup + '</div>', chromeFree ? '' : tabBar(route), '<div class="home-indicator" aria-hidden="true"><span></span></div>', settingsSheet(state), '</div>'].join('');
 
     bindNavigation(app);
     bindSettings(app);
@@ -192,7 +179,9 @@
     }
     if (previousRoute === route) {
       var nextScroll = app.querySelector('.screen-scroll');
-      if (nextScroll) { nextScroll.scrollTop = scrollTop; }
+      if (nextScroll) {
+        nextScroll.scrollTop = scrollTop;
+      }
     }
     if (typeof screen.afterRender === 'function') {
       screen.afterRender(app);
@@ -201,7 +190,9 @@
   }
 
   global.Router = {
-    go: function (route) { AppState.setRoute(route); },
+    go: function (route) {
+      AppState.setRoute(route);
+    },
     render: render
   };
 
@@ -221,4 +212,4 @@
   AppState.subscribe(render);
   applyInitialScreen();
   render();
-}(window));
+})(window);

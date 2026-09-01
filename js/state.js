@@ -9,7 +9,7 @@
 
   function initialTutorialCounts() {
     var counts = {};
-        AI_RESULTS['saidan.png'].forEach(function (result) {
+    AI_RESULTS['saidan.png'].forEach(function (result) {
       counts[result.itemId] = result.count;
     });
     return counts;
@@ -24,14 +24,13 @@
       caption: '',
       imageUrl: null,
       analysis: null,
-            analysisError: null,
+      analysisError: null
     };
   }
 
   // 画像解析 API（server.js）。file:// 直開きなど到達できない環境では仕込みデータへ退避する。
   var ANALYZE_ENDPOINT = '/api/analyze';
-    var ANALYZE_ERROR_MESSAGE =
-        'AIによる分析に失敗しました。手動で入力できます。';
+  var ANALYZE_ERROR_MESSAGE = 'AIによる分析に失敗しました。手動で入力できます。';
   var MIN_ANALYSIS_MS = 1200;
 
   var listeners = [];
@@ -48,13 +47,13 @@
     tutorial: {
       stage: 'welcome',
       selected: false,
-            counts: initialTutorialCounts(),
+      counts: initialTutorialCounts()
     },
-        items: clone(
-            ITEMS.filter(function (item) {
-                return !item.pendingDemo;
-            }),
-        ),
+    items: clone(
+      ITEMS.filter(function (item) {
+        return !item.pendingDemo;
+      })
+    ),
     likedPosts: {},
     requestSent: false,
     selectedProfile: null,
@@ -65,10 +64,10 @@
     postedItemId: null,
     listing: {
       itemId: null,
-            stage: 'form',
+      stage: 'form'
     },
     shrineCardOpen: false,
-        toast: null,
+    toast: null
   };
 
   // 解析結果を data.js の ITEMS と同じ形の資産にする。
@@ -80,7 +79,7 @@
       id: 'ai-' + Date.now(),
       name: analysis.title,
       shortName: analysis.title,
-            thumb: imageUrl || 'assets/img/acsta2.png',
+      thumb: imageUrl || 'assets/img/acsta2.png',
       marketPrice: price,
       count: count,
       trend7d: 0,
@@ -90,7 +89,7 @@
       status: 'hold',
       duplicate: count >= 2,
       category: analysis.category,
-            condition: analysis.condition,
+      condition: analysis.condition
     };
   }
 
@@ -101,32 +100,30 @@
   }
 
   function getItem(itemId) {
-        return (
-            state.items.find(function (item) {
-                return item.id === itemId;
-            }) || null
-        );
+    return (
+      state.items.find(function (item) {
+        return item.id === itemId;
+      }) || null
+    );
   }
 
   function getUser(handle) {
-        return (
-            USERS.find(function (user) {
-                return user.handle === handle;
-            }) || null
-        );
+    return (
+      USERS.find(function (user) {
+        return user.handle === handle;
+      }) || null
+    );
   }
 
   function getTotal() {
     return state.items.reduce(function (sum, item) {
-            return sum + item.marketPrice * item.count;
+      return sum + item.marketPrice * item.count;
     }, 0);
   }
 
   function getTutorialTotal() {
-        return AI_RESULTS['saidan.png'].reduce(function (sum, result) {
-            return (
-                sum + result.price * (state.tutorial.counts[result.itemId] || 1)
-            );
+    return AI_RESULTS['saidan.png'].reduce(function (sum, result) {
+      return sum + result.price * (state.tutorial.counts[result.itemId] || 1);
     }, 0);
   }
 
@@ -149,9 +146,9 @@
     subscribe: function (listener) {
       listeners.push(listener);
       return function () {
-                listeners = listeners.filter(function (candidate) {
-                    return candidate !== listener;
-                });
+        listeners = listeners.filter(function (candidate) {
+          return candidate !== listener;
+        });
       };
     },
 
@@ -181,17 +178,17 @@
     },
 
     setTheme: function (themeId) {
-            if (state.theme === themeId) {
-                return;
-            }
+      if (state.theme === themeId) {
+        return;
+      }
       state.theme = themeId;
       notify();
     },
 
     setMode: function (modeId) {
-            if (state.mode === modeId) {
-                return;
-            }
+      if (state.mode === modeId) {
+        return;
+      }
       state.mode = modeId;
       notify();
     },
@@ -215,10 +212,10 @@
       notify();
     },
 
-        cancelTutorialCapture: function () {
-            state.tutorial.stage = 'welcome';
-            notify();
-        },
+    cancelTutorialCapture: function () {
+      state.tutorial.stage = 'welcome';
+      notify();
+    },
 
     startTutorialAnalysis: function () {
       state.tutorial.selected = true;
@@ -235,10 +232,7 @@
 
     adjustTutorialCount: function (itemId, delta) {
       var current = state.tutorial.counts[itemId] || 1;
-            state.tutorial.counts[itemId] = Math.max(
-                1,
-                Math.min(5, current + delta),
-            );
+      state.tutorial.counts[itemId] = Math.max(1, Math.min(5, current + delta));
       notify();
     },
 
@@ -276,9 +270,7 @@
 
     sendRequest: function () {
       state.requestSent = true;
-            showToast(
-                'リクエストを送りました。取引はメルカリのあんしん決済で行われます',
-            );
+      showToast('リクエストを送りました。取引はメルカリのあんしん決済で行われます');
     },
 
     startPostAnalysis: function (file) {
@@ -302,18 +294,11 @@
 
       // スピナーが一瞬で消えないよう最低表示時間だけ待ってから result へ進む。
       function finish(analysis, errorMessage) {
-                var wait = Math.max(
-                    0,
-                    MIN_ANALYSIS_MS - (Date.now() - startedAt),
-                );
+        var wait = Math.max(0, MIN_ANALYSIS_MS - (Date.now() - startedAt));
         analysisTimer = global.setTimeout(function () {
           state.post.analysis = analysis;
           state.post.analysisError = errorMessage || null;
-                    if (
-                        analysis &&
-                        analysis.description &&
-                        !state.post.caption
-                    ) {
+          if (analysis && analysis.description && !state.post.caption) {
             state.post.caption = analysis.description;
           }
           state.post.stage = 'result';
@@ -329,52 +314,37 @@
       var form = new global.FormData();
       form.append('image', file);
       // 既存グッズの2個目かどうかを Gemini に判断させるため一覧を渡す。
-            form.append(
-                'items',
-                JSON.stringify(
-                    state.items.map(function (item) {
-        return { id: item.id, name: item.name };
-                    }),
-                ),
-            );
+      form.append(
+        'items',
+        JSON.stringify(
+          state.items.map(function (item) {
+            return { id: item.id, name: item.name };
+          })
+        )
+      );
 
-            global
-                .fetch(ANALYZE_ENDPOINT, { method: 'POST', body: form })
-                .then(function (response) {
-                    return response.json();
-                })
+      global
+        .fetch(ANALYZE_ENDPOINT, { method: 'POST', body: form })
+        .then(function (response) {
+          return response.json();
+        })
         .then(function (payload) {
           if (payload && payload.success && payload.data) {
             finish(payload.data, null);
             return;
           }
           // 画面には出さない開発者向けの手がかり。
-                    global.console.error(
-                        '[推しポート] 解析APIがエラーを返しました:',
-                        payload && payload.error,
-                    );
-                    finish(
-                        null,
-                        (payload && payload.error) || ANALYZE_ERROR_MESSAGE,
-                    );
+          global.console.error('[推しポート] 解析APIがエラーを返しました:', payload && payload.error);
+          finish(null, (payload && payload.error) || ANALYZE_ERROR_MESSAGE);
         })
         .catch(function (error) {
-          global.console.error(
-                        '[推しポート] 解析APIに接続できません（' +
-                            ANALYZE_ENDPOINT +
-                            '）。' +
-            'サーバが起動しているか確認してください: npm start → http://localhost:3000',
-                        error,
-          );
+          global.console.error('[推しポート] 解析APIに接続できません（' + ANALYZE_ENDPOINT + '）。' + 'サーバが起動しているか確認してください: npm start → http://localhost:3000', error);
           finish(null, ANALYZE_ERROR_MESSAGE);
         });
     },
 
     adjustPostCount: function (delta) {
-            state.post.count = Math.max(
-                1,
-                Math.min(5, state.post.count + delta),
-            );
+      state.post.count = Math.max(1, Math.min(5, state.post.count + delta));
       notify();
     },
 
@@ -402,9 +372,7 @@
 
       if (analysis) {
         // Gemini が既存グッズと同定したものだけ個数を足す。
-                item = analysis.matchedItemId
-                    ? getItem(analysis.matchedItemId)
-                    : null;
+        item = analysis.matchedItemId ? getItem(analysis.matchedItemId) : null;
       } else {
         // 解析結果がない（API 停止時）は従来のデモ挙動に退避する。
         item = getItem('stella-acsta');
@@ -414,11 +382,7 @@
         item.count += addedCount;
         item.duplicate = item.count >= 2;
       } else {
-                item = createItemFromAnalysis(
-                    analysis,
-                    addedCount,
-                    state.post.imageUrl,
-                );
+        item = createItemFromAnalysis(analysis, addedCount, state.post.imageUrl);
         state.items.push(item);
       }
 
@@ -427,10 +391,10 @@
       state.post.stage = 'complete';
       state.createdPosts.unshift({
         id: 'created-' + Date.now(),
-                image: state.post.imageUrl || 'assets/img/acsta2.png',
-                caption: state.post.caption || item.name + 'をお迎えしました✨',
+        image: state.post.imageUrl || 'assets/img/acsta2.png',
+        caption: state.post.caption || item.name + 'をお迎えしました✨',
         tag: item.name,
-                giveaway: state.post.giveaway,
+        giveaway: state.post.giveaway
       });
       notify();
     },
@@ -474,7 +438,7 @@
       showToast('Xへのシェア画面を開きました（デモ）');
     },
 
-        showToast: showToast,
+    showToast: showToast
   };
 
   global.AppState = AppState;
