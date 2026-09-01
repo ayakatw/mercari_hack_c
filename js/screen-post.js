@@ -78,6 +78,19 @@
       : '仕込みデータ';
     var missing = (analysis && analysis.missingFields) || [];
 
+    // 実際に資産へ加算される相場を出す。
+    // 既存グッズに同定されたらその相場、新規なら Gemini の推定額。
+    var matched = analysis && analysis.matchedItemId ? AppState.getItem(analysis.matchedItemId) : null;
+    var price = fallback.price;
+    var priceNote = '参考：メルカリ成約データ';
+    if (matched) {
+      price = matched.marketPrice;
+      priceNote = '参考：登録済みの相場';
+    } else if (analysis && analysis.estimatedPrice) {
+      price = analysis.estimatedPrice;
+      priceNote = '✦ Geminiの推定相場';
+    }
+
     return [
       '<section class="screen screen-post">',
         postHeader('2 / 2'),
@@ -89,7 +102,7 @@
               '<img src="' + escapeHtml(photo) + '" alt="' + escapeHtml(title) + '">',
               '<div><h2>' + escapeHtml(title) + '</h2><div class="tag-row">' + tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join('') + '</div><p>状態 <strong>' + escapeHtml(condition) + '</strong></p></div>',
             '</div>',
-            '<div class="market-box"><span>現在の相場</span><strong>¥3,200</strong><small>参考：メルカリ成約データ</small></div>',
+            '<div class="market-box"><span>現在の相場</span><strong>' + AppState.formatYen(price) + '</strong><small>' + escapeHtml(priceNote) + '</small></div>',
           '</div>',
           missing.length ? [
             '<div class="ai-missing-note">',
