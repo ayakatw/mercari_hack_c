@@ -21,9 +21,17 @@
       selected: false,
       count: 1,
       giveaway: false,
-      caption: ''
+      caption: '',
+      imageUrl: null,
+      analysis: null,
+      analysisError: null
     };
   }
+
+  // 画像解析 API（server.js）。file:// 直開きなど到達できない環境では仕込みデータへ退避する。
+  var ANALYZE_ENDPOINT = '/api/analyze';
+  var ANALYZE_ERROR_MESSAGE = 'AIによる分析に失敗しました。手動で入力できます。';
+  var MIN_ANALYSIS_MS = 1200;
 
   var listeners = [];
   var analysisTimer = null;
@@ -45,6 +53,7 @@
     post: initialPostState(),
     createdPosts: [],
     postedDemo: false,
+    postedItemId: null,
     listing: {
       itemId: null,
       stage: 'form'
@@ -53,6 +62,29 @@
     shrineCardOpen: false,
     toast: null
   };
+
+  // 解析結果を data.js の ITEMS と同じ形の資産にする。
+  // history30d は最終日だけ計上する（過去から持っていたことにしない）。
+  function createItemFromAnalysis(analysis, count, imageUrl) {
+    var price = analysis.estimatedPrice || 3200;
+    var lastIndex = HISTORY_LABELS.length - 1;
+    return {
+      id: 'ai-' + Date.now(),
+      name: analysis.title,
+      shortName: analysis.title,
+      thumb: imageUrl || 'assets/img/acsta2.svg',
+      marketPrice: price,
+      count: count,
+      trend7d: 0,
+      history30d: HISTORY_LABELS.map(function (label, index) {
+        return index === lastIndex ? price : 0;
+      }),
+      status: 'hold',
+      duplicate: count >= 2,
+      category: analysis.category,
+      condition: analysis.condition
+    };
+  }
 
   function notify() {
     listeners.slice().forEach(function (listener) {
@@ -191,17 +223,70 @@
       showToast('リクエストを送りました。取引はメルカリのあんしん決済で行われます');
     },
 
-    startPostAnalysis: function () {
+    startPostAnalysis: function (file) {
+      if (state.post.stage === 'analyzing') {
+        return;
+      }
       state.post.selected = true;
       state.post.stage = 'analyzing';
+      state.post.analysis = null;
+      state.post.analysisError = null;
+      if (file && global.URL && global.URL.createObjectURL) {
+        state.post.imageUrl = global.URL.createObjectURL(file);
+      }
       notify();
+
       if (analysisTimer) {
         global.clearTimeout(analysisTimer);
       }
-      analysisTimer = global.setTimeout(function () {
-        state.post.stage = 'result';
-        notify();
-      }, 1500);
+
+      var startedAt = Date.now();
+
+      // スピナーが一瞬で消えないよう最低表示時間だけ待ってから result へ進む。
+      function finish(analysis, errorMessage) {
+        var wait = Math.max(0, MIN_ANALYSIS_MS - (Date.now() - startedAt));
+        analysisTimer = global.setTimeout(function () {
+          state.post.analysis = analysis;
+          state.post.analysisError = errorMessage || null;
+          if (analysis && analysis.description && !state.post.caption) {
+            state.post.caption = analysis.description;
+          }
+          state.post.stage = 'result';
+          notify();
+        }, wait);
+      }
+
+      if (!file || !global.fetch || !global.FormData) {
+        finish(null, null);
+        return;
+      }
+
+      var form = new global.FormData();
+      form.append('image', file);
+      // 既存グッズの2個目かどうかを Gemini に判断させるため一覧を渡す。
+      form.append('items', JSON.stringify(state.items.map(function (item) {
+        return { id: item.id, name: item.name };
+      })));
+
+      global.fetch(ANALYZE_ENDPOINT, { method: 'POST', body: form })
+        .then(function (response) { return response.json(); })
+        .then(function (payload) {
+          if (payload && payload.success && payload.data) {
+            finish(payload.data, null);
+            return;
+          }
+          // 画面には出さない開発者向けの手がかり。
+          global.console.error('[推しポート] 解析APIがエラーを返しました:', payload && payload.error);
+          finish(null, (payload && payload.error) || ANALYZE_ERROR_MESSAGE);
+        })
+        .catch(function (error) {
+          global.console.error(
+            '[推しポート] 解析APIに接続できません（' + ANALYZE_ENDPOINT + '）。' +
+            'サーバが起動しているか確認してください: npm start → http://localhost:3000',
+            error
+          );
+          finish(null, ANALYZE_ERROR_MESSAGE);
+        });
     },
 
     adjustPostCount: function (delta) {
@@ -222,17 +307,34 @@
       if (state.post.stage !== 'result') {
         return;
       }
-      var item = getItem('stella-acsta');
+      var analysis = state.post.analysis;
       var addedCount = state.post.count;
-      item.count += addedCount;
-      item.duplicate = item.count >= 2;
+      var item = null;
+
+      if (analysis) {
+        // Gemini が既存グッズと同定したものだけ個数を足す。
+        item = analysis.matchedItemId ? getItem(analysis.matchedItemId) : null;
+      } else {
+        // 解析結果がない（API 停止時）は従来のデモ挙動に退避する。
+        item = getItem('stella-acsta');
+      }
+
+      if (item) {
+        item.count += addedCount;
+        item.duplicate = item.count >= 2;
+      } else {
+        item = createItemFromAnalysis(analysis, addedCount, state.post.imageUrl);
+        state.items.push(item);
+      }
+
       state.postedDemo = true;
+      state.postedItemId = item.id;
       state.post.stage = 'complete';
       state.createdPosts.unshift({
         id: 'created-' + Date.now(),
-        image: 'assets/img/acsta2.svg',
-        caption: state.post.caption || '新しいステラのアクスタをお迎えしました✨',
-        tag: 'ステラ アクリルスタンド',
+        image: state.post.imageUrl || 'assets/img/acsta2.svg',
+        caption: state.post.caption || (item.name + 'をお迎えしました✨'),
+        tag: item.name,
         giveaway: state.post.giveaway
       });
       notify();

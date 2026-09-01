@@ -11,9 +11,12 @@ description: Use before a hackathon demo or presentation of the 推しポート 
 
 ## 0. 前提（このアプリ固有）
 
-- **install も build も存在しない。** `npm install` / `npm run build` は無い。clean install の確認は「clone 直後の状態で開けるか」に読み替える
-- **ライブ AI 呼び出しは無い。** 認識結果は `data.js` の `AI_RESULTS` に焼き込み済み。API の失敗・遅延・レート制限はデモ中に発生しない（[docs/API.md](../../../docs/API.md)）
+- **build は存在しない**が、`npm install` は必要（サーバの依存のみ。フロントは変換されない）
+- **投稿フローの画像解析だけ Gemini を実呼び出しする。** API の失敗・遅延・レート制限が**デモ中に起こり得る**。
+  ただし失敗時は `data.js` の `AI_RESULTS` へ退避して既存フローは完走する（[docs/API.md](../../../docs/API.md)）
+- **チュートリアルの祭壇スキャンは AI を呼ばない。** 固定 7 件なので当日ぶれない
 - **リロードすると必ずチュートリアルから始まる。** 永続化していないため、デモは何度でも同じ手順でやり直せる
+- **`.env` は clone に含まれない。** 発表用 PC では `cp .env.example .env` して `GEMINI_API_KEY` を入れ直す
 
 ---
 
@@ -26,23 +29,52 @@ git stash list                  # 退避したまま忘れていないか
 
 # 別ディレクトリに clone して開く（発表用 PC を想定）
 cd /tmp && rm -rf demo-check && git clone <repo-url> demo-check && cd demo-check
-python3 -m http.server 5173
+npm install
+cp .env.example .env      # GEMINI_API_KEY を入れる
+npm start
 ```
 
-- [ ] http://localhost:5173 でチュートリアルの最初の画面が出る
-- [ ] `open index.html`（`file://` 直開き）でも同じく動く ← **会場でサーバを立てられない場合の保険**
+- [ ] `npm install` が成功する
+- [ ] http://localhost:3000 でチュートリアルの最初の画面が出る
+- [ ] `open index.html`（`file://` 直開き）でも動く ← **会場でサーバを立てられない場合の保険**
+      （この場合 AI 解析は仕込みデータになるが、デモの核は完走する）
 
 ## 2. 静的チェック
 
 ```bash
-node --check data.js && for f in js/*.js; do node --check "$f" || echo "NG: $f"; done && echo OK
+node --check data.js && for f in js/*.js server.js server/gemini.js; do node --check "$f" || echo "NG: $f"; done && echo OK
 
 grep -ohE "assets/img/[A-Za-z0-9_.-]+" index.html data.js js/*.js styles.css \
   | sort -u | while read -r p; do [ -f "$p" ] || echo "MISSING: $p"; done
+
+# ブラウザへ配信されるコードに API キーが混入していないか
+grep -rniE "gemini_api_key|AIza" index.html data.js js/ styles.css assets/ && echo "NG: 漏洩" || echo OK
 ```
 
 - [ ] 構文エラーなし（`OK` が出る）
 - [ ] `MISSING:` が 1 件も出ない ← **画像切れはデモで最も目立つ事故**
+- [ ] API キーの漏洩なし
+- [ ] `git status` に `.env` が出ない（`.gitignore` 済み）
+
+## 2.5 AI 解析の当日チェック（**最重要**）
+
+Gemini 側の負荷で応答時間が日によって大きく振れる。**当日の朝に必ず測る。**
+
+```bash
+# サーバ起動中に実行。実際にデモで使う写真で測る
+time curl -s -X POST -F "image=@path/to/demo-photo.jpg" http://localhost:3000/api/analyze
+```
+
+- [ ] `"success": true` が返る
+- [ ] **5 秒以内**に返る ← 遅ければ `.env` の `GEMINI_MODEL` を lite 系に切り替える
+- [ ] `matchedItemId` が `stella-acsta` になる（アクスタを撮った場合）
+      ← ここが `null` だと「2個目を検出」が出ず、**デモの山場が消える**
+- [ ] サーバのログに `[analyze] 成功: ...` が出る
+
+**AI を落とした状態でも完走するか**（保険の確認）:
+
+- [ ] サーバを止めて投稿フローを通す → 仕込みデータで「2個目を検出」まで到達する
+- [ ] 画面に「AIによる分析に失敗しました。手動で入力できます。」が出て、手入力で投稿できる
 
 ## 3. デモの核（絶対に通す）
 
@@ -52,7 +84,8 @@ grep -ohE "assets/img/[A-Za-z0-9_.-]+" index.html data.js js/*.js styles.css \
 - [ ] **缶バッジの ＋ を 1 回押す** → 合計が **¥81,000** になり「この内容で確定」が有効化される
 - [ ] 「あなたの祭壇は ¥81,000 です」→ 資産タブへ着地
 - [ ] ホーム TL: 8 件表示 / いいねで数が増えハートが赤くなる / 「譲ります」投稿の「欲しい」でトースト / みお のアイコンからプロフィールへ
-- [ ] 投稿タブ: 画像選択 → 解析 → AI 結果カード（相場 ¥3,200）→ 投稿 → 「+¥3,200」
+- [ ] 投稿タブ: 画像選択 → 解析 → AI 結果カード → 投稿 → 「+¥3,200」
+      （カード右上が `Gemini · 確信度 XX%` なら実解析、`仕込みデータ` なら退避中）
 - [ ] **投稿直後に「2個目を検出」通知カードが出る** ← デモのハイライト
 - [ ] 「出品ドラフトを見る」→ メルカリ配色の出品モック、全項目プレフィル済み
 - [ ] 「出品する」→ 完了画面 → 資産タブに戻ると該当アイテムに「出品中」バッジ
@@ -62,7 +95,7 @@ grep -ohE "assets/img/[A-Za-z0-9_.-]+" index.html data.js js/*.js styles.css \
 
 ## 4. 状態の確認（loading / empty / error）
 
-- [ ] **loading**: チュートリアルと投稿の「AI が解析中…」スピナーが約 1.5 秒出て、必ず次へ進む（止まらない）
+- [ ] **loading**: チュートリアルのスピナーは約 1.5 秒。投稿の「AIが商品を分析中…」は Gemini 次第（実測 2 秒前後、最長でも 12 秒でタイムアウトして次へ進む）。**止まったままにならない**
 - [ ] **empty**: マイページのグリッドが、投稿前でも崩れずに表示される
 - [ ] **error**: チュートリアルで缶バッジを直さずに「この内容で確定」→ トーストが出て**画面が壊れない**
 - [ ] **既知の落とし穴**: 缶バッジ**以外**の個数を増やすと、缶バッジを 2 個にしてもトーストが出続けて進めなくなる（[docs/DECISIONS.md](../../../docs/DECISIONS.md) 参照）。**デモ中に余計な ＋ を押さないこと**を発表者に伝える

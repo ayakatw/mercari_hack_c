@@ -50,7 +50,9 @@ git diff main...HEAD
 - `js/state.js` が `document` を参照していないか
 - `import` / `export` / `type="module"` が入っていないか
 - `data.js` のスキーマ（キーの追加・削除・型変更）が変わっていないか
-- 新しい CDN・npm パッケージ・外部通信が追加されていないか
+- 新しい CDN・npm パッケージ・外部通信が追加されていないか（外部通信は `/api/analyze` の 1 本だけ）
+- **API キーがブラウザ配信コードに混入していないか**（`index.html` / `data.js` / `js/*.js`）
+- **AI 依存が必須になっていないか。** 解析が失敗しても仕込みデータへ退避して完走するか
 - `const` / `let` / アロー関数 / テンプレートリテラル / class が混入していないか（既存コードは `var` + `function` で統一）
 - Chart.js の生成が `render` の中で行われていないか（**`afterRender` でなければ canvas がまだ DOM にない**）
 
@@ -96,7 +98,8 @@ node --check data.js && for f in js/*.js; do node --check "$f" || echo "NG: $f";
 grep -ohE "assets/img/[A-Za-z0-9_.-]+" index.html data.js js/*.js styles.css \
   | sort -u | while read -r p; do [ -f "$p" ] || echo "MISSING: $p"; done
 
-python3 -m http.server 5173
+npm start                     # → http://localhost:3000
+# チュートリアルを飛ばすなら http://localhost:3000/?screen=post
 ```
 
 変更された画面と、デモの核の一通りを実際に触る。

@@ -6,7 +6,9 @@
 
 ## 1. System Overview
 
-**ビルド工程を持たない単一ページの静的アプリ。** `index.html` を開くと、素の `<script>` タグで 10 本の JS が順に読み込まれ、`window` 上のグローバルを介して協調する。サーバもデータベースも外部 API 呼び出しも存在しない。
+**フロントはビルド工程を持たない単一ページの静的アプリ。** `index.html` を開くと、素の `<script>` タグで 10 本の JS が順に読み込まれ、`window` 上のグローバルを介して協調する。データベースは無い。
+
+**画像解析のためだけに最小の Node サーバ（`server.js`）が付く。** 静的ファイルの配信と `POST /api/analyze` の 2 役で、API キーをブラウザへ出さないために存在する。サーバが落ちていてもフロントは仕込みデータへ退避して動く。
 
 390×844 のスマートフォン枠（CSS で描画したベゼル）を PC ブラウザの中央に置き、その中だけを 1 つのアプリとして描画する。
 
@@ -19,6 +21,8 @@
 | 画面層 | `js/screen-*.js` | `window.Screens.<route>` に `{ render, bind?, afterRender? }` を登録 |
 | ルータ層 | `js/router.js` | 現在の route に対応する画面を描画。タブバー・ステータスバー・トーストの共通クロームを担当。最後に読み込まれ、起動も行う |
 | スタイル | `styles.css` | 全画面ぶんの CSS。独自リセットを含み自己完結 |
+| サーバ | `server.js` | 静的配信 + `POST /api/analyze`。`.env` などの配信を拒否する |
+| AI 連携 | `server/gemini.js` | プロンプト・JSON Schema・Gemini 呼び出し。**API キーが存在する唯一の場所** |
 
 ---
 
@@ -26,8 +30,12 @@
 
 ```
 index.html              エントリポイント。script 読み込み順を固定
-styles.css              全画面ぶんの CSS（189 クラス）
+styles.css              全画面ぶんの CSS
 data.js                 ITEMS / POSTS / USERS / AI_RESULTS / EVENTS / HISTORY_LABELS
+server.js               静的配信 + POST /api/analyze（Node。ブラウザへは配信されない）
+server/gemini.js        プロンプト / JSON Schema / Gemini 呼び出し
+package.json            サーバの依存（@google/genai, express, multer, dotenv）
+.env                    GEMINI_API_KEY。.gitignore 済み。絶対にコミットしない
 js/
 ├── state.js            AppState（状態 + 全ミューテータ）
 ├── router.js           描画ループと共通クローム。起動担当
@@ -79,6 +87,8 @@ DOM 更新
 
 `router.js` の末尾で `AppState.subscribe(render)` してから `render()` を 1 回呼ぶ。初期 route は `state.js` の `route: 'tutorial'`。
 
+**開発用の抜け道**: URL に `?screen=post` を付けると、チュートリアルを済ませた状態でその画面から始まる（`applyInitialScreen`）。クエリが無ければ従来どおり。デモ本番では使わない。
+
 ### 注意点
 
 - `render()` は毎回 `innerHTML` を丸ごと置き換える。**DOM 要素への参照を跨いで保持しない**
@@ -89,20 +99,24 @@ DOM 更新
 
 ## 4. External API Integration
 
-**外部 HTTP API の呼び出しは 1 件も存在しない。** 詳細と根拠は [API.md](API.md)。
-
-- AI（Gemini 等）の**ライブ呼び出しはない**。「AI が解析中…」は `setTimeout` 1.5 秒の演出で、認識結果は `data.js` の `AI_RESULTS` にハードコードされている
-- 唯一の外部依存は `index.html` が読む CDN 2 本（Chart.js、Tailwind Play CDN）
+**外部 API の呼び出しは投稿フローの画像解析 1 箇所だけ。** 契約の詳細は [API.md](API.md)。
 
 ```
 Browser
    │
-   ├── index.html / styles.css / js/*.js / assets/img/*  ← すべてローカル
+   ├── index.html / styles.css / js/*.js / assets/img/*   ← server.js が配信
+   │
+   ├── POST /api/analyze  ──▶ server.js ──▶ server/gemini.js ──▶ Gemini
+   │      （投稿フローの画像解析のみ。API キーはサーバ側だけ）
    │
    └── CDN（描画の補助のみ。データ取得はしない）
         ├── cdn.jsdelivr.net  … Chart.js 4.4.7   ← 失敗時は自前の drawFallback へ退避
         └── cdn.tailwindcss.com … Tailwind Play  ← 実質未使用（ユーティリティクラス 0 件）
 ```
+
+- **チュートリアルの祭壇スキャンは AI を呼ばない。** `setTimeout` 1.5 秒の演出で `AI_RESULTS` の固定 7 件を出す
+- **解析が失敗しても既存フローは壊れない。** 仕込みデータへ退避し、手入力で投稿を続けられる
+- `file://` 直開きでもアプリは動く（`/api/analyze` に届かず退避するだけ）
 
 ---
 
@@ -121,9 +135,10 @@ Browser
 | `likedPosts` | postId → boolean |
 | `requestSent` | 「欲しい」送信済みフラグ |
 | `selectedProfile` | 表示中の他人プロフィールの handle |
-| `post` | `{ stage, selected, count, giveaway, caption }`。stage は `select` → `analyzing` → `result` → `complete` |
+| `post` | `{ stage, selected, count, giveaway, caption, imageUrl, analysis, analysisError }`。stage は `select` → `analyzing` → `result` → `complete`。`imageUrl` は選んだ写真の object URL、`analysis` は Gemini の解析結果（失敗時 `null`）、`analysisError` は表示用の失敗メッセージ |
 | `createdPosts` | 投稿フローで作られた投稿（マイページのグリッドに反映） |
 | `postedDemo` | デモ投稿済みフラグ |
+| `postedItemId` | 直前に投稿したアイテムの id。完了画面と出品ドラフトが対象を引くのに使う |
 | `listing` | `{ itemId, stage }`。stage は `form` / `success` |
 | `assetDetailItemId` | 資産詳細モーダルの対象。`stella-card` のみ開く |
 | `shrineCardOpen` | 祭壇カードモーダルの開閉 |
@@ -148,7 +163,9 @@ Browser
 | `data.js` のスキーマ | **変更しない。** 変換関数で対応する | 同じ形を前提にした他画面が全滅する |
 | script 読み込み順 | `data.js` → `state.js` → `screen-*.js` → `router.js`。**変えない** | 起動時に未定義参照で落ちる |
 | モジュール形式 | **ES modules を導入しない** | `file://` 直開きが CORS で動かなくなる |
-| 外部通信 | **新規に足さない** | 会場の回線障害でデモが止まる |
+| 外部通信 | **これ以上増やさない。** 現在は `/api/analyze` の 1 本のみ | 会場の回線障害でデモが止まる |
+| API キー | **ブラウザへ配信されるファイルに書かない**（`index.html` / `data.js` / `js/*.js`） | キーが公開され失効させる羽目になる |
+| AI 依存 | **必須にしない。** 失敗時は必ず仕込みデータへ退避する | API が落ちた瞬間にデモ全体が止まる |
 
 ### 現状の読み取り依存（許容されている直読み）
 
@@ -172,7 +189,8 @@ screen は以下のグローバルを**読み取りのみ**直接参照してい
 ```
 チュートリアル ──（items[].count を確定）──▶ 資産タブ（総額 ¥81,000）
                                               │
-投稿フロー ──（stella-acsta の count +1）─────┤ 総額 ¥84,200 / ×2 バッジ
+投稿フロー ──（同定されたグッズの count +1）───┤ 総額 ¥84,200 / ×2 バッジ
+     │       または（新規アイテムを items に追加）
      │                                        │
      └──（createdPosts に追加）──▶ マイページのグリッド
      │
@@ -189,19 +207,26 @@ screen は以下のグローバルを**読み取りのみ**直接参照してい
 ### デモの核（絶対に壊してはいけない経路）
 
 ```
-投稿タブ → 画像選択 → AI 結果カード → 投稿 → 「2個目を検出」通知カード
+投稿タブ → 画像選択 → Gemini 解析 → AI 結果カード → 投稿 → 「2個目を検出」通知カード
         → [出品ドラフトを見る] → メルカリ風出品モック → 出品する
         → 資産タブに「出品中」バッジ
 ```
 
 この経路に関わるのは `screen-post.js` / `screen-listing.js` / `screen-assets.js` と `state.js` の
-`startPostAnalysis` / `submitPost` / `prepareListing` / `submitListing` / `finishListing`。
+`startPostAnalysis` / `submitPost` / `prepareListing` / `submitListing` / `finishListing`、
+および `server.js` / `server/gemini.js`。
+
+**「2個目を検出」が出る条件**: Gemini が既存グッズと同定（`matchedItemId`）し、
+その結果 `count >= 2` になったとき。ステラのアクスタを撮れば `stella-acsta` に同定される。
+同定されなければ新規資産として追加され、「資産に追加しました」の表示になる。
+**解析が失敗した場合は従来どおり `stella-acsta` に加算するので、デモ台本は成立し続ける。**
 
 ### 数値の整合（仕様で固定。変更するとデモ台本と食い違う）
 
 | 場面 | 値 | 根拠 |
 | --- | --- | --- |
 | チュートリアル確定後の総額 | ¥81,000 | 7 アイテム、缶バッジのみ 2 個 |
-| デモ投稿で加算 | +¥3,200 | ステラ アクリルスタンドの相場 |
+| デモ投稿で加算 | +¥3,200 | ステラ アクリルスタンドの相場。**既存グッズに同定された場合は既存の相場を使う**（Gemini の推定値では上書きしない） |
 | 投稿後の総額 | ¥84,200 | 資産タブヘッダーの表示と一致させる |
+| 新規アイテムの相場 | Gemini の `estimatedPrice` | 同定されなかった場合のみ。総額はここで台本から外れる |
 | 急騰イベント | 8/21 +18% | ステラのトレカ。チャートにマーカー |
