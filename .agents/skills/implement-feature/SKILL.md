@@ -13,7 +13,7 @@ description: Use when implementing a new feature or screen in the 推しポー�
 
 このリポジトリはビルドなし・ES modules なし・`var` と `function` のみ・render は HTML 文字列を返す、という統一された書き方で全ファイルが書かれている。「より良い書き方」を持ち込むと、他のファイルと噛み合わなくなり、並行作業している人の変更と衝突する。改善案は実装せず、報告に書くだけにする。
 
-新しいライブラリ・CDN・npm パッケージも追加しない。
+新しいライブラリ・CDN・npm パッケージも追加しない（サーバの既存 4 つで足りている）。
 
 ## 手順
 
@@ -73,7 +73,8 @@ grep -ohE "assets/img/[A-Za-z0-9_.-]+" index.html data.js js/*.js styles.css \
   | sort -u | while read -r p; do [ -f "$p" ] || echo "MISSING: $p"; done
 
 # ブラウザで確認
-python3 -m http.server 5173   # → http://localhost:5173
+npm start                     # → http://localhost:3000
+# チュートリアルを飛ばすなら http://localhost:3000/?screen=post
 ```
 
 ブラウザでは次を必ず見る。

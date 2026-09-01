@@ -236,6 +236,84 @@ Reason not documented yet. 当初 Tailwind で書く前提だったが、実装�
 
 ---
 
+## Decision: Gemini をライブ呼び出しする（最小バックエンドを追加）
+
+**Status**: Accepted
+**Date**: 2026-09-01
+
+### Context
+
+「AI をデモ中に呼び出さず、認識結果を `data.js` に焼き込む」で決めた仕込みデータ方式では、
+どんな写真を撮っても「ステラ アクリルスタンド」しか出ない。
+デモの訴求が「AI が商品を認識して出品情報を作る」ことである以上、
+実際に動いて見えることを優先する判断に切り替えた。
+
+### Decision
+
+投稿フロー（`Screens.post`）の画像解析だけを Gemini の実呼び出しにする。
+API キーをブラウザへ出せないため、静的配信を兼ねる最小の Node サーバ（`server.js`）を追加する。
+
+- `POST /api/analyze` … multipart で画像を受け、出品情報を JSON で返す
+- プロンプトと JSON Schema は `server/gemini.js` に置く（サーバ側で管理）
+- 公式 SDK `@google/genai` を使い、Structured Output で応答形式を固定する
+- キーは `GEMINI_API_KEY`。`.env` は `.gitignore` 済み
+
+**チュートリアルの祭壇スキャンは仕込みデータのまま**にした。
+あちらは「合計 ¥81,000 ちょうど・缶バッジ2個」を関門にしてデモが進む作りで、
+実結果に置き換えると関門が成立しなくなるため。
+
+### Why
+
+解析が落ちても既存フローが壊れない退避経路（`AI_RESULTS`）を残せる見通しが立ったため、
+旧判断が避けたかったリスクを負わずにライブ呼び出しの説得力を得られると判断した。
+
+### Alternatives
+
+- 仕込みデータのまま続ける → 撮った物と表示が一致せず、デモの主張が成立しない
+- フロントから直接 Gemini を呼ぶ → API キーがブラウザに露出するため却下
+
+### Consequences
+
+- **フロントはビルド工程なしのまま**だが、`npm install` / `npm start` が必要になった。
+  `file://` 直開きでも動くが、その場合 `/api/analyze` に届かず仕込みデータへ退避する
+- `js/state.js` に初めて `fetch` と Promise が入った（従来は `setTimeout` の演出のみ）
+- 撮った商品が既存グッズと同定されなければ、新規資産として `state.items` に追加される。
+  相場は Gemini の `estimatedPrice` を使う（既存グッズに同定された場合は既存の相場を優先）
+- API キーの管理責任が発生した。`.env` を絶対にコミットしないこと
+
+---
+
+## Decision: 画像解析には lite 系モデルを使い、タイムアウトで打ち切る
+
+**Status**: Accepted
+**Date**: 2026-09-01
+
+### Context
+
+Gemini 側の負荷でモデルの応答時間が大きく振れる。実測で `gemini-3.6-flash` が
+同じ画像に対し **2.2 秒のときと 81.9 秒のとき**があった。
+デモ中に数十秒待たされるのは成立しない。
+
+### Decision
+
+主モデルを `gemini-3.5-flash-lite`（実測 1.6〜1.9 秒）にする。
+SDK は遅いだけでは失敗しないため、`server/gemini.js` 側でタイムアウトを実装する
+（主 12 秒 → 退避先 `gemini-3.1-flash-lite` 20 秒）。
+`GEMINI_MODEL` 環境変数で上書きできる。
+
+### Why
+
+デモでは精度より速度が効く。lite 系でも出品情報の生成には実用上足りている。
+
+### Consequences
+
+- 当日 Gemini が空いていれば `GEMINI_MODEL=gemini-3.6-flash` の方が結果は良い
+- 両モデルとも落ちた場合は 502 を返し、フロントは仕込みデータへ退避する
+- **モデル名は陳腐化が速い。** `gemini-2.5-flash` は開発中に提供終了して 404 を返すようになった。
+  動かなくなったら `GET https://generativelanguage.googleapis.com/v1beta/models` で現行モデルを確認する
+
+---
+
 ## Decision: 出品モックを実物メルカリのダークUIに完コピし、赤ヘッダーを廃止する
 
 **Status**: Accepted

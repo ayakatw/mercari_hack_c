@@ -1,6 +1,12 @@
 (function (global) {
   'use strict';
 
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>'"]/g, function (char) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char];
+    });
+  }
+
   function yen(value) {
     return Number(value).toLocaleString('ja-JP');
   }
@@ -11,7 +17,7 @@
 
   function photoRow(item) {
     var slots = [
-      '<div class="ml-slot is-filled"><img src="' + item.thumb + '" alt="' + item.name + 'の出品写真"><span class="ml-slot-num">1</span></div>',
+      '<div class="ml-slot is-filled"><img src="' + escapeHtml(item.thumb) + '" alt="' + escapeHtml(item.name) + 'の出品写真"><span class="ml-slot-num">1</span></div>',
       '<div class="ml-slot"><span class="ml-slot-cam" aria-hidden="true">◎</span><span class="ml-slot-num">2</span></div>'
     ];
     var index;
@@ -24,13 +30,13 @@
   function navRow(label, value, pill, note) {
     return [
       '<div class="ml-row" data-listing-nav>',
-        pill ? '<span class="ml-pill">' + pill + '</span>' : '',
+        pill ? '<span class="ml-pill">' + escapeHtml(pill) + '</span>' : '',
         '<div class="ml-row-main">',
-          '<span class="ml-row-label">' + label + '</span>',
-          '<span class="ml-row-value">' + value + '</span>',
+          '<span class="ml-row-label">' + escapeHtml(label) + '</span>',
+          '<span class="ml-row-value">' + escapeHtml(value) + '</span>',
           '<span class="ml-chevron" aria-hidden="true">›</span>',
         '</div>',
-        note ? '<span class="ml-row-note">' + note + '</span>' : '',
+        note ? '<span class="ml-row-note">' + escapeHtml(note) + '</span>' : '',
       '</div>'
     ].join('');
   }
@@ -60,7 +66,9 @@
     ].join('');
   }
 
-  function listingForm(item) {
+  function listingForm(item, aiDescription) {
+    var text = aiDescription || description(item);
+    var aiLabel = aiDescription ? '✦ Geminiが作成' : '✦ AIで作成済み';
     return [
       '<section class="screen listing-screen">',
         '<header class="ml-header">',
@@ -72,16 +80,16 @@
           '<button type="button" class="ml-template" data-listing-template><span aria-hidden="true">▤</span> テンプレート</button>',
           '<div class="ml-block">',
             '<h2 class="ml-heading">商品名</h2>',
-            '<div class="ml-input">' + item.name + '</div>',
+            '<div class="ml-input">' + escapeHtml(item.name) + '</div>',
           '</div>',
           '<div class="ml-block ml-rows">',
-            navRow('カテゴリー', item.category, '', ''),
-            navRow('商品の状態', item.condition, '', ''),
+            navRow('カテゴリー', item.category || '', '', ''),
+            navRow('商品の状態', item.condition || '', '', ''),
             navRow('配送方法', 'ゆうゆうメルカリ便', '送料込み (出品者負担)', '東京都から1~2日で発送'),
           '</div>',
           '<div class="ml-block">',
-            '<div class="ml-heading-line"><h2 class="ml-heading">商品の説明</h2><span class="ml-ai-badge">✦ AIで作成済み</span></div>',
-            '<div class="ml-input ml-textarea">' + description(item) + '</div>',
+            '<div class="ml-heading-line"><h2 class="ml-heading">商品の説明</h2><span class="ml-ai-badge">' + aiLabel + '</span></div>',
+            '<div class="ml-input ml-textarea">' + escapeHtml(text) + '</div>',
           '</div>',
           saleTypeBlock(item),
           '<div class="ml-terms">',
@@ -120,13 +128,23 @@
       var state = AppState.getState();
       var item = AppState.getItem(state.listing.itemId || 'stella-acsta');
       var displayItem = item;
-      if (item.id === 'stella-acsta' && state.postedDemo) {
+      var aiDescription = null;
+      var analysis = state.post.analysis;
+      if (analysis && state.postedItemId === item.id) {
         displayItem = Object.assign({}, item, {
-          thumb: AI_RESULTS['acsta2.svg'].image,
+          thumb: state.post.imageUrl || item.thumb,
+          name: analysis.title,
+          category: analysis.category,
+          condition: analysis.condition
+        });
+        aiDescription = analysis.description;
+      } else if (item.id === 'stella-acsta' && state.postedDemo) {
+        displayItem = Object.assign({}, item, {
+          thumb: state.post.imageUrl || AI_RESULTS['acsta2.svg'].image,
           condition: AI_RESULTS['acsta2.svg'].state
         });
       }
-      return state.listing.stage === 'success' ? listingDone() : listingForm(displayItem);
+      return state.listing.stage === 'success' ? listingDone() : listingForm(displayItem, aiDescription);
     },
 
     bind: function (root) {
