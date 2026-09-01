@@ -1275,6 +1275,62 @@ p {
   color: var(--ink);
 }
 
+/* Gemini 画像解析の補足表示（確認が必要な項目 / 解析失敗） */
+.ai-missing-note {
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1px solid #ded4ff;
+  border-radius: 13px;
+  background: var(--lavender);
+}
+
+.ai-missing-note b {
+  display: block;
+  color: var(--purple-dark);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ai-missing-note ul {
+  margin-top: 6px;
+  padding-left: 14px;
+  color: #6d6982;
+  font-size: 9px;
+  line-height: 1.7;
+  list-style: disc;
+}
+
+.ai-error-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid #f6d5db;
+  border-radius: 13px;
+  background: #fdf1f3;
+}
+
+.ai-error-note > span {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--red);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ai-error-note p {
+  color: #8a5560;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
 .market-box {
   display: grid;
   grid-template-columns: 1fr auto;

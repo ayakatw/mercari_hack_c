@@ -203,6 +203,20 @@
     render: render
   };
 
+  // 開発用: ?screen=post のように指定すると、チュートリアルを済ませた状態で
+  // その画面から始められる。指定がなければ従来どおりチュートリアルから。
+  function applyInitialScreen() {
+    var match = /[?&]screen=([a-z]+)/.exec(global.location.search || '');
+    var route = match && match[1];
+    if (!route || !Screens[route] || route === 'tutorial') {
+      return;
+    }
+    AppState.adjustTutorialCount('stella-badge', 1);
+    AppState.completeTutorial();
+    AppState.setRoute(route);
+  }
+
   AppState.subscribe(render);
+  applyInitialScreen();
   render();
 }(window));
