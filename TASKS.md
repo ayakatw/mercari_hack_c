@@ -28,6 +28,18 @@
 
 # Active Tasks
 
+## Haruto + Claude (Fable)
+
+### チュートリアルに推しカラーAI推定UXを追加
+
+- **Status**: In review
+- **Owner**: Haruto / Claude Fable
+- **Branch**: feat/tutorial-theme-ux（base: feat/listing-mercari-redesign）
+- **Files / directories**: `js/screen-tutorial.js`
+- **Goal**: 祭壇解析中に「推しカラーを推定中…」を出し、認識結果画面にAI推定verdict+テーマ選択（`Theme.THEMES` / `.theme-option` 再利用、`AppState.setTheme`）を置く。エンジンは `js/theme.js` の data-theme 方式をそのまま使用
+
+**Notes**: 旧4色CSS変数エンジン(feat/personalized-tutorial-theme)はこのdata-theme方式に置き換えられたため破棄予定。ブラウザ検収済み。
+
 ## Claude
 
 ### タブアイコンの Ionicons 化 + フィードカードの再デザイン

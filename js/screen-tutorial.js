@@ -38,7 +38,7 @@
       '<section class="tutorial-screen tutorial-analysis">',
         '<header class="tutorial-head"><span>AI SCANNING</span><h1>祭壇を解析中…</h1><p>グッズとメルカリ相場を照合しています</p></header>',
         '<div class="shrine-scan"><img src="assets/img/saidan.svg" alt="解析中のステライト祭壇"><div class="scan-beam"></div><span class="detect-box box-a">アクスタ ✓</span><span class="detect-box box-b">トレカ ✓</span><span class="detect-box box-c">ぬい ✓</span></div>',
-        '<div class="recognition-status"><span class="ai-spinner"><i></i></span><div><strong>AIが解析中…</strong><p>7件の候補を検出しています</p></div></div>',
+        '<div class="recognition-status"><span class="ai-spinner"><i></i></span><div><strong>AIが解析中…</strong><p>7件の候補を検出 ✦ 推しカラーを推定しています</p></div></div>',
         progress(2),
       '</section>'
     ].join('');
@@ -55,13 +55,26 @@
     ].join('');
   }
 
+  function themeOption(theme, current) {
+    var active = theme.id === current;
+    return [
+      '<button type="button" class="theme-option' + (active ? ' is-active' : '') + '" data-set-theme="' + theme.id + '" aria-pressed="' + active + '" title="' + theme.hue + ' / ' + theme.desc + '">',
+        '<span class="theme-dots" data-theme="' + theme.id + '" aria-hidden="true"><i></i><i></i><i></i></span>',
+        '<strong>' + theme.name + '</strong>',
+      '</button>'
+    ].join('');
+  }
+
   function renderReview(state) {
     var results = AI_RESULTS['saidan.svg'];
     var total = AppState.getTutorialTotal();
     var ready = state.tutorial.counts['stella-badge'] === 2 && total === 81000;
+    var estimated = Theme.find(Theme.DEFAULT_THEME);
     return [
       '<section class="tutorial-screen tutorial-review">',
         '<header class="review-head"><div><span>7件を認識しました ✦</span><h1>個数を確認してください</h1></div><div class="ai-badge">AI</div></header>',
+        '<div class="review-hint"><span>🎨</span><p>祭壇の色味から、あなたの推しカラーは<strong>' + estimated.hue + '「' + estimated.name + '」</strong>と推定。<br>タップで今すぐ着せ替えできます</p></div>',
+        '<div class="theme-options" role="group" aria-label="推しカラーを選ぶ">' + Theme.THEMES.map(function (theme) { return themeOption(theme, state.theme); }).join('') + '</div>',
         '<div class="review-hint"><span>☝</span><p>実物は<strong>「ステラ 缶バッジ」が2個</strong>。<br>＋を押してAIの候補を直してみよう</p></div>',
         '<div class="recognition-list">' + results.map(function (result) { return reviewRow(result, state.tutorial.counts[result.itemId] || 1); }).join('') + '</div>',
         '<div class="review-footer"><div><span>現在の合計</span><strong>' + AppState.formatYen(total) + '</strong></div><button type="button" class="primary-button' + (ready ? '' : ' is-muted') + '" data-confirm-tutorial>この内容で確定</button></div>',
@@ -107,6 +120,11 @@
       root.querySelectorAll('[data-tutorial-count]').forEach(function (button) {
         button.addEventListener('click', function () {
           AppState.adjustTutorialCount(button.getAttribute('data-tutorial-count'), Number(button.getAttribute('data-delta')));
+        });
+      });
+      root.querySelectorAll('[data-set-theme]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          AppState.setTheme(button.getAttribute('data-set-theme'));
         });
       });
       var confirm = root.querySelector('[data-confirm-tutorial]');
