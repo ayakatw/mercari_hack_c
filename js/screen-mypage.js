@@ -2,6 +2,7 @@
   'use strict';
 
   function shrineModal(total) {
+    // total はグッズの点数（金額はUIから外した）
     return [
       '<div class="modal-layer shrine-layer" data-close-shrine>',
         '<section class="modal-sheet shrine-sheet" role="dialog" aria-modal="true" aria-labelledby="shrine-title">',
@@ -10,10 +11,10 @@
           '<div class="share-preview">',
             '<div class="share-brand">推しポート <span>✦</span></div>',
             '<img src="assets/img/saidan.svg" alt="りなの祭壇">',
-            '<div class="share-copy"><span>MY STELLIGHT ALTAR</span><h2 id="shrine-title">My祭壇</h2><strong>' + AppState.formatYen(total) + '</strong><p>好きの記録が、わたしのポートフォリオ。</p></div>',
+            '<div class="share-copy"><span>MY STELLIGHT ALTAR</span><h2 id="shrine-title">My祭壇</h2><strong>' + total + '点</strong><p>好きの記録が、わたしのポートフォリオ。</p></div>',
             '<div class="share-sparkles" aria-hidden="true">✦　⋆　✧</div>',
           '</div>',
-          '<p class="share-help">金額を入れた祭壇カードをシェアできます</p>',
+          '<p class="share-help">祭壇カードをシェアできます</p>',
           '<button type="button" class="x-share-button" data-share-x><span>𝕏</span> Xでシェア</button>',
         '</section>',
       '</div>'
@@ -44,7 +45,7 @@
               grid.map(function (image, index) { return '<img src="' + image + '" alt="りなの投稿 ' + (index + 1) + '" loading="lazy">'; }).join(''),
             '</div>',
           '</div>',
-          state.shrineCardOpen ? shrineModal(AppState.getTotal()) : '',
+          state.shrineCardOpen ? shrineModal(state.items.reduce(function (sum, item) { return sum + item.count; }, 0)) : '',
         '</section>'
       ].join('');
     },

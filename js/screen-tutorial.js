@@ -11,7 +11,7 @@
         '<div class="welcome-sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>⋆</span><span>✦</span></div>',
         '<div class="welcome-logo">推しポート <b>✦</b></div>',
         '<div class="welcome-visual"><div class="orb orb-one"></div><div class="orb orb-two"></div><img src="assets/img/saidan.svg" alt="ステライトの祭壇"></div>',
-        '<div class="welcome-copy"><span class="mini-pill">推し活が資産になるSNS</span><h1>その祭壇、<br><em>いくら</em>か知ってる?</h1><p>投稿するだけで、あなたの「好き」が<br>ポートフォリオになります。</p></div>',
+        '<div class="welcome-copy"><span class="mini-pill">推し活が資産になるSNS</span><h1>その祭壇、<br><em>ちゃんと</em>記録してる?</h1><p>投稿するだけで、あなたの「好き」が<br>ポートフォリオになります。</p></div>',
         '<button type="button" class="primary-button tutorial-cta" data-start-tutorial>はじめる <span>›</span></button>',
         progress(1),
       '</section>'
@@ -49,7 +49,7 @@
     return [
       '<div class="recognition-row">',
         '<img src="' + item.thumb + '" alt="">',
-        '<div class="recognition-copy"><h3>' + result.name + '</h3><p>相場 ' + AppState.formatYen(result.price) + '</p></div>',
+        '<div class="recognition-copy"><h3>' + result.name + '</h3></div>',
         '<div class="mini-stepper"><button type="button" data-tutorial-count="' + result.itemId + '" data-delta="-1" aria-label="' + result.name + 'を減らす"' + (count <= 1 ? ' disabled' : '') + '>−</button><strong>' + count + '</strong><button type="button" data-tutorial-count="' + result.itemId + '" data-delta="1" aria-label="' + result.name + 'を増やす">＋</button></div>',
       '</div>'
     ].join('');
@@ -67,8 +67,12 @@
 
   function renderReview(state) {
     var results = AI_RESULTS['saidan.svg'];
-    var total = AppState.getTutorialTotal();
-    var ready = state.tutorial.counts['stella-badge'] === 2 && total === 81000;
+    var ready = state.tutorial.counts['stella-badge'] === 2 && results.every(function (result) {
+      return result.itemId === 'stella-badge' || (state.tutorial.counts[result.itemId] || 1) === 1;
+    });
+    var confirmedCount = results.reduce(function (sum, result) {
+      return sum + (state.tutorial.counts[result.itemId] || 1);
+    }, 0);
     var estimated = Theme.find(Theme.DEFAULT_THEME);
     return [
       '<section class="tutorial-screen tutorial-review">',
@@ -77,20 +81,23 @@
         '<div class="theme-options" role="group" aria-label="推しカラーを選ぶ">' + Theme.THEMES.map(function (theme) { return themeOption(theme, state.theme); }).join('') + '</div>',
         '<div class="review-hint"><span>☝</span><p>実物は<strong>「ステラ 缶バッジ」が2個</strong>。<br>＋を押してAIの候補を直してみよう</p></div>',
         '<div class="recognition-list">' + results.map(function (result) { return reviewRow(result, state.tutorial.counts[result.itemId] || 1); }).join('') + '</div>',
-        '<div class="review-footer"><div><span>現在の合計</span><strong>' + AppState.formatYen(total) + '</strong></div><button type="button" class="primary-button' + (ready ? '' : ' is-muted') + '" data-confirm-tutorial>この内容で確定</button></div>',
+        '<div class="review-footer"><div><span>登録するグッズ</span><strong>' + confirmedCount + '点</strong></div><button type="button" class="primary-button' + (ready ? '' : ' is-muted') + '" data-confirm-tutorial>この内容で確定</button></div>',
       '</section>'
     ].join('');
   }
 
-  function renderValue() {
+  function renderValue(state) {
+    var registered = AI_RESULTS['saidan.svg'].reduce(function (sum, result) {
+      return sum + (state.tutorial.counts[result.itemId] || 1);
+    }, 0);
     return [
       '<section class="tutorial-screen tutorial-value">',
         '<div class="value-stars" aria-hidden="true">✦　⋆　✧</div>',
         '<span class="value-kicker">解析が完了しました</span>',
-        '<div class="value-shrine"><img src="assets/img/saidan.svg" alt="登録したステライト祭壇"><span>7アイテムを登録 ✓</span></div>',
-        '<div class="value-copy"><p>あなたの祭壇は</p><h1>¥81,000</h1><span>です</span></div>',
-        '<p class="value-note">今日から相場の変化を自動で追いかけます</p>',
-        '<button type="button" class="primary-button tutorial-cta" data-complete-tutorial>資産を見てみる <span>›</span></button>',
+        '<div class="value-shrine"><img src="assets/img/saidan.svg" alt="登録したステライト祭壇"><span>' + AI_RESULTS['saidan.svg'].length + '種類を登録 ✓</span></div>',
+        '<div class="value-copy"><p>あなたの祭壇に</p><h1>' + registered + '点</h1><span>を記録しました</span></div>',
+        '<p class="value-note">重複したグッズは、次のオタクへ継承できます</p>',
+        '<button type="button" class="primary-button tutorial-cta" data-complete-tutorial>グッズを見てみる <span>›</span></button>',
         progress(3),
       '</section>'
     ].join('');
@@ -104,7 +111,7 @@
       if (state.tutorial.stage === 'capture') { return renderCapture(); }
       if (state.tutorial.stage === 'analyzing') { return renderAnalyzing(); }
       if (state.tutorial.stage === 'review') { return renderReview(state); }
-      if (state.tutorial.stage === 'value') { return renderValue(); }
+      if (state.tutorial.stage === 'value') { return renderValue(state); }
       return renderWelcome();
     },
 

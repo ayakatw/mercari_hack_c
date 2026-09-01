@@ -18,7 +18,7 @@
 | --- | --- | --- |
 | データ層 | `data.js` | 仕込みデータを `window` に公開。読み取り専用の定数 |
 | 状態層 | `js/state.js` | `window.AppState`。アプリ状態の保持と、状態を変更する全メソッド。DOM に触れない |
-| 画面層 | `js/screen-*.js` | `window.Screens.<route>` に `{ render, bind?, afterRender? }` を登録 |
+| 画面層 | `js/screen-*.js` | `window.Screens.<route>` に `{ render, bind? }` を登録 |
 | ルータ層 | `js/router.js` | 現在の route に対応する画面を描画。タブバー・ステータスバー・トーストの共通クロームを担当。最後に読み込まれ、起動も行う |
 | スタイル | `styles.css` | 全画面ぶんの CSS。独自リセットを含み自己完結 |
 | サーバ | `server.js` | 静的配信 + `POST /api/analyze`。`.env` などの配信を拒否する |
@@ -41,7 +41,7 @@ js/
 ├── router.js           描画ループと共通クローム。起動担当
 ├── screen-home.js      Screens.home / Screens.explore / Screens.profile
 ├── screen-post.js      Screens.post
-├── screen-assets.js    Screens.assets（Chart.js 使用）
+├── screen-goods.js     Screens.goods（グッズ一覧）
 ├── screen-mypage.js    Screens.mypage
 ├── screen-tutorial.js  Screens.tutorial
 └── screen-listing.js   Screens.listing
@@ -77,7 +77,7 @@ router.js の render()
    │   3. bindNavigation(app) でタブバーを結線
    │   4. screen.bind(app) で画面固有のイベントを結線
    │   5. 同一 route なら .screen-scroll のスクロール位置を復元
-   │   6. screen.afterRender(app) を呼ぶ（Chart.js の生成はここ）
+   │   6. screen.afterRender(app) を呼ぶ（DOM 挿入後の処理用。現在は未使用）
    │   7. renderToast(state) でトーストを描画
    ▼
 DOM 更新
@@ -92,7 +92,6 @@ DOM 更新
 ### 注意点
 
 - `render()` は毎回 `innerHTML` を丸ごと置き換える。**DOM 要素への参照を跨いで保持しない**
-- `render()` の時点では canvas はまだ DOM に入っていない。**Chart.js の生成は必ず `afterRender` で行う**
 - スクロール位置は `.screen-scroll` クラスを持つ要素からのみ復元される
 
 ---
@@ -110,7 +109,6 @@ Browser
    │      （投稿フローの画像解析のみ。API キーはサーバ側だけ）
    │
    └── CDN（描画の補助のみ。データ取得はしない）
-        ├── cdn.jsdelivr.net  … Chart.js 4.4.7   ← 失敗時は自前の drawFallback へ退避
         └── cdn.tailwindcss.com … Tailwind Play  ← 実質未使用（ユーティリティクラス 0 件）
 ```
 
@@ -128,7 +126,7 @@ Browser
 
 | キー | 意味 |
 | --- | --- |
-| `route` | 現在の画面。`tutorial` / `home` / `explore` / `profile` / `post` / `assets` / `mypage` / `listing` |
+| `route` | 現在の画面。`tutorial` / `home` / `explore` / `profile` / `post` / `goods` / `mypage` / `listing` |
 | `tutorialComplete` | チュートリアル完了フラグ |
 | `tutorial` | `{ stage, selected, counts }`。stage は `welcome` → `capture` → `analyzing` → `review` → `value` → `done` |
 | `items` | 保有アイテム。`ITEMS` から `pendingDemo` を除いた**クローン**。個数・出品状態はここを更新する |
@@ -138,9 +136,9 @@ Browser
 | `post` | `{ stage, selected, count, giveaway, caption, imageUrl, analysis, analysisError }`。stage は `select` → `analyzing` → `result` → `complete`。`imageUrl` は選んだ写真の object URL、`analysis` は Gemini の解析結果（失敗時 `null`）、`analysisError` は表示用の失敗メッセージ |
 | `createdPosts` | 投稿フローで作られた投稿（マイページのグリッドに反映） |
 | `postedDemo` | デモ投稿済みフラグ |
-| `postedItemId` | 直前に投稿したアイテムの id。完了画面と出品ドラフトが対象を引くのに使う |
+| `postedItemId` | 直前に投稿したアイテムの id。完了画面と継承ドラフトが対象を引くのに使う |
+| `showPrices` | グッズ一覧の相場トグル。ON かつ `status === 'listed'` のグッズにだけ金額を出す |
 | `listing` | `{ itemId, stage }`。stage は `form` / `success` |
-| `assetDetailItemId` | 資産詳細モーダルの対象。`stella-card` のみ開く |
 | `shrineCardOpen` | 祭壇カードモーダルの開閉 |
 | `toast` | `{ message, token }`。3.2 秒後に token 一致なら自動で消える |
 
@@ -148,7 +146,7 @@ Browser
 
 ### 派生値（保存せず都度計算する）
 
-- `getTotal()` — `items` の `marketPrice × count` の総和。資産タブのヘッダーと祭壇カードが使う
+- `getTotal()` — `items` の `marketPrice × count` の総和。**現在 UI からは呼ばれていない**（金額表示を外したため）が、関数は残してある
 - `getTutorialTotal()` — `AI_RESULTS['saidan.svg']` の `price × tutorial.counts` の総和
 
 ---
@@ -174,7 +172,7 @@ screen は以下のグローバルを**読み取りのみ**直接参照してい
 | ファイル | 直読みしているデータ |
 | --- | --- |
 | `screen-home.js` | `POSTS` |
-| `screen-assets.js` | `HISTORY_LABELS` |
+| `screen-goods.js` | （なし） |
 | `screen-post.js` | `AI_RESULTS` |
 | `screen-listing.js` | `AI_RESULTS` |
 | `screen-tutorial.js` | `AI_RESULTS` |
@@ -187,17 +185,17 @@ screen は以下のグローバルを**読み取りのみ**直接参照してい
 画面は独立しているが、**共有 state を通じて一方向に影響する**。下図の矢印は「左の操作が右の表示を変える」。
 
 ```
-チュートリアル ──（items[].count を確定）──▶ 資産タブ（総額 ¥81,000）
+チュートリアル ──（items[].count を確定）──▶ グッズ一覧タブ（8点 / 継承できる 1点）
                                               │
-投稿フロー ──（同定されたグッズの count +1）───┤ 総額 ¥84,200 / ×2 バッジ
+投稿フロー ──（同定されたグッズの count +1）───┤ 9点 / ×2 バッジ
      │       または（新規アイテムを items に追加）
      │                                        │
      └──（createdPosts に追加）──▶ マイページのグリッド
      │
-     └──（prepareListing）──▶ 出品モック ──（status='listed'）──▶ 資産タブ「出品中」バッジ
+     └──（prepareListing）──▶ 出品モック ──（status='listed'）──▶ グッズ一覧「出品中」バッジ
                                   ▲
-資産タブの [売る] ボタン ──────────┘
-（詳細モーダルの [売る] も同じ入口）
+グッズ一覧の [継承する] ボタン ────┘
+（詳細モーダルは撤去済み）
 
 ホーム TL ──（openProfile）──▶ 簡易プロフィール    ※ tappable な mio_stella のみ
 探す ── 静的グリッド。他画面へ影響しない
@@ -208,11 +206,11 @@ screen は以下のグローバルを**読み取りのみ**直接参照してい
 
 ```
 投稿タブ → 画像選択 → Gemini 解析 → AI 結果カード → 投稿 → 「2個目を検出」通知カード
-        → [出品ドラフトを見る] → メルカリ風出品モック → 出品する
-        → 資産タブに「出品中」バッジ
+        → [継承ドラフトを見る] → メルカリ風出品モック → 出品する
+        → グッズ一覧に「出品中」バッジ → 相場トグルで金額が見える
 ```
 
-この経路に関わるのは `screen-post.js` / `screen-listing.js` / `screen-assets.js` と `state.js` の
+この経路に関わるのは `screen-post.js` / `screen-listing.js` / `screen-goods.js` と `state.js` の
 `startPostAnalysis` / `submitPost` / `prepareListing` / `submitListing` / `finishListing`、
 および `server.js` / `server/gemini.js`。
 
@@ -225,8 +223,7 @@ screen は以下のグローバルを**読み取りのみ**直接参照してい
 
 | 場面 | 値 | 根拠 |
 | --- | --- | --- |
-| チュートリアル確定後の総額 | ¥81,000 | 7 アイテム、缶バッジのみ 2 個 |
-| デモ投稿で加算 | +¥3,200 | ステラ アクリルスタンドの相場。**既存グッズに同定された場合は既存の相場を使う**（Gemini の推定値では上書きしない） |
-| 投稿後の総額 | ¥84,200 | 資産タブヘッダーの表示と一致させる |
-| 新規アイテムの相場 | Gemini の `estimatedPrice` | 同定されなかった場合のみ。総額はここで台本から外れる |
+| チュートリアル確定後の点数 | 8 点 | 7 種類、缶バッジのみ 2 個 |
+| デモ投稿で加算 | +1 点 | 完了画面は点数のみ表示する |
+| 相場が見える条件 | トグルON かつ `status === 'listed'` | **継承を1件完了するまで金額は画面に一切出ない** |
 | 急騰イベント | 8/21 +18% | ステラのトレカ。チャートにマーカー |

@@ -56,12 +56,12 @@
     post: initialPostState(),
     createdPosts: [],
     postedDemo: false,
+    showPrices: false,
     postedItemId: null,
     listing: {
       itemId: null,
       stage: 'form'
     },
-    assetDetailItemId: null,
     shrineCardOpen: false,
     toast: null
   };
@@ -153,7 +153,6 @@
 
     setRoute: function (route) {
       state.route = route;
-      state.assetDetailItemId = null;
       state.shrineCardOpen = false;
       state.settingsOpen = false;
       notify();
@@ -216,8 +215,11 @@
 
     confirmTutorialItems: function () {
       var exactCount = state.tutorial.counts['stella-badge'] === 2;
-      var exactTotal = getTutorialTotal() === 81000;
-      if (!exactCount || !exactTotal) {
+      // 缶バッジ以外は 1 個のまま、が正解。金額では判定しない。
+      var othersAreOne = AI_RESULTS['saidan.svg'].every(function (result) {
+        return result.itemId === 'stella-badge' || (state.tutorial.counts[result.itemId] || 1) === 1;
+      });
+      if (!exactCount || !othersAreOne) {
         showToast('実物に合わせて「ステラ 缶バッジ」を2個にしてください');
         return;
       }
@@ -234,7 +236,7 @@
       });
       state.tutorialComplete = true;
       state.tutorial.stage = 'done';
-      state.route = 'assets';
+      state.route = 'goods';
       notify();
     },
 
@@ -319,6 +321,11 @@
       notify();
     },
 
+    toggleShowPrices: function () {
+      state.showPrices = !state.showPrices;
+      notify();
+    },
+
     togglePostGiveaway: function () {
       state.post.giveaway = !state.post.giveaway;
       notify();
@@ -376,7 +383,6 @@
       }
       state.listing.itemId = itemId;
       state.listing.stage = 'form';
-      state.assetDetailItemId = null;
       state.route = 'listing';
       notify();
     },
@@ -392,20 +398,7 @@
     },
 
     finishListing: function () {
-      state.route = 'assets';
-      notify();
-    },
-
-    openAssetDetail: function (itemId) {
-      if (itemId !== 'stella-card') {
-        return;
-      }
-      state.assetDetailItemId = itemId;
-      notify();
-    },
-
-    closeAssetDetail: function () {
-      state.assetDetailItemId = null;
+      state.route = 'goods';
       notify();
     },
 

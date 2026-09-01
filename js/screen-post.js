@@ -78,19 +78,6 @@
       : '仕込みデータ';
     var missing = (analysis && analysis.missingFields) || [];
 
-    // 実際に資産へ加算される相場を出す。
-    // 既存グッズに同定されたらその相場、新規なら Gemini の推定額。
-    var matched = analysis && analysis.matchedItemId ? AppState.getItem(analysis.matchedItemId) : null;
-    var price = fallback.price;
-    var priceNote = '参考：メルカリ成約データ';
-    if (matched) {
-      price = matched.marketPrice;
-      priceNote = '参考：登録済みの相場';
-    } else if (analysis && analysis.estimatedPrice) {
-      price = analysis.estimatedPrice;
-      priceNote = '✦ Geminiの推定相場';
-    }
-
     return [
       '<section class="screen screen-post">',
         postHeader('2 / 2'),
@@ -102,7 +89,6 @@
               '<img src="' + escapeHtml(photo) + '" alt="' + escapeHtml(title) + '">',
               '<div><h2>' + escapeHtml(title) + '</h2><div class="tag-row">' + tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join('') + '</div><p>状態 <strong>' + escapeHtml(condition) + '</strong></p></div>',
             '</div>',
-            '<div class="market-box"><span>現在の相場</span><strong>' + AppState.formatYen(price) + '</strong><small>' + escapeHtml(priceNote) + '</small></div>',
           '</div>',
           missing.length ? [
             '<div class="ai-missing-note">',
@@ -124,8 +110,6 @@
 
   function renderComplete(state) {
     var item = AppState.getItem(state.postedItemId);
-    var price = item ? item.marketPrice : 3200;
-    var addedValue = price * state.post.count;
     // 既存グッズの2個目以降だけ、継承（出品）を勧める。
     var isDuplicate = Boolean(item && item.count >= 2);
     var thumb = item ? item.thumb : 'assets/img/item-acsta.svg';
@@ -134,15 +118,15 @@
     var card = isDuplicate ? [
       '<article class="duplicate-alert">',
         '<div class="alert-kicker"><span>⚡</span> 重複アイテムを検出</div>',
-        '<div class="alert-body"><img src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(label) + '"><div><h3>' + escapeHtml(label) + '、<em>' + item.count + '個目</em>を検出。</h3><p>相場' + AppState.formatYen(price) + ' — 次のオタクに<br>継承しませんか?</p></div></div>',
-        '<button type="button" class="inherit-button" data-open-draft>出品ドラフトを見る <span>›</span></button>',
+        '<div class="alert-body"><img src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(label) + '"><div><h3>' + escapeHtml(label) + '、<em>' + item.count + '個目</em>を検出。</h3><p>次のオタクに<br>継承しませんか?</p></div></div>',
+        '<button type="button" class="inherit-button" data-open-draft>継承ドラフトを見る <span>›</span></button>',
         '<small>メルカリのあんしん取引へ移動します</small>',
       '</article>'
     ].join('') : [
       '<article class="duplicate-alert">',
         '<div class="alert-kicker"><span>✦</span> 資産に追加しました</div>',
-        '<div class="alert-body"><img src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(label) + '"><div><h3>' + escapeHtml(label) + '</h3><p>相場' + AppState.formatYen(price) + ' — 手放すなら<br>いま出品できます</p></div></div>',
-        '<button type="button" class="inherit-button" data-open-draft>出品ドラフトを見る <span>›</span></button>',
+        '<div class="alert-body"><img src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(label) + '"><div><h3>' + escapeHtml(label) + '</h3><p>手放すなら<br>いま継承に出せます</p></div></div>',
+        '<button type="button" class="inherit-button" data-open-draft>継承ドラフトを見る <span>›</span></button>',
         '<small>メルカリのあんしん取引へ移動します</small>',
       '</article>'
     ].join('');
@@ -151,7 +135,7 @@
       '<section class="screen screen-post post-complete-screen">',
         postHeader('完了'),
         '<div class="screen-scroll complete-scroll">',
-          '<div class="success-block"><div class="success-orb">✓<span>✦</span></div><h2>投稿しました。</h2><p>ポートフォリオに追加 <strong>+' + AppState.formatYen(addedValue) + '</strong></p></div>',
+          '<div class="success-block"><div class="success-orb">✓<span>✦</span></div><h2>投稿しました。</h2><p>ポートフォリオに追加 <strong>+' + state.post.count + '点</strong></p></div>',
           card,
           '<button type="button" class="text-button" data-post-again>もう1件投稿する</button>',
         '</div>',

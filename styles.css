@@ -1796,6 +1796,65 @@ p {
   font-style: normal;
 }
 
+/* グッズ一覧のサマリ。総額のかわりに点数と継承候補を出す */
+.goods-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 14px 16px 2px;
+}
+
+.goods-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.goods-summary strong {
+  color: var(--navy);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.goods-summary span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* 相場表示の一括トグル。継承中が1点以上あるときだけ描画される */
+.goods-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 16px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.goods-price-row label {
+  display: block;
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.goods-price-row small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
 .asset-section-head {
   display: flex;
   align-items: center;
@@ -1836,7 +1895,7 @@ p {
   position: relative;
   display: grid;
   min-height: 82px;
-  grid-template-columns: 59px minmax(0, 1fr) 50px;
+  grid-template-columns: 59px minmax(0, 1fr) 58px;
   align-items: center;
   gap: 9px;
   padding: 9px 10px;
@@ -1950,8 +2009,8 @@ p {
 .trend.up { color: var(--pink); }
 .trend.down { color: var(--periwinkle); }
 
-.sell-button {
-  min-width: 45px;
+.goods-inherit-button {
+  min-width: 54px;
   padding: 7px 9px;
   border: 1px solid var(--purple);
   border-radius: 12px;
@@ -3747,7 +3806,7 @@ p {
 .modal-close,
 .settings-close,
 .back-button,
-.sell-button,
+.goods-inherit-button,
 .stepper button,
 .mini-stepper button {
   position: relative;
@@ -3757,7 +3816,7 @@ p {
 .modal-close::after,
 .settings-close::after,
 .back-button::after,
-.sell-button::after {
+.goods-inherit-button::after {
   position: absolute;
   inset: -9px;
   content: "";

@@ -120,14 +120,15 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 
 ---
 
-## 2. 外部依存: CDN 2 本
+## 2. 外部依存: CDN 1 本
 
 `index.html` の `<head>` で読み込む。**データ取得ではなく描画の補助**にのみ使う。
 
 | # | URL | 用途 | 呼び出し箇所 | 失敗時の挙動 |
 | --- | --- | --- | --- | --- |
-| 1 | `https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js` | 資産タブの 30 日ライン、詳細モーダルのチャート | `js/screen-assets.js` の `createLineChart()` | **フォールバックあり。** `global.Chart` が未定義なら `drawFallback()` が Canvas 2D で簡易ラインを描く |
-| 2 | `https://cdn.tailwindcss.com` | （実質未使用） | なし | **未検証。** 後述 |
+| 1 | `https://cdn.tailwindcss.com` | （実質未使用） | なし | **未検証。** 後述 |
+
+Chart.js は**撤去済み**（グッズ一覧からチャートを外したため）。
 
 ### Tailwind Play CDN について
 
@@ -165,8 +166,8 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 | `openProfile(handle)` | `tappable: true` のユーザーのみプロフィールへ遷移 |
 | `startTutorialCapture()` / `startTutorialAnalysis()` | チュートリアルの stage を進める（後者は 1.5 秒後に `review` へ） |
 | `adjustTutorialCount(itemId, delta)` | 個数を 1〜5 の範囲で増減 |
-| `confirmTutorialItems()` | 条件を満たせば `value` へ。満たさなければトースト |
-| `completeTutorial()` | `tutorial.counts` を `items[].count` に反映し資産タブへ |
+| `confirmTutorialItems()` | 「缶バッジ 2 個かつ他は 1 個」なら `value` へ。満たさなければトースト（**金額では判定しない**） |
+| `completeTutorial()` | `tutorial.counts` を `items[].count` に反映しグッズ一覧タブへ |
 | `toggleLike(postId)` | いいねのトグル |
 | `sendRequest()` | 「欲しい」送信。トーストのみ |
 | `startPostAnalysis(file)` | 選択された `File` を `/api/analyze` へ POST し、結果を `post.analysis` に入れて `result` へ。**解析中の再呼び出しは無視する**（二重送信防止）。失敗時は `post.analysisError` を立てて仕込みデータへ退避。`file` 省略時や `fetch` 不在時は従来の `setTimeout` 演出のみ。スピナーが一瞬で消えないよう最低 1.2 秒は `analyzing` を保つ |
@@ -175,9 +176,9 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 | `resetPost()` | 投稿フォームを初期化 |
 | `prepareListing(itemId)` | 出品モックへ遷移。存在しない itemId なら何もしない |
 | `submitListing()` | 対象を `status: 'listed'` にして完了画面へ |
-| `finishListing()` | 資産タブへ戻る |
-| `openAssetDetail(itemId)` | **`stella-card` のときのみ**モーダルを開く（仕様どおり） |
-| `closeAssetDetail()` / `setShrineCardOpen(isOpen)` / `shareShrineCard()` | モーダル・シェアの制御 |
+| `finishListing()` | グッズ一覧タブへ戻る |
+| `setShrineCardOpen(isOpen)` / `shareShrineCard()` | 祭壇カードモーダル・シェアの制御 |
+| `toggleShowPrices()` | グッズ一覧の相場トグル。ON かつ `status === 'listed'` のグッズにだけ金額が出る |
 | `showToast(message)` | 3.2 秒で自動的に消えるトースト |
 
 `state.post.analysis` は `/api/analyze` のレスポンス `data` がそのまま入る（失敗時は `null`）。
@@ -191,12 +192,12 @@ Gemini は「フリマアプリへの出品情報を作る Agent」として指�
 | --- | --- | --- |
 | `render()` | **必須** | HTML **文字列**を返す。DOM を組み立てない。この時点で要素はまだ DOM に無い |
 | `bind(root)` | 任意 | `render` の結果が DOM に入った後に呼ばれる。イベント登録はここで |
-| `afterRender(root)` | 任意 | `bind` の後に呼ばれる。**Chart.js の生成はここ**（canvas が DOM に入っている必要があるため） |
+| `afterRender(root)` | 任意 | `bind` の後に呼ばれる。DOM 挿入後でないとできない処理はここで。現在使っている画面は無い |
 
-登録済みの route: `home` / `explore` / `profile` / `post` / `assets` / `mypage` / `tutorial` / `listing`。
+登録済みの route: `home` / `explore` / `profile` / `post` / `goods` / `mypage` / `tutorial` / `listing`。
 未登録の route が指定された場合、router は `Screens.home` にフォールバックする。
 
-**開発用**: `?screen=post` のように URL クエリで初期画面を指定できる（`router.js` の `applyInitialScreen`）。
+**開発用**: `?screen=post` / `?screen=goods` のように URL クエリで初期画面を指定できる（`router.js` の `applyInitialScreen`）。
 チュートリアルを済ませた状態から始まる。クエリが無ければ従来どおりチュートリアルから。
 
 ### 3.3 `window.Router`（`js/router.js`）

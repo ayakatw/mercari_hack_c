@@ -149,7 +149,7 @@
 
     bind: function (root) {
       var close = root.querySelector('[data-listing-close]');
-      if (close) { close.addEventListener('click', function () { AppState.setRoute('assets'); }); }
+      if (close) { close.addEventListener('click', function () { AppState.setRoute('goods'); }); }
 
       var template = root.querySelector('[data-listing-template]');
       if (template) { template.addEventListener('click', function () { AppState.showToast('テンプレート入力はデモでは省略しています'); }); }

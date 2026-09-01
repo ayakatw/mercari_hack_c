@@ -23,7 +23,7 @@
 | 言語 | 素の JavaScript（ES5 相当の書き方。`var` + `function`）、HTML、CSS |
 | ビルド | **なし。** フロントにバンドラ・トランスパイラは不在。追跡ファイルがそのまま成果物 |
 | モジュール | **ES modules 不使用。** 素の `<script>` + `window` グローバル名前空間 |
-| フロントの依存 | CDN 2 本のみ: Chart.js 4.4.7（資産チャート）、Tailwind Play CDN（**実質未使用**、後述） |
+| フロントの依存 | CDN 1 本のみ: Tailwind Play CDN（**実質未使用**）。Chart.js は撤去済み |
 | CSS | `styles.css` 1 枚の手書き。独自リセット込みで自己完結 |
 | バックエンド | **画像解析のためだけに最小構成あり。** `server.js`（静的配信 + `POST /api/analyze`）と `server/gemini.js`。DB は無い |
 | サーバの依存 | `@google/genai` / `express` / `multer` / `dotenv`（`package.json`） |
@@ -52,7 +52,7 @@ js/
 ├── router.js         画面切替・タブバー・トースト描画。最後に読み込み、起動も担当
 ├── screen-home.js    ホーム TL / 探す / 簡易プロフィール（Screens.home / .explore / .profile）
 ├── screen-post.js    投稿フロー（Screens.post）
-├── screen-assets.js  資産タブ + Chart.js 描画（Screens.assets）
+├── screen-goods.js   グッズ一覧タブ（Screens.goods）
 ├── screen-mypage.js  マイページ + 祭壇カード（Screens.mypage）
 ├── screen-tutorial.js 初回チュートリアル（Screens.tutorial）
 └── screen-listing.js メルカリ風出品モック（Screens.listing）
@@ -112,7 +112,6 @@ router.js        Screens を呼んで描画。AppState.subscribe(render) で再�
 - **`var` と `function` 宣言を使う。** `const` / `let` / アロー関数 / テンプレートリテラル / class は既存コードに 1 件もない。混ぜない
 - **render は HTML 文字列を返す。** DOM API で要素を組み立てない。配列 `.join('')` で連結する既存パターンに従う
 - **イベントは `bind(root)` 内で `data-*` 属性を `querySelectorAll` して登録。** インライン `onclick` を使わない
-- **Chart.js の生成は `afterRender` で。** `render` の時点では canvas が DOM に入っていない
 - **命名**: ファイル `screen-<route>.js` / 状態キーと itemId は kebab-case（`stella-acsta`）/ CSS クラスも kebab-case
 - **ユーザー入力を HTML に埋めるときは `escapeHtml` を通す**（`js/screen-post.js` に実装あり）
 - **金額は `AppState.formatYen()` を使う。** `¥` の手書き連結をしない

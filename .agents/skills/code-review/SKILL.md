@@ -30,13 +30,13 @@ git diff main...HEAD
 #### Correctness
 
 - ロジックが仕様（`specs/推しポート要件定義.md`）どおりか
-- **固定値の整合**: チュートリアル後 ¥81,000 / 投稿後 ¥84,200 / 急騰 +18%。`data.js` の価格を変えた場合、`js/state.js` の `81000` 判定と食い違わないか
+- **固定値の整合**: チュートリアル後 8 点 / 投稿で +1 点。関門は「缶バッジ 2 個かつ他は 1 個」の個数判定（`js/state.js` の `confirmTutorialItems`）。旧 `81000` 判定と食い違わないか
 - `getItem()` / `getUser()` は `null` を返しうる。呼び出し側にガードがあるか
 - 個数の範囲（1〜5）のクランプが効いているか
 
 #### Regressions
 
-- **デモの核を壊していないか**: 投稿 → 2個目検出通知 → 出品モック → 資産タブの「出品中」バッジ
+- **デモの核を壊していないか**: 投稿 → 2個目検出通知 → 出品モック → グッズ一覧の「出品中」バッジ
 - `js/state.js` / `data.js` / `index.html` / `styles.css` は共有ファイル。変更があれば**全画面への影響**を確認する
 - `index.html` の script 読み込み順が変わっていないか（`data.js` → `state.js` → `screen-*.js` → `router.js`）
 - `styles.css` に追加したクラス名が既存クラスと衝突していないか
@@ -54,7 +54,7 @@ git diff main...HEAD
 - **API キーがブラウザ配信コードに混入していないか**（`index.html` / `data.js` / `js/*.js`）
 - **AI 依存が必須になっていないか。** 解析が失敗しても仕込みデータへ退避して完走するか
 - `const` / `let` / アロー関数 / テンプレートリテラル / class が混入していないか（既存コードは `var` + `function` で統一）
-- Chart.js の生成が `render` の中で行われていないか（**`afterRender` でなければ canvas がまだ DOM にない**）
+- **金額が意図せず露出していないか**（グッズ一覧はトグルON かつ `status === 'listed'` のときだけ。継承画面以外に `formatYen` を足さない）
 
 #### Duplicate logic
 
