@@ -112,12 +112,14 @@
     root.querySelectorAll('[data-close-settings]').forEach(function (button) {
       button.addEventListener('click', function () { AppState.setSettingsOpen(false); });
     });
-    root.querySelectorAll('[data-set-theme]').forEach(function (button) {
+    // 設定シート内に限定する。チュートリアルにも [data-set-theme] があり、
+    // app 全体に張ると二重バインドで誤トーストが出る。
+    root.querySelectorAll('.settings-layer [data-set-theme]').forEach(function (button) {
       button.addEventListener('click', function () {
         AppState.setTheme(button.getAttribute('data-set-theme'));
       });
     });
-    root.querySelectorAll('[data-set-mode]').forEach(function (button) {
+    root.querySelectorAll('.settings-layer [data-set-mode]').forEach(function (button) {
       button.addEventListener('click', function () {
         AppState.setMode(button.getAttribute('data-set-mode'));
       });
