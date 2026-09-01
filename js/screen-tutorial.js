@@ -136,13 +136,13 @@
                 estimated.hue +
                 '「' +
                 estimated.name +
-                '」</strong>と推定。<br>タップで今すぐ着せ替えできます</p></div>',
+                '」</strong>と推定。タップで今すぐ着せ替えできます</p></div>',
             '<div class="theme-options" role="group" aria-label="推しカラーを選ぶ">' +
                 Theme.THEMES.map(function (theme) {
                     return themeOption(theme, state.theme);
                 }).join('') +
                 '</div>',
-            '<div class="review-hint"><span>☝</span><p>実物は<strong>「ステラ 缶バッジ」が2個</strong>。<br>＋を押してAIの候補を直してみよう</p></div>',
+            '<div class="review-hint"><span>☝</span><p>実物は<strong>「ステラ 缶バッジ」が2個</strong>。＋を押してAIの候補を直してみよう</p></div>',
             '<div class="recognition-list">' +
                 results
                     .map(function (result) {
