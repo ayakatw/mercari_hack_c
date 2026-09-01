@@ -195,6 +195,7 @@
     if (typeof screen.afterRender === 'function') {
       screen.afterRender(app);
     }
+    if (global.PhotoSlot) { global.PhotoSlot.apply(app); }
     renderToast(state);
   }
 
