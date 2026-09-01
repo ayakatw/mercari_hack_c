@@ -3842,3 +3842,61 @@ p {
   inset: -9px -4px;
   content: "";
 }
+
+/* Responsive: スマホ実機ではPC用のiPhone枠・Dynamic Island・ホームバーを消し全画面にする。
+   PCでは従来の390×844枠を維持。viewport-fit=cover なので safe-area-inset が使える。 */
+@media (max-width: 480px) {
+  body {
+    overflow: auto;
+  }
+
+  body::before,
+  body::after {
+    display: none;
+  }
+
+  .demo-stage {
+    min-height: 100dvh;
+    min-height: 100svh;
+    padding: 0;
+    place-items: stretch;
+  }
+
+  .phone-frame {
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    height: 100svh;
+    min-height: 100dvh;
+    border: 0;
+    border-radius: 0;
+    background: var(--page);
+    box-shadow: none;
+  }
+
+  .phone-speaker {
+    display: none !important;
+  }
+
+  .phone-screen {
+    border-radius: 0;
+  }
+
+  .status-bar {
+    display: none !important;
+  }
+
+  .top-app-bar,
+  .ml-header {
+    padding-top: calc(9px + env(safe-area-inset-top));
+  }
+
+  .tab-bar {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(66px + env(safe-area-inset-bottom));
+  }
+
+  .home-indicator {
+    display: none !important;
+  }
+}
