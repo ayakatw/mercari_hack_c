@@ -35,7 +35,7 @@
           '<header class="top-app-bar compact-bar"><div><span class="eyebrow">MY PAGE</span><h1>マイページ</h1></div><button type="button" class="round-icon-button" data-open-settings aria-label="表示のカスタマイズを開く">⋯</button></header>',
           '<div class="screen-scroll mypage-scroll">',
             '<section class="my-profile">',
-              '<div class="profile-main"><div class="profile-avatar" data-profile-avatar><img src="assets/img/avatar-rina.svg" alt="りなのアイコン"><span>✦</span></div><div class="profile-names"><h2>りな</h2><p>@rina_oshi</p></div><div class="post-stat" data-post-stat><strong>' + grid.length + '</strong><span>投稿</span></div></div>',
+              '<div class="profile-main"><div class="profile-avatar" data-profile-avatar><img src="assets/img/avatar-rina.png" alt="りなのアイコン"><span>✦</span></div><div class="profile-names"><h2>りな</h2><p>@rina_oshi</p></div><div class="post-stat" data-post-stat><strong>' + grid.length + '</strong><span>投稿</span></div></div>',
               '<p class="profile-bio">ステライト箱推し🫶<br>継承はDMじゃなくてここから</p>',
               '<button type="button" class="shrine-button" data-open-shrine><span>✦</span> 祭壇カードを作る <b>›</b></button>',
             '</section>',

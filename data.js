@@ -127,23 +127,23 @@
   ];
 
   var USERS = [
-    { handle: 'rina_oshi', name: 'りな', avatar: IMG + 'avatar-rina.svg', tappable: false },
-    { handle: 'mio_stella', name: 'みお', avatar: IMG + 'avatar-mio.svg', tappable: true },
-    { handle: 'yuna_blue', name: 'ゆな', avatar: IMG + 'avatar-yuna.svg', tappable: false },
-    { handle: 'sora_light', name: 'そら', avatar: IMG + 'avatar-sora.svg', tappable: false },
-    { handle: 'noa_kira', name: 'のあ', avatar: IMG + 'avatar-noa.svg', tappable: false },
-    { handle: 'mei_starry', name: 'めい', avatar: IMG + 'avatar-mei.svg', tappable: false }
+    { handle: 'rina_oshi', name: 'りな', avatar: IMG + 'avatar-rina.png', tappable: false },
+    { handle: 'mio_stella', name: 'みお', avatar: IMG + 'avatar-mio.png', tappable: true },
+    { handle: 'yuna_blue', name: 'ゆな', avatar: IMG + 'avatar-yuna.png', tappable: false },
+    { handle: 'sora_light', name: 'そら', avatar: IMG + 'avatar-sora.png', tappable: false },
+    { handle: 'noa_kira', name: 'のあ', avatar: IMG + 'avatar-noa.png', tappable: false },
+    { handle: 'mei_starry', name: 'めい', avatar: IMG + 'avatar-mei.png', tappable: false }
   ];
 
   var POSTS = [
-    { id: 'post-1', user: 'yuna_blue', avatar: IMG + 'avatar-yuna.svg', image: IMG + 'tl-post.svg', caption: '今日の祭壇、淡いブルーでまとめたよ🫧 ずっと眺めていられる…！', likes: 128, tags: ['ステライト 祭壇'], giveaway: false },
-    { id: 'post-2', user: 'mio_stella', avatar: IMG + 'avatar-mio.svg', image: IMG + 'item-acsta.svg', caption: 'ステラのアクスタが重なったので、次のステラ推しさんへ継承したいです💫', likes: 86, tags: ['ステラ アクリルスタンド'], giveaway: true },
-    { id: 'post-3', user: 'sora_light', avatar: IMG + 'avatar-sora.svg', image: IMG + 'item-card.svg', caption: 'ツアービジュのステラ、光の入り方まで最高。大切に保管します。', likes: 214, tags: ['ステラのトレカ'], giveaway: false },
-    { id: 'post-4', user: 'noa_kira', avatar: IMG + 'avatar-noa.svg', image: IMG + 'item-plush.svg', caption: 'ぬいとカフェ巡り☕ ラベンダーのリボンをおそろいにしたよ。', likes: 73, tags: ['ステラ マスコットぬい'], giveaway: false },
-    { id: 'post-5', user: 'mei_starry', avatar: IMG + 'avatar-mei.svg', image: IMG + 'item-penlight.svg', caption: '日本ツアー発表おめでとう！このペンライトをまた振れる日が来る🌟', likes: 302, tags: ['STELLIGHT ペンライト'], giveaway: false },
-    { id: 'post-6', user: 'rina_oshi', avatar: IMG + 'avatar-rina.svg', image: IMG + 'item-badge.svg', caption: '缶バッジを並べ替え。左右対称って落ち着く…🫶', likes: 95, tags: ['ステラ 缶バッジ'], giveaway: false },
-    { id: 'post-7', user: 'yuna_blue', avatar: IMG + 'avatar-yuna.svg', image: IMG + 'item-hoodie.svg', caption: 'STELLIGHTのツアーパーカー、秋の現場コーデに決定！', likes: 64, tags: ['STELLIGHT ツアーパーカー'], giveaway: false },
-    { id: 'post-8', user: 'sora_light', avatar: IMG + 'avatar-sora.svg', image: IMG + 'item-album.svg', caption: '1stアルバム発売から1年。今日も大事な一枚です💿', likes: 147, tags: ['STELLIGHT 1stアルバム限定盤'], giveaway: false }
+    { id: 'post-1', user: 'yuna_blue', avatar: IMG + 'avatar-yuna.png', image: IMG + 'tl-post.svg', caption: '今日の祭壇、淡いブルーでまとめたよ🫧 ずっと眺めていられる…！', likes: 128, tags: ['ステライト 祭壇'], giveaway: false },
+    { id: 'post-2', user: 'mio_stella', avatar: IMG + 'avatar-mio.png', image: IMG + 'item-acsta.svg', caption: 'ステラのアクスタが重なったので、次のステラ推しさんへ継承したいです💫', likes: 86, tags: ['ステラ アクリルスタンド'], giveaway: true },
+    { id: 'post-3', user: 'sora_light', avatar: IMG + 'avatar-sora.png', image: IMG + 'item-card.svg', caption: 'ツアービジュのステラ、光の入り方まで最高。大切に保管します。', likes: 214, tags: ['ステラのトレカ'], giveaway: false },
+    { id: 'post-4', user: 'noa_kira', avatar: IMG + 'avatar-noa.png', image: IMG + 'item-plush.svg', caption: 'ぬいとカフェ巡り☕ ラベンダーのリボンをおそろいにしたよ。', likes: 73, tags: ['ステラ マスコットぬい'], giveaway: false },
+    { id: 'post-5', user: 'mei_starry', avatar: IMG + 'avatar-mei.png', image: IMG + 'item-penlight.svg', caption: '日本ツアー発表おめでとう！このペンライトをまた振れる日が来る🌟', likes: 302, tags: ['STELLIGHT ペンライト'], giveaway: false },
+    { id: 'post-6', user: 'rina_oshi', avatar: IMG + 'avatar-rina.png', image: IMG + 'item-badge.svg', caption: '缶バッジを並べ替え。左右対称って落ち着く…🫶', likes: 95, tags: ['ステラ 缶バッジ'], giveaway: false },
+    { id: 'post-7', user: 'yuna_blue', avatar: IMG + 'avatar-yuna.png', image: IMG + 'item-hoodie.svg', caption: 'STELLIGHTのツアーパーカー、秋の現場コーデに決定！', likes: 64, tags: ['STELLIGHT ツアーパーカー'], giveaway: false },
+    { id: 'post-8', user: 'sora_light', avatar: IMG + 'avatar-sora.png', image: IMG + 'item-album.svg', caption: '1stアルバム発売から1年。今日も大事な一枚です💿', likes: 147, tags: ['STELLIGHT 1stアルバム限定盤'], giveaway: false }
   ];
 
   var AI_RESULTS = {

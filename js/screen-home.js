@@ -2,7 +2,7 @@
   'use strict';
 
   function userFor(handle) {
-    return AppState.getUser(handle) || { handle: handle, name: handle, avatar: 'assets/img/avatar-rina.svg', tappable: false };
+    return AppState.getUser(handle) || { handle: handle, name: handle, avatar: 'assets/img/avatar-rina.png', tappable: false };
   }
 
   function bindPressTargets(root, selector, callback) {
