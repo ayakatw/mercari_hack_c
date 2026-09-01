@@ -107,7 +107,7 @@
         var estimated = Theme.find(Theme.DEFAULT_THEME);
         return [
             '<section class="tutorial-screen tutorial-review">',
-            '<header class="review-head"><div><span>7件を認識しました ✦</span><h1>個数を確認してください</h1></div><div class="ai-badge">AI</div></header>',
+            '<header class="review-head"><div><span>7件を認識しました ✦</span><h1>個数を確認してください</h1></div></header>',
             '<div class="review-hint"><span>🎨</span><p>祭壇の色味から、あなたの推しカラーは<strong>' +
                 estimated.hue +
                 '「' +
