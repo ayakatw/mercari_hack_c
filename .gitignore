@@ -1,2 +1,15 @@
 # mac
 .DS_Store
+
+# secrets — 絶対にコミットしない
+.env
+.env.*
+!.env.example
+
+# 依存（このリポジトリはパッケージマネージャを使わない。別ブランチの残骸）
+node_modules/
+server/node_modules/
+
+# エディタ
+.vscode/
+.idea/
