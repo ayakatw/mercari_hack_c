@@ -28,6 +28,21 @@
 
 # Active Tasks
 
+## Claude
+
+### タブアイコンの Ionicons 化 + フィードカードの再デザイン
+
+- **Status**: In review
+- **Owner**: Claude
+- **Branch**: feat/listing-mercari-redesign
+- **Files / directories**: `js/router.js`（ICONS 定義・タブバー）, `styles.css`（`.tab-icon` / `.tab-glyph` / `.feed-*`）, `docs/ICONS.md`, `docs/DECISIONS.md`
+- **Goal**: タブの記号グリフ（`⌂⌕⌁♙`）を Ionicons の SVG に置き換え、フィードカードを `design/名称未設定.png` に寄せる
+
+**Notes**: **ブラウザ未確認。** 確認すべき点は [docs/ICONS.md](docs/ICONS.md) §5 と [docs/DECISIONS.md](docs/DECISIONS.md) の該当節。
+`js/theme.js` 等、別エージェントの変更が同じ作業ツリーに未コミットで同居している。**`git checkout` で戻すと相手の作業も消えるので使わないこと。**
+
+---
+
 <!-- 以下をコピーして使う -->
 
 ## <Developer / Agent name>
@@ -63,3 +78,15 @@
 # Completed
 
 （完了したタスクをここへ移す）
+
+## Claude
+
+### 出品モックを実物メルカリのダークUIに完コピ
+
+- **Status**: Done
+- **Owner**: Claude
+- **Branch**: main
+- **Files / directories**: `js/screen-listing.js`, `styles.css`（`/* Mercari listing */` セクション全面 + `.status-bar.mercari-status` + `.mercari-runtime .home-indicator`）, `specs/推しポート要件定義.md`（§2.6 改訂）, `docs/DECISIONS.md`
+- **Goal**: 自作の赤ヘッダー版だった出品モックを、実物メルカリの出品画面（ダーク）と出品完了モーダル（ライト）に完コピする。値は空にせず必ずプレフィルしたまま
+
+**Notes**: 判断の根拠は [docs/DECISIONS.md](docs/DECISIONS.md) の「出品モックを実物メルカリのダークUIに完コピし、赤ヘッダーを廃止する」。仕様書 §2.6 は実装に合わせて改訂済み。**ブラウザでの目視は未実施（このセッションではブラウザを操作できなかった）。** 構文チェック・参照画像チェック・Node 上での render 実行・全7アイテムでのフォーム生成は確認済み。

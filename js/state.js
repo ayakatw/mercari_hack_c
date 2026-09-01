@@ -41,6 +41,9 @@
   var state = {
     route: 'tutorial',
     tutorialComplete: false,
+    theme: Theme.DEFAULT_THEME,
+    mode: Theme.DEFAULT_MODE,
+    settingsOpen: false,
     tutorial: {
       stage: 'welcome',
       selected: false,
@@ -152,7 +155,29 @@
       state.route = route;
       state.assetDetailItemId = null;
       state.shrineCardOpen = false;
+      state.settingsOpen = false;
       notify();
+    },
+
+    setSettingsOpen: function (isOpen) {
+      state.settingsOpen = Boolean(isOpen);
+      notify();
+    },
+
+    setTheme: function (themeId) {
+      if (state.theme === themeId) { return; }
+      state.theme = themeId;
+      notify();
+    },
+
+    setMode: function (modeId) {
+      if (state.mode === modeId) { return; }
+      state.mode = modeId;
+      notify();
+    },
+
+    toggleMode: function () {
+      AppState.setMode(state.mode === 'dark' ? 'light' : 'dark');
     },
 
     openProfile: function (handle) {

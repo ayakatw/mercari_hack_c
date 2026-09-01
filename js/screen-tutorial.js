@@ -84,6 +84,8 @@
   }
 
   global.Screens.tutorial = {
+    key: function (state) { return state.tutorial.stage; },
+
     render: function () {
       var state = AppState.getState();
       if (state.tutorial.stage === 'capture') { return renderCapture(); }
