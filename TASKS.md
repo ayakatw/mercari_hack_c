@@ -91,6 +91,18 @@
 
 （完了したタスクをここへ移す）
 
+## Codex
+
+### アバター6点をリアルなSNSプロフィール写真へ差し替え
+
+- **Status**: Done
+- **Owner**: Codex
+- **Branch**: current worktree
+- **Files / directories**: `assets/img/avatar-*.png`, `data.js`, `js/screen-home.js`, `js/screen-mypage.js`, `assets/photo/README.md`, `docs/DECISIONS.md`
+- **Goal**: 既存6ユーザーのイラストアバターに対応する、判別しやすいリアルなSNS風プロフィール写真をImageGenで生成して参照を差し替える
+
+**Notes**: 既存SVGはフォールバック用に保持。生成画像の目視・構文・参照画像・秘密情報を確認済み。ブラウザ接続が無く、アプリ画面の目視は未確認。
+
 ## Claude
 
 ### 出品モックを実物メルカリのダークUIに完コピ

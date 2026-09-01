@@ -1,6 +1,21 @@
 (function (global) {
     'use strict';
 
+    // 確定前のステップ後退用。state.tutorial.stage を汚さずに表示だけ戻す。
+    var localStage = null;
+
+    function visibleStage(state) {
+        return localStage || state.tutorial.stage;
+    }
+
+    function backButton(target) {
+        return (
+            '<button type="button" class="text-button" data-tutorial-back="' +
+            target +
+            '">‹ 前のステップに戻る</button>'
+        );
+    }
+
     function progress(active) {
         return (
             '<div class="tutorial-progress" aria-label="チュートリアル ' +
@@ -45,6 +60,7 @@
             '<header class="tutorial-head"><span>AI SCANNING</span><h1>祭壇を解析中…</h1><p>グッズとメルカリ相場を照合しています</p></header>',
             '<div class="shrine-scan"><img src="assets/img/saidan.png" alt="解析中のステライト祭壇"><div class="scan-beam"></div><span class="detect-box box-a">アクスタ ✓</span><span class="detect-box box-b">トレカ ✓</span><span class="detect-box box-c">ぬい ✓</span></div>',
             '<div class="recognition-status"><span class="ai-spinner"><i></i></span><div><strong>AIが解析中…</strong><p>7件の候補を検出 ✦ 推しカラーを推定しています</p></div></div>',
+            backButton('analyzing'),
             progress(2),
             '</section>',
         ].join('');
@@ -64,9 +80,7 @@
                 result.itemId +
                 '" data-delta="-1" aria-label="' +
                 result.name +
-                'を減らす"' +
-                (count <= 1 ? ' disabled' : '') +
-                '>−</button><strong>' +
+                'を減らす">−</button><strong>' +
                 count +
                 '</strong><button type="button" data-tutorial-count="' +
                 result.itemId +
@@ -97,6 +111,16 @@
             '<strong>' + theme.name + '</strong>',
             '</button>',
         ].join('');
+    }
+
+    function setThemeWithFeedback(themeId) {
+        if (AppState.getState().theme === themeId) {
+            AppState.showToast(
+                '推しカラー「' + Theme.find(themeId).name + '」を選択中です',
+            );
+            return;
+        }
+        AppState.setTheme(themeId);
     }
 
     function renderReview(state) {
@@ -146,6 +170,7 @@
             '<div class="value-shrine"><img src="assets/img/saidan.png" alt="登録したステライト祭壇"><span>7アイテムを登録 ✓</span></div>',
             '<div class="value-copy"><p>あなたの祭壇は</p><h1>¥81,000</h1><span>です</span></div>',
             '<p class="value-note">今日から相場の変化を自動で追いかけます</p>',
+            backButton('confirmed'),
             '<button type="button" class="primary-button tutorial-cta" data-complete-tutorial>資産を見てみる <span>›</span></button>',
             progress(3),
             '</section>',
@@ -154,21 +179,22 @@
 
     global.Screens.tutorial = {
         key: function (state) {
-            return state.tutorial.stage;
+            return visibleStage(state);
         },
 
         render: function () {
             var state = AppState.getState();
-            if (state.tutorial.stage === 'capture') {
+            var stage = visibleStage(state);
+            if (stage === 'capture') {
                 return renderCapture();
             }
-            if (state.tutorial.stage === 'analyzing') {
+            if (stage === 'analyzing') {
                 return renderAnalyzing();
             }
-            if (state.tutorial.stage === 'review') {
+            if (stage === 'review') {
                 return renderReview(state);
             }
-            if (state.tutorial.stage === 'value') {
+            if (stage === 'value') {
                 return renderValue();
             }
             return renderWelcome();
@@ -178,49 +204,103 @@
             var start = root.querySelector('[data-start-tutorial]');
             if (start) {
                 start.addEventListener('click', function () {
+                    localStage = null;
                     AppState.startTutorialCapture();
                 });
             }
             var yes = root.querySelector('[data-tutorial-yes]');
             if (yes) {
                 yes.addEventListener('click', function () {
+                    localStage = null;
                     AppState.startTutorialAnalysis();
                 });
             }
             var no = root.querySelector('[data-tutorial-no]');
             if (no) {
                 no.addEventListener('click', function () {
+                    localStage = null;
                     AppState.cancelTutorialCapture();
                 });
             }
+            root.querySelectorAll('[data-tutorial-back]').forEach(
+                function (button) {
+                    button.addEventListener('click', function () {
+                        var target = button.getAttribute('data-tutorial-back');
+                        if (target === 'welcome') {
+                            localStage = 'welcome';
+                            AppState.showToast('最初の画面に戻りました');
+                            return;
+                        }
+                        if (target === 'capture') {
+                            localStage = null;
+                            AppState.startTutorialCapture();
+                            return;
+                        }
+                        if (target === 'analyzing') {
+                            AppState.showToast(
+                                '解析中のため、完了後に前のステップへ戻れます（デモ）',
+                            );
+                            return;
+                        }
+                        AppState.showToast('確定後は前のステップに戻せません');
+                    });
+                },
+            );
             root.querySelectorAll('[data-tutorial-count]').forEach(
                 function (button) {
                     button.addEventListener('click', function () {
-                        AppState.adjustTutorialCount(
-                            button.getAttribute('data-tutorial-count'),
-                            Number(button.getAttribute('data-delta')),
-                        );
+                        var itemId =
+                            button.getAttribute('data-tutorial-count');
+                        var delta = Number(button.getAttribute('data-delta'));
+                        var current =
+                            AppState.getState().tutorial.counts[itemId] || 1;
+                        if (delta < 0 && current <= 1) {
+                            AppState.showToast('個数は1個以上で登録してください');
+                            return;
+                        }
+                        if (delta > 0 && current >= 5) {
+                            AppState.showToast('個数は5個まで変更できます');
+                            return;
+                        }
+                        AppState.adjustTutorialCount(itemId, delta);
                     });
                 },
             );
             root.querySelectorAll('[data-set-theme]').forEach(
                 function (button) {
                     button.addEventListener('click', function () {
-                        AppState.setTheme(
+                        setThemeWithFeedback(
                             button.getAttribute('data-set-theme'),
                         );
                     });
                 },
             );
+            var estimatedTheme = root.querySelector(
+                '[data-apply-estimated-theme]',
+            );
+            if (estimatedTheme) {
+                var applyEstimatedTheme = function () {
+                    setThemeWithFeedback(Theme.DEFAULT_THEME);
+                };
+                estimatedTheme.addEventListener('click', applyEstimatedTheme);
+                estimatedTheme.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        applyEstimatedTheme();
+                    }
+                });
+            }
             var confirm = root.querySelector('[data-confirm-tutorial]');
             if (confirm) {
                 confirm.addEventListener('click', function () {
+                    localStage = null;
                     AppState.confirmTutorialItems();
                 });
             }
             var complete = root.querySelector('[data-complete-tutorial]');
             if (complete) {
                 complete.addEventListener('click', function () {
+                    localStage = null;
                     AppState.completeTutorial();
                 });
             }

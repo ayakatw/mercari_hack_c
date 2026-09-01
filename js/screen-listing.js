@@ -27,17 +27,17 @@
 
     function photoRow(item) {
         var slots = [
-            '<div class="ml-slot is-filled"><img src="' +
+            '<div class="ml-slot is-filled" data-listing-photo><img src="' +
                 escapeHtml(item.thumb) +
                 '" alt="' +
                 escapeHtml(item.name) +
                 'の出品写真"><span class="ml-slot-num">1</span></div>',
-            '<div class="ml-slot"><span class="ml-slot-cam" aria-hidden="true">◎</span><span class="ml-slot-num">2</span></div>',
+            '<div class="ml-slot" data-listing-photo><span class="ml-slot-cam" aria-hidden="true">◎</span><span class="ml-slot-num">2</span></div>',
         ];
         var index;
         for (index = 3; index <= 5; index += 1) {
             slots.push(
-                '<div class="ml-slot"><span class="ml-slot-num">' +
+                '<div class="ml-slot" data-listing-photo><span class="ml-slot-num">' +
                     index +
                     '</span></div>',
             );
@@ -71,11 +71,11 @@
         return [
             '<div class="ml-block">',
             '<h2 class="ml-heading">販売タイプ</h2>',
-            '<div class="ml-option">',
+            '<div class="ml-option" data-listing-sale-type>',
             '<span class="ml-radio" aria-hidden="true"></span>',
             '<div class="ml-option-copy"><strong>オークション形式</strong><small>思わぬ価格で売れるかも！</small></div>',
             '</div>',
-            '<div class="ml-option is-selected">',
+            '<div class="ml-option is-selected" data-listing-sale-type>',
             '<div class="ml-option-head">',
             '<span class="ml-radio is-on" aria-hidden="true"></span>',
             '<div class="ml-option-copy"><strong>価格を設定する</strong></div>',
@@ -110,7 +110,7 @@
             '<button type="button" class="ml-template" data-listing-template><span aria-hidden="true">▤</span> テンプレート</button>',
             '<div class="ml-block">',
             '<h2 class="ml-heading">商品名</h2>',
-            '<div class="ml-input">' + escapeHtml(item.name) + '</div>',
+            '<div class="ml-input" data-listing-field>' + escapeHtml(item.name) + '</div>',
             '</div>',
             '<div class="ml-block ml-rows">',
             navRow('カテゴリー', item.category || '', '', ''),
@@ -126,13 +126,13 @@
             '<div class="ml-heading-line"><h2 class="ml-heading">商品の説明</h2><span class="ml-ai-badge">' +
                 aiLabel +
                 '</span></div>',
-            '<div class="ml-input ml-textarea">' + escapeHtml(text) + '</div>',
+            '<div class="ml-input ml-textarea" data-listing-field>' + escapeHtml(text) + '</div>',
             '</div>',
             saleTypeBlock(item),
             '<div class="ml-terms">',
-            '<p><a>規約</a>・<a>プライバシーポリシー</a>に同意し出品してください</p>',
-            '<p>役務提供時期、対価とその支払時期・方法等は<a>こちら</a>をご覧ください</p>',
-            '<p><a>あんしん鑑定</a>の規約に同意して出品してください。</p>',
+            '<p><a href="#" data-listing-terms>規約</a>・<a href="#" data-listing-terms>プライバシーポリシー</a>に同意し出品してください</p>',
+            '<p>役務提供時期、対価とその支払時期・方法等は<a href="#" data-listing-terms>こちら</a>をご覧ください</p>',
+            '<p><a href="#" data-listing-terms>あんしん鑑定</a>の規約に同意して出品してください。</p>',
             '</div>',
             '<div class="ml-footer">',
             '<button type="button" class="ml-draft" data-listing-draft>下書きに保存</button>',
@@ -205,6 +205,31 @@
                     );
                 });
             }
+
+            root.querySelectorAll('[data-listing-photo]').forEach(function (slot) {
+                slot.addEventListener('click', function () {
+                    AppState.showToast('写真の追加・編集はデモではできません');
+                });
+            });
+
+            root.querySelectorAll('[data-listing-field]').forEach(function (field) {
+                field.addEventListener('click', function () {
+                    AppState.showToast('商品情報の編集はデモではできません');
+                });
+            });
+
+            root.querySelectorAll('[data-listing-sale-type]').forEach(function (option) {
+                option.addEventListener('click', function () {
+                    AppState.showToast('販売タイプは「価格を設定する」で固定しています（デモ）');
+                });
+            });
+
+            root.querySelectorAll('[data-listing-terms]').forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    AppState.showToast('リンク先はデモでは開けません');
+                });
+            });
 
             root.querySelectorAll('[data-listing-nav]').forEach(function (row) {
                 row.addEventListener('click', function () {

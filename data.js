@@ -192,37 +192,37 @@
         {
             handle: 'rina_oshi',
             name: 'りな',
-            avatar: IMG + 'avatar-rina.svg',
+            avatar: IMG + 'avatar-rina.png',
             tappable: false,
         },
         {
             handle: 'mio_stella',
             name: 'みお',
-            avatar: IMG + 'avatar-mio.svg',
+            avatar: IMG + 'avatar-mio.png',
             tappable: true,
         },
         {
             handle: 'yuna_blue',
             name: 'ゆな',
-            avatar: IMG + 'avatar-yuna.svg',
+            avatar: IMG + 'avatar-yuna.png',
             tappable: false,
         },
         {
             handle: 'sora_light',
             name: 'そら',
-            avatar: IMG + 'avatar-sora.svg',
+            avatar: IMG + 'avatar-sora.png',
             tappable: false,
         },
         {
             handle: 'noa_kira',
             name: 'のあ',
-            avatar: IMG + 'avatar-noa.svg',
+            avatar: IMG + 'avatar-noa.png',
             tappable: false,
         },
         {
             handle: 'mei_starry',
             name: 'めい',
-            avatar: IMG + 'avatar-mei.svg',
+            avatar: IMG + 'avatar-mei.png',
             tappable: false,
         },
     ];
@@ -231,7 +231,7 @@
         {
             id: 'post-1',
             user: 'yuna_blue',
-            avatar: IMG + 'avatar-yuna.svg',
+            avatar: IMG + 'avatar-yuna.png',
             image: IMG + 'tl-post.png',
             caption:
                 '今日の祭壇、淡いブルーでまとめたよ🫧 ずっと眺めていられる…！',
@@ -242,7 +242,7 @@
         {
             id: 'post-2',
             user: 'mio_stella',
-            avatar: IMG + 'avatar-mio.svg',
+            avatar: IMG + 'avatar-mio.png',
             image: IMG + 'item-acsta.png',
             caption:
                 'ステラのアクスタが重なったので、次のステラ推しさんへ継承したいです💫',
@@ -253,7 +253,7 @@
         {
             id: 'post-3',
             user: 'sora_light',
-            avatar: IMG + 'avatar-sora.svg',
+            avatar: IMG + 'avatar-sora.png',
             image: IMG + 'item-card.png',
             caption:
                 'ツアービジュのステラ、光の入り方まで最高。大切に保管します。',
@@ -264,7 +264,7 @@
         {
             id: 'post-4',
             user: 'noa_kira',
-            avatar: IMG + 'avatar-noa.svg',
+            avatar: IMG + 'avatar-noa.png',
             image: IMG + 'item-plush.png',
             caption:
                 'ぬいとカフェ巡り☕ ラベンダーのリボンをおそろいにしたよ。',
@@ -275,7 +275,7 @@
         {
             id: 'post-5',
             user: 'mei_starry',
-            avatar: IMG + 'avatar-mei.svg',
+            avatar: IMG + 'avatar-mei.png',
             image: IMG + 'item-penlight.png',
             caption:
                 '日本ツアー発表おめでとう！このペンライトをまた振れる日が来る🌟',
@@ -286,7 +286,7 @@
         {
             id: 'post-6',
             user: 'rina_oshi',
-            avatar: IMG + 'avatar-rina.svg',
+            avatar: IMG + 'avatar-rina.png',
             image: IMG + 'item-badge.png',
             caption: '缶バッジを並べ替え。左右対称って落ち着く…🫶',
             likes: 95,
@@ -296,7 +296,7 @@
         {
             id: 'post-7',
             user: 'yuna_blue',
-            avatar: IMG + 'avatar-yuna.svg',
+            avatar: IMG + 'avatar-yuna.png',
             image: IMG + 'item-hoodie.png',
             caption: 'STELLIGHTのツアーパーカー、秋の現場コーデに決定！',
             likes: 64,
@@ -306,7 +306,7 @@
         {
             id: 'post-8',
             user: 'sora_light',
-            avatar: IMG + 'avatar-sora.svg',
+            avatar: IMG + 'avatar-sora.png',
             image: IMG + 'item-album.png',
             caption: '1stアルバム発売から1年。今日も大事な一枚です💿',
             likes: 147,

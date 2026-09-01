@@ -31,6 +31,21 @@
         return MISSING_FIELD_LABELS[key] || key;
     }
 
+    function bindPressTargets(root, selector, callback) {
+        root.querySelectorAll(selector).forEach(function (target) {
+            target.addEventListener('click', function () {
+                callback(target);
+            });
+            target.addEventListener('keydown', function (event) {
+                if (event.key !== 'Enter' && event.key !== ' ') {
+                    return;
+                }
+                event.preventDefault();
+                callback(target);
+            });
+        });
+    }
+
     function postHeader(stepLabel) {
         return (
             '<header class="top-app-bar compact-bar"><div><span class="eyebrow">NEW POST</span><h1>＋投稿</h1></div><span class="step-label">' +
@@ -128,13 +143,13 @@
                 escapeHtml(photo) +
                 '" alt="' +
                 escapeHtml(title) +
-                '">',
+                '" role="button" tabindex="0" data-change-post-photo aria-label="投稿写真を変更する">',
             '<div><h2>' +
                 escapeHtml(title) +
                 '</h2><div class="tag-row">' +
                 tags
                     .map(function (tag) {
-                        return '<span>' + escapeHtml(tag) + '</span>';
+                        return '<span role="button" tabindex="0" data-post-result-tag="' + escapeHtml(tag) + '" aria-label="' + escapeHtml(tag) + 'のAIタグを確認する">' + escapeHtml(tag) + '</span>';
                     })
                     .join('') +
                 '</div><p>状態 <strong>' +
@@ -166,12 +181,10 @@
                   ].join('')
                 : '',
             '<div class="form-card">',
-            '<div class="form-row"><div><label>個数</label><small>実物を見て確定</small></div><div class="stepper" aria-label="投稿する個数"><button type="button" data-post-count="-1" aria-label="個数を減らす"' +
-                (state.post.count <= 1 ? ' disabled' : '') +
-                '>−</button><strong>' +
+            '<div class="form-row"><div><label>個数</label><small>実物を見て確定</small></div><div class="stepper" aria-label="投稿する個数"><button type="button" data-post-count="-1" aria-label="個数を減らす">−</button><strong>' +
                 state.post.count +
                 '</strong><button type="button" data-post-count="1" aria-label="個数を増やす">＋</button></div></div>',
-            '<div class="form-row"><div><label>譲ります</label><small>次のオタクへ継承する</small></div><button type="button" class="switch' +
+            '<div class="form-row"><div role="button" tabindex="0" data-giveaway-copy aria-label="譲りますを切り替える"><label>譲ります</label><small>次のオタクへ継承する</small></div><button type="button" class="switch' +
                 (state.post.giveaway ? ' is-on' : '') +
                 '" data-giveaway aria-pressed="' +
                 state.post.giveaway +
@@ -279,9 +292,14 @@
             root.querySelectorAll('[data-post-count]').forEach(
                 function (button) {
                     button.addEventListener('click', function () {
-                        AppState.adjustPostCount(
-                            Number(button.getAttribute('data-post-count')),
+                        var delta = Number(
+                            button.getAttribute('data-post-count'),
                         );
+                        if (delta < 0 && AppState.getState().post.count <= 1) {
+                            AppState.showToast('個数は1個以上で投稿してください');
+                            return;
+                        }
+                        AppState.adjustPostCount(delta);
                     });
                 },
             );
@@ -291,6 +309,19 @@
                     AppState.togglePostGiveaway();
                 });
             }
+            bindPressTargets(root, '[data-giveaway-copy]', function () {
+                AppState.togglePostGiveaway();
+            });
+            bindPressTargets(root, '[data-change-post-photo]', function () {
+                AppState.showToast('写真の変更はデモでは省略しています');
+            });
+            bindPressTargets(root, '[data-post-result-tag]', function (target) {
+                AppState.showToast(
+                    '「' +
+                        target.getAttribute('data-post-result-tag') +
+                        '」はAIが設定したタグです',
+                );
+            });
             var caption = root.querySelector('[data-caption]');
             if (caption) {
                 caption.addEventListener('input', function () {
