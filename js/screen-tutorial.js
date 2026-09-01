@@ -125,18 +125,31 @@
                 estimated.hue +
                 '「' +
                 estimated.name +
-                '」</strong>と推定。<br>タップで今すぐ着せ替えできます</p></div>',
+                '」</strong>と推定。タップで今すぐ着せ替えできます</p></div>',
             '<div class="theme-options" role="group" aria-label="推しカラーを選ぶ">' +
                 Theme.THEMES.map(function (theme) {
                     return themeOption(theme, state.theme);
                 }).join('') +
                 '</div>',
-        '<div class="review-hint"><span>☝</span><p>実物は<strong>「ステラ 缶バッジ」が2個</strong>。<br>＋を押してAIの候補を直してみよう</p></div>',
-        '<div class="recognition-list">' + results.map(function (result) { return reviewRow(result, state.tutorial.counts[result.itemId] || 1); }).join('') + '</div>',
-        '<div class="review-footer"><div><span>登録するグッズ</span><strong>' + confirmedCount + '点</strong></div><button type="button" class="primary-button' + (ready ? '' : ' is-muted') + '" data-confirm-tutorial>この内容で確定</button></div>',
-      '</section>'
-    ].join('');
-  }
+            '<div class="review-hint"><span>☝</span><p>実物は<strong>「ステラ 缶バッジ」が2個</strong>。＋を押してAIの候補を直してみよう</p></div>',
+            '<div class="recognition-list">' +
+                results
+                    .map(function (result) {
+                        return reviewRow(
+                            result,
+                            state.tutorial.counts[result.itemId] || 1,
+                        );
+                    })
+                    .join('') +
+                '</div>',
+            '<div class="review-footer"><div><span>現在の合計</span><strong>' +
+                AppState.formatYen(total) +
+                '</strong></div><button type="button" class="primary-button' +
+                (ready ? '' : ' is-muted') +
+                '" data-confirm-tutorial>この内容で確定</button></div>',
+            '</section>',
+        ].join('');
+    }
 
   function renderValue(state) {
     var registered = AI_RESULTS['saidan.png'].reduce(function (sum, result) {
