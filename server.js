@@ -8,6 +8,7 @@
 require('dotenv').config({ quiet: true });
 
 var path = require('path');
+var fs = require('fs');
 var express = require('express');
 var multer = require('multer');
 var analyzeImages = require('./server/gemini');
@@ -20,6 +21,16 @@ var MAX_FILES = 4;
 var ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
 
 var app = express();
+var STATIC_OPTIONS = {
+  dotfiles: 'deny',
+  // デモ開発中に古い JS/CSS がキャッシュから動かないよう毎回再検証させる。
+  setHeaders: function (res) { res.setHeader('Cache-Control', 'no-cache'); }
+};
+var STATIC_TEXT = {
+  indexHtml: fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'),
+  stylesCss: fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8'),
+  dataJs: fs.readFileSync(path.join(ROOT, 'data.js'), 'utf8')
+};
 
 // ── アクセスログ ───────────────────────────────────────────
 // ブラウザがこのサーバを見ているかを一目で分かるようにする。画像は多いので除外。
@@ -31,21 +42,12 @@ app.use(function (req, res, next) {
 });
 
 // ── 静的配信 ───────────────────────────────────────────────
-// .env / .git などのドットファイルと、サーバ側ファイルはブラウザへ出さない。
-var BLOCKED = /^\/(server\.js|package(-lock)?\.json|server\/|node_modules\/)/;
-app.use(function (req, res, next) {
-  if (BLOCKED.test(req.path)) {
-    res.status(404).send('Not found');
-    return;
-  }
-  next();
-});
-app.use(express.static(ROOT, {
-  dotfiles: 'deny',
-  index: 'index.html',
-  // デモ開発中に古い JS/CSS がキャッシュから動かないよう毎回再検証させる。
-  setHeaders: function (res) { res.setHeader('Cache-Control', 'no-cache'); }
-}));
+app.get('/', function (req, res) { res.set('Cache-Control', 'no-cache').type('html').send(STATIC_TEXT.indexHtml); });
+app.get('/index.html', function (req, res) { res.set('Cache-Control', 'no-cache').type('html').send(STATIC_TEXT.indexHtml); });
+app.get('/styles.css', function (req, res) { res.set('Cache-Control', 'no-cache').type('text/css').send(STATIC_TEXT.stylesCss); });
+app.get('/data.js', function (req, res) { res.set('Cache-Control', 'no-cache').type('application/javascript').send(STATIC_TEXT.dataJs); });
+app.use('/assets', express.static(path.join(ROOT, 'assets'), STATIC_OPTIONS));
+app.use('/js', express.static(path.join(ROOT, 'js'), STATIC_OPTIONS));
 
 // ── POST /api/analyze ─────────────────────────────────────
 var upload = multer({
@@ -76,7 +78,7 @@ app.post('/api/analyze', function (req, res) {
       return;
     }
 
-    var files = req.files || [];
+    var files = Array.isArray(req.files) ? req.files : [];
     if (!files.length) {
       res.status(400).json({ success: false, error: '画像が送信されていません。' });
       return;
@@ -95,8 +97,12 @@ app.post('/api/analyze', function (req, res) {
 
     // フロントが送ってきた登録済みグッズ（同一商品の同定に使う）。
     var ownedItems = [];
+    var itemsPayload = req.body && req.body.items;
+    if (typeof itemsPayload !== 'string') {
+      itemsPayload = '[]';
+    }
     try {
-      var parsed = JSON.parse((req.body && req.body.items) || '[]');
+      var parsed = JSON.parse(itemsPayload);
       if (Array.isArray(parsed)) {
         ownedItems = parsed.slice(0, 50).filter(function (item) {
           return item && typeof item.id === 'string' && typeof item.name === 'string';
