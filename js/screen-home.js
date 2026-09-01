@@ -45,7 +45,7 @@
         '<section class="screen screen-home">',
           '<header class="top-app-bar">',
             '<div><span class="eyebrow">MERCARI presents</span><h1 class="wordmark">推しポート<span>✦</span></h1></div>',
-            '<span class="round-icon-button" aria-hidden="true"><span>♢</span><i></i></span>',
+            '<button type="button" class="round-icon-button settings-trigger" data-open-settings aria-label="表示のカスタマイズを開く"><span aria-hidden="true">◐</span><i class="settings-trigger-dot" aria-hidden="true"></i></button>',
           '</header>',
           '<div class="screen-scroll feed-list">',
             '<section class="feed-intro">',

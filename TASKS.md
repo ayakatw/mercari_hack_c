@@ -28,6 +28,21 @@
 
 # Active Tasks
 
+## Claude
+
+### タブアイコンの Ionicons 化 + フィードカードの再デザイン
+
+- **Status**: In review
+- **Owner**: Claude
+- **Branch**: feat/listing-mercari-redesign
+- **Files / directories**: `js/router.js`（ICONS 定義・タブバー）, `styles.css`（`.tab-icon` / `.tab-glyph` / `.feed-*`）, `docs/ICONS.md`, `docs/DECISIONS.md`
+- **Goal**: タブの記号グリフ（`⌂⌕⌁♙`）を Ionicons の SVG に置き換え、フィードカードを `design/名称未設定.png` に寄せる
+
+**Notes**: **ブラウザ未確認。** 確認すべき点は [docs/ICONS.md](docs/ICONS.md) §5 と [docs/DECISIONS.md](docs/DECISIONS.md) の該当節。
+`js/theme.js` 等、別エージェントの変更が同じ作業ツリーに未コミットで同居している。**`git checkout` で戻すと相手の作業も消えるので使わないこと。**
+
+---
+
 <!-- 以下をコピーして使う -->
 
 ## <Developer / Agent name>

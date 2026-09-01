@@ -77,6 +77,22 @@
     ctx.stroke();
   }
 
+  // Chart.js と canvas は CSS 変数を解釈しないので、実際に計算された値を読む。
+  // 参照先は必ず素の16進を持つ Layer 1 のトークンにする（color-mix は canvas が解せない）。
+  function token(name, fallback) {
+    var value = global.getComputedStyle(global.document.documentElement)
+      .getPropertyValue(name).trim();
+    return value || fallback;
+  }
+
+  function tokenAlpha(name, alpha, fallback) {
+    var hex = token(name, fallback).replace('#', '');
+    if (hex.length === 3) { hex = hex.split('').map(function (c) { return c + c; }).join(''); }
+    if (hex.length !== 6) { return fallback; }
+    return 'rgba(' + parseInt(hex.slice(0, 2), 16) + ',' + parseInt(hex.slice(2, 4), 16) +
+      ',' + parseInt(hex.slice(4, 6), 16) + ',' + alpha + ')';
+  }
+
   function eventMarkerPlugin() {
     return {
       id: 'oshiEventMarker',
@@ -87,7 +103,7 @@
         var x = xScale.getPixelForValue(18);
         var ctx = chart.ctx;
         ctx.save();
-        ctx.strokeStyle = '#ff8a50';
+        ctx.strokeStyle = token('--orange', '#ff8a50');
         ctx.lineWidth = 1.5;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -95,7 +111,7 @@
         ctx.lineTo(x, area.bottom);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = '#ff8a50';
+        ctx.fillStyle = token('--orange', '#ff8a50');
         ctx.beginPath();
         ctx.arc(x, area.top + 7, 4, 0, Math.PI * 2);
         ctx.fill();
@@ -107,12 +123,12 @@
   function createLineChart(canvas, labels, values, detail) {
     if (!canvas) { return null; }
     if (!global.Chart) {
-      drawFallback(canvas, values, detail ? '#7d65dc' : '#ffffff');
+      drawFallback(canvas, values, detail ? token('--b1', '#7d65dc') : '#ffffff');
       return null;
     }
     var context = canvas.getContext('2d');
     var gradient = context.createLinearGradient(0, 0, 0, detail ? 180 : 150);
-    gradient.addColorStop(0, detail ? 'rgba(141,120,234,.30)' : 'rgba(255,255,255,.36)');
+    gradient.addColorStop(0, detail ? tokenAlpha('--b1', 0.3, '#7d65dc') : 'rgba(255,255,255,.36)');
     gradient.addColorStop(1, 'rgba(255,255,255,0)');
     return new Chart(context, {
       type: 'line',
@@ -120,7 +136,7 @@
         labels: labels,
         datasets: [{
           data: values,
-          borderColor: detail ? '#7d65dc' : '#ffffff',
+          borderColor: detail ? token('--b1', '#7d65dc') : '#ffffff',
           backgroundColor: gradient,
           borderWidth: detail ? 2.5 : 2.2,
           fill: true,

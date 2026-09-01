@@ -52,7 +52,7 @@ js/
 assets/img/           グッズ・アバター画像（SVG）
 specs/                要件定義書。仕様の唯一の正
 design/               デザインカンプ・ワイヤーフレーム。**アプリ本体とは別物、実行されない**
-docs/                 ARCHITECTURE / API / DECISIONS / LISTING-DESIGN
+docs/                 ARCHITECTURE / API / DECISIONS / LISTING-DESIGN / ICONS
 .agents/skills/       タスク別ワークフロー
 ```
 

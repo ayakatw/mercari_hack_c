@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>推しポート テーマ検証</title>
+<style>
+/* ===========================================================
+   ページ自体のクローム。色の判断を歪めないよう完全な無彩色。
+   =========================================================== */
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 24px 64px;
+  background: #dcdcdf; color: #1c1c1e;
+  font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+}
+h1 { margin: 0 0 4px; font-size: 20px; letter-spacing: .02em; }
+.lede { margin: 0 0 20px; color: #55555c; font-size: 13px; }
+.controls { display: flex; gap: 8px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
+.controls button {
+  padding: 7px 14px; border: 1px solid #b6b6bc; border-radius: 999px;
+  background: #f2f2f4; color: #1c1c1e; font: inherit; font-size: 13px; cursor: pointer;
+}
+.controls button[aria-pressed="true"] { border-color: #1c1c1e; background: #1c1c1e; color: #fff; }
+.controls .sep { width: 1px; height: 22px; background: #b6b6bc; margin: 0 6px; }
+
+.grid { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+.col { width: 328px; }
+.col > header { margin-bottom: 10px; }
+.col h2 { margin: 0; font-size: 15px; }
+.col .meta { color: #55555c; font-size: 12px; }
+.col .share { display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 4px;
+  background: #c8c8cd; font-size: 11px; font-weight: 700; }
+
+/* ===========================================================
+   Layer 1: パレット（テーマがここだけ差し替える）
+   Layer 2: 既存の styles.css 変数名をエイリアスとして受ける
+   → 掃除subagentは「直書きhex → 既存名」だけやればよい
+   =========================================================== */
+.pv {
+  /* --- Layer 2: styles.css 側の既存名（触らない） --- */
+  --purple:      var(--b1);
+  --periwinkle:  var(--b2);
+  --pink:        var(--b3);
+  --page:        var(--bg-page);
+  --surface:     var(--bg-surface);
+  --ink:         var(--text-strong);
+  --muted:       var(--text-muted);
+  --line:        var(--line-color);
+  --brand-gradient: linear-gradient(112deg, var(--b2) 0%, var(--b1) 52%, var(--b3) 100%);
+  --shadow: 0 8px 24px var(--shadow-color);
+  --mercari: #ff0211;               /* ブランド色。テーマで変えない */
+}
+
+/* ---------- 寒色系 / 淡色 ---------- */
+.pv[data-theme="cool"] {
+  --b1: #6f8ce0; --b2: #7fb3e3; --b3: #9d8ce8;
+  --bg-page: #f4f7fc; --bg-surface: #ffffff;
+  --text-strong: #23304f; --text-muted: #75839e; --line-color: #e4eaf3;
+  --shadow-color: rgba(58, 77, 142, .13);
+  --up: #2f9d7c; --down: #e06077;
+  --deco-1: "✦"; --deco-2: "✧";
+}
+/* ---------- 中性色 / 淡色 ---------- */
+.pv[data-theme="neutral"] {
+  --b1: #7fae94; --b2: #a8c4a2; --b3: #dfa3ad;
+  --bg-page: #f7f6f2; --bg-surface: #ffffff;
+  --text-strong: #333a36; --text-muted: #82897f; --line-color: #e8e7df;
+  --shadow-color: rgba(70, 84, 72, .13);
+  --up: #4d9b74; --down: #cf6a72;
+  --deco-1: "❋"; --deco-2: "✼";
+}
+/* ---------- 暖色系 / 淡色 ---------- */
+.pv[data-theme="warm"] {
+  --b1: #e08a6a; --b2: #edb27f; --b3: #d97070;
+  --bg-page: #fdf6f1; --bg-surface: #ffffff;
+  --text-strong: #4a2f26; --text-muted: #9b7d70; --line-color: #f2e5db;
+  --shadow-color: rgba(150, 88, 60, .15);
+  --up: #3d9a70; --down: #d4565f;
+  --deco-1: "✺"; --deco-2: "✵";
+}
+
+/* ---------- 濃色版（同じ色相を暗い地に載せる） ---------- */
+.pv[data-theme="cool"][data-mode="dark"] {
+  --b1: #8ba3f0; --b2: #79b6ee; --b3: #b09df0;
+  --bg-page: #0f1420; --bg-surface: #1a2032;
+  --text-strong: #e6ecf7; --text-muted: #8494b0; --line-color: #26304a;
+  --shadow-color: rgba(0, 0, 0, .5);
+  --up: #45c79b; --down: #f37b90;
+}
+.pv[data-theme="neutral"][data-mode="dark"] {
+  --b1: #8dbfa3; --b2: #b4d0ad; --b3: #e6b0b9;
+  --bg-page: #16181a; --bg-surface: #1f2326;
+  --text-strong: #e8ebe6; --text-muted: #8a938c; --line-color: #2b3033;
+  --shadow-color: rgba(0, 0, 0, .5);
+  --up: #63c795; --down: #e4818a;
+}
+.pv[data-theme="warm"][data-mode="dark"] {
+  --b1: #e89b7a; --b2: #f0bd8d; --b3: #e08080;
+  --bg-page: #1a1210; --bg-surface: #251a17;
+  --text-strong: #f5e9e2; --text-muted: #a89087; --line-color: #37271f;
+  --shadow-color: rgba(0, 0, 0, .55);
+  --up: #4fbe8e; --down: #ee7078;
+}
+
+/* ===========================================================
+   ミニUI（実画面の縮図。色は文脈の中でしか判断できない）
+   =========================================================== */
+.pv {
+  position: relative; overflow: hidden;
+  border-radius: 26px; border: 1px solid var(--line);
+  background: var(--page);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  transition: background .35s ease, color .35s ease, border-color .35s ease;
+}
+.pv::before, .pv::after {
+  position: absolute; z-index: 0; pointer-events: none;
+  color: color-mix(in srgb, var(--b1) 24%, transparent);
+}
+.pv::before { content: var(--deco-1); top: 14px; left: 16px; font-size: 30px; }
+.pv::after  { content: var(--deco-2); right: 18px; bottom: 74px; font-size: 20px; }
+.pv > * { position: relative; z-index: 1; }
+
+.pv-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px 10px;
+}
+.pv-logo { font-size: 15px; font-weight: 800; letter-spacing: .04em; }
+.pv-logo b { color: var(--b1); }
+.pv-pill {
+  padding: 3px 10px; border-radius: 999px; font-size: 10px; font-weight: 700;
+  color: #fff; background: var(--brand-gradient);
+}
+
+.pv-body { padding: 0 14px 12px; display: grid; gap: 10px; }
+
+/* 資産サマリ（グラデーションの見え方が一番出る） */
+.asset-hero {
+  padding: 16px 16px 14px; border-radius: 18px; color: #fff;
+  background: var(--brand-gradient);
+}
+.asset-hero span { font-size: 11px; opacity: .85; }
+.asset-hero strong { display: block; font-size: 26px; letter-spacing: .01em; margin-top: 2px; }
+.asset-hero .delta { font-size: 11px; opacity: .9; }
+.spark { display: flex; align-items: flex-end; gap: 3px; height: 26px; margin-top: 10px; }
+.spark i { flex: 1; border-radius: 2px 2px 0 0; background: rgba(255,255,255,.55); }
+
+/* アイテム行 */
+.row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+}
+.thumb {
+  width: 38px; height: 38px; border-radius: 10px; flex: none;
+  background: linear-gradient(140deg, var(--b2), var(--b3));
+}
+.row .name { font-size: 12px; font-weight: 700; }
+.row .sub { font-size: 11px; color: var(--muted); }
+.row .val { margin-left: auto; text-align: right; }
+.row .val b { font-size: 13px; }
+.row .val em { display: block; font-style: normal; font-size: 11px; font-weight: 700; }
+.up { color: var(--up); } .down { color: var(--down); }
+
+/* TL投稿カード */
+.post {
+  border-radius: 16px; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--line);
+}
+.post-top { display: flex; align-items: center; gap: 8px; padding: 9px 11px; }
+.ava { width: 25px; height: 25px; border-radius: 50%; background: linear-gradient(140deg, var(--b1), var(--b3)); }
+.post-top .who { font-size: 12px; font-weight: 700; }
+.giveaway {
+  margin-left: auto; padding: 2px 8px; border-radius: 999px;
+  font-size: 10px; font-weight: 700;
+  color: var(--b1); background: color-mix(in srgb, var(--b1) 14%, transparent);
+}
+.post-img { height: 92px; background: linear-gradient(150deg, var(--b2) 0%, var(--b1) 55%, var(--b3) 100%); opacity: .82; }
+.post-foot { padding: 9px 11px; }
+.acts { display: flex; gap: 12px; font-size: 13px; color: var(--muted); }
+.acts .liked { color: var(--down); }
+.cap { margin: 6px 0 7px; font-size: 11px; line-height: 1.5; }
+.tag {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 10px;
+  color: var(--b1); background: color-mix(in srgb, var(--b1) 12%, transparent);
+}
+
+/* ボタン群 */
+.btns { display: flex; gap: 8px; }
+.btn-primary {
+  flex: 1; padding: 11px; border: 0; border-radius: 13px; cursor: pointer;
+  color: #fff; background: var(--brand-gradient);
+  font: inherit; font-size: 12px; font-weight: 700;
+}
+.btn-ghost {
+  flex: none; padding: 11px 15px; border-radius: 13px; cursor: pointer;
+  border: 1.5px solid var(--b1); background: transparent; color: var(--b1);
+  font: inherit; font-size: 12px; font-weight: 700;
+}
+.btn-mercari {
+  flex: none; padding: 11px 15px; border: 0; border-radius: 13px; cursor: pointer;
+  color: #fff; background: var(--mercari); font: inherit; font-size: 12px; font-weight: 700;
+}
+
+/* タブバー */
+.tabs {
+  display: flex; align-items: center; justify-content: space-around;
+  padding: 9px 6px 14px; border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+.tabs span { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.25; }
+.tabs span i { display: block; font-size: 15px; font-style: normal; }
+.tabs .on { color: var(--b1); font-weight: 700; }
+.tabs .plus {
+  width: 34px; height: 34px; border-radius: 50%; color: #fff; font-size: 17px;
+  display: grid; place-items: center; background: var(--brand-gradient);
+}
+
+/* スウォッチ */
+.sw { display: flex; gap: 5px; margin-top: 10px; }
+.sw div { flex: 1; border-radius: 7px; padding: 5px 4px 6px; font-size: 9px; text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.sw .s1 { background: var(--b1); color: #fff; }
+.sw .s2 { background: var(--b2); color: #fff; }
+.sw .s3 { background: var(--b3); color: #fff; }
+.sw .s4 { background: var(--bg-page); color: var(--ink); border: 1px solid var(--line); }
+
+/* コピペ用CSS */
+.out { margin-top: 34px; }
+.out h2 { font-size: 15px; margin: 0 0 8px; }
+.out pre {
+  margin: 0; padding: 16px; border-radius: 12px; overflow: auto;
+  background: #1c1c1e; color: #e4e4e8; font-size: 11.5px; line-height: 1.65;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.note { margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; background: #ecebef;
+  border-left: 3px solid #8a8a90; font-size: 12.5px; color: #3a3a40; }
+.note b { color: #1c1c1e; }
+</style>
+</head>
+<body>
+
+<h1>推しポート テーマ検証</h1>
+<p class="lede">推し色の人気シェア（青21% / 紫15.7% / 赤14.7% / 緑14.7% / ピンク9.4%、パステル志向79%）を3系統に畳んだもの。同じミニUIに同じトークンを流している。</p>
+
+<div class="controls">
+  <button data-mode="light" aria-pressed="true">淡色（パステル・くすみ）</button>
+  <button data-mode="dark" aria-pressed="false">濃色（ダーク）</button>
+  <span class="sep"></span>
+  <button data-deco="on" aria-pressed="true">✦ 装飾あり</button>
+  <button data-deco="off" aria-pressed="false">装飾なし</button>
+</div>
+
+<div class="grid" id="grid">
+
+  <section class="col">
+    <header>
+      <h2>寒色系 — 蒼</h2>
+      <div class="meta">青 + 紫 / クール・知的・上品</div>
+      <div class="share">人気シェア 36.7%（最大）</div>
+    </header>
+    <div class="pv" data-theme="cool">
+      <div class="pv-head"><div class="pv-logo">推しポート <b>✦</b></div><div class="pv-pill">資産</div></div>
+      <div class="pv-body">
+        <div class="asset-hero">
+          <span>現金化可能額</span>
+          <strong>¥81,000</strong>
+          <div class="delta">今週 +4.6% / 8アイテム</div>
+          <div class="spark"><i style="height:38%"></i><i style="height:52%"></i><i style="height:44%"></i><i style="height:66%"></i><i style="height:58%"></i><i style="height:78%"></i><i style="height:71%"></i><i style="height:92%"></i></div>
+        </div>
+        <div class="row">
+          <div class="thumb"></div>
+          <div><div class="name">ステラのトレカ</div><div class="sub">相場 ¥18,000</div></div>
+          <div class="val"><b>×1</b><em class="up">+18%</em></div>
+        </div>
+        <div class="row">
+          <div class="thumb"></div>
+          <div><div class="name">ステラ 缶バッジ</div><div class="sub">相場 ¥6,500</div></div>
+          <div class="val"><b>×2</b><em class="down">−1.8%</em></div>
+        </div>
+        <div class="post">
+          <div class="post-top"><div class="ava"></div><div class="who">みお</div><div class="giveaway">譲ります</div></div>
+          <div class="post-img"></div>
+          <div class="post-foot">
+            <div class="acts"><span class="liked">♥ 86</span><span>♡ 保存</span></div>
+            <p class="cap">アクスタが重なったので、次のステラ推しさんへ継承したいです</p>
+            <span class="tag">ステラ アクリルスタンド</span>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="btn-primary">次のオタクに継承する</button>
+          <button class="btn-ghost">欲しい</button>
+          <button class="btn-mercari">出品</button>
+        </div>
+        <div class="sw"><div class="s1">#6f8ce0</div><div class="s2">#7fb3e3</div><div class="s3">#9d8ce8</div><div class="s4">#f4f7fc</div></div>
+      </div>
+      <div class="tabs">
+        <span><i>⌂</i>ホーム</span><span><i>⌕</i>探す</span><span class="plus">＋</span><span class="on"><i>⌁</i>資産</span><span><i>♙</i>マイページ</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="col">
+    <header>
+      <h2>中性色 — 霞</h2>
+      <div class="meta">緑 + ピンク / 癒し・優しい・シック</div>
+      <div class="share">人気シェア 24.1%</div>
+    </header>
+    <div class="pv" data-theme="neutral">
+      <div class="pv-head"><div class="pv-logo">推しポート <b>❋</b></div><div class="pv-pill">資産</div></div>
+      <div class="pv-body">
+        <div class="asset-hero">
+          <span>現金化可能額</span>
+          <strong>¥81,000</strong>
+          <div class="delta">今週 +4.6% / 8アイテム</div>
+          <div class="spark"><i style="height:38%"></i><i style="height:52%"></i><i style="height:44%"></i><i style="height:66%"></i><i style="height:58%"></i><i style="height:78%"></i><i style="height:71%"></i><i style="height:92%"></i></div>
+        </div>
+        <div class="row">
+          <div class="thumb"></div>
+          <div><div class="name">ステラのトレカ</div><div class="sub">相場 ¥18,000</div></div>
+          <div class="val"><b>×1</b><em class="up">+18%</em></div>
+        </div>
+        <div class="row">
+          <div class="thumb"></div>
+          <div><div class="name">ステラ 缶バッジ</div><div class="sub">相場 ¥6,500</div></div>
+          <div class="val"><b>×2</b><em class="down">−1.8%</em></div>
+        </div>
+        <div class="post">
+          <div class="post-top"><div class="ava"></div><div class="who">みお</div><div class="giveaway">譲ります</div></div>
+          <div class="post-img"></div>
+          <div class="post-foot">
+            <div class="acts"><span class="liked">♥ 86</span><span>♡ 保存</span></div>
+            <p class="cap">アクスタが重なったので、次のステラ推しさんへ継承したいです</p>
+            <span class="tag">ステラ アクリルスタンド</span>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="btn-primary">次のオタクに継承する</button>
+          <button class="btn-ghost">欲しい</button>
+          <button class="btn-mercari">出品</button>
+        </div>
+        <div class="sw"><div class="s1">#7fae94</div><div class="s2">#a8c4a2</div><div class="s3">#dfa3ad</div><div class="s4">#f7f6f2</div></div>
+      </div>
+      <div class="tabs">
+        <span><i>⌂</i>ホーム</span><span><i>⌕</i>探す</span><span class="plus">＋</span><span class="on"><i>⌁</i>資産</span><span><i>♙</i>マイページ</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="col">
+    <header>
+      <h2>暖色系 — 陽</h2>
+      <div class="meta">赤 + オレンジ / 情熱的・エネルギッシュ</div>
+      <div class="share">人気シェア 14.7%〜</div>
+    </header>
+    <div class="pv" data-theme="warm">
+      <div class="pv-head"><div class="pv-logo">推しポート <b>✺</b></div><div class="pv-pill">資産</div></div>
+      <div class="pv-body">
+        <div class="asset-hero">
+          <span>現金化可能額</span>
+          <strong>¥81,000</strong>
+          <div class="delta">今週 +4.6% / 8アイテム</div>
+          <div class="spark"><i style="height:38%"></i><i style="height:52%"></i><i style="height:44%"></i><i style="height:66%"></i><i style="height:58%"></i><i style="height:78%"></i><i style="height:71%"></i><i style="height:92%"></i></div>
+        </div>
+        <div class="row">
+          <div class="thumb"></div>
+          <div><div class="name">ステラのトレカ</div><div class="sub">相場 ¥18,000</div></div>
+          <div class="val"><b>×1</b><em class="up">+18%</em></div>
+        </div>
+        <div class="row">
+          <div class="thumb"></div>
+          <div><div class="name">ステラ 缶バッジ</div><div class="sub">相場 ¥6,500</div></div>
+          <div class="val"><b>×2</b><em class="down">−1.8%</em></div>
+        </div>
+        <div class="post">
+          <div class="post-top"><div class="ava"></div><div class="who">みお</div><div class="giveaway">譲ります</div></div>
+          <div class="post-img"></div>
+          <div class="post-foot">
+            <div class="acts"><span class="liked">♥ 86</span><span>♡ 保存</span></div>
+            <p class="cap">アクスタが重なったので、次のステラ推しさんへ継承したいです</p>
+            <span class="tag">ステラ アクリルスタンド</span>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="btn-primary">次のオタクに継承する</button>
+          <button class="btn-ghost">欲しい</button>
+          <button class="btn-mercari">出品</button>
+        </div>
+        <div class="sw"><div class="s1">#e08a6a</div><div class="s2">#edb27f</div><div class="s3">#d97070</div><div class="s4">#fdf6f1</div></div>
+      </div>
+      <div class="tabs">
+        <span><i>⌂</i>ホーム</span><span><i>⌕</i>探す</span><span class="plus">＋</span><span class="on"><i>⌁</i>資産</span><span><i>♙</i>マイページ</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="out">
+  <h2>styles.css にそのまま貼れる形</h2>
+  <pre>:root {
+  /* ---- Layer 1: パレット（テーマがここだけ差し替える）---- */
+  --b1: #6f8ce0;  --b2: #7fb3e3;  --b3: #9d8ce8;
+  --bg-page: #f4f7fc;      --bg-surface: #ffffff;
+  --text-strong: #23304f;  --text-muted: #75839e;
+  --line-color: #e4eaf3;   --shadow-color: rgba(58, 77, 142, .13);
+  --up: #2f9d7c;           --down: #e06077;
+  --deco-1: "✦";           --deco-2: "✧";
+
+  /* ---- Layer 2: 既存名はエイリアスで温存（3307行を書き換えない）---- */
+  --purple: var(--b1);   --purple-dark: color-mix(in srgb, var(--b1) 80%, #000);
+  --periwinkle: var(--b2);  --blue: var(--b2);
+  --pink: var(--b3);
+  --page: var(--bg-page);   --surface: var(--bg-surface);
+  --ink: var(--text-strong);  --navy: var(--text-strong);
+  --muted: var(--text-muted); --line: var(--line-color);
+  --green: var(--up);       --red: var(--down);
+  --brand-gradient: linear-gradient(112deg, var(--b2) 0%, var(--b1) 52%, var(--b3) 100%);
+  --shadow: 0 8px 24px var(--shadow-color);
+  --mercari: #ff0211;   /* ブランド色。テーマで変えない */
+}
+
+[data-theme="neutral"] {
+  --b1: #7fae94;  --b2: #a8c4a2;  --b3: #dfa3ad;
+  --bg-page: #f7f6f2;      --bg-surface: #ffffff;
+  --text-strong: #333a36;  --text-muted: #82897f;
+  --line-color: #e8e7df;   --shadow-color: rgba(70, 84, 72, .13);
+  --up: #4d9b74;           --down: #cf6a72;
+  --deco-1: "❋";           --deco-2: "✼";
+}
+
+[data-theme="warm"] {
+  --b1: #e08a6a;  --b2: #edb27f;  --b3: #d97070;
+  --bg-page: #fdf6f1;      --bg-surface: #ffffff;
+  --text-strong: #4a2f26;  --text-muted: #9b7d70;
+  --line-color: #f2e5db;   --shadow-color: rgba(150, 88, 60, .15);
+  --up: #3d9a70;           --down: #d4565f;
+  --deco-1: "✺";           --deco-2: "✵";
+}
+
+/* body の装飾グリフもトークン経由にする（styles.css:52, 65, 1486）*/
+body::before { content: var(--deco-1); }
+body::after  { content: var(--deco-2); }</pre>
+  <p class="note"><b>適用は <code>document.documentElement.setAttribute('data-theme', ...)</code></b>。<code>#app</code> ではなく <code>&lt;html&gt;</code>。body の背景グラデーションと ✦ が body 側にいるため。router.js の render() 内に1行足せば冪等に効く。</p>
+</div>
+
+<script>
+(function () {
+  var grid = document.getElementById('grid');
+  function press(group, value) {
+    document.querySelectorAll('[data-' + group + ']').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-' + group) === value));
+    });
+  }
+  document.querySelectorAll('[data-mode]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var mode = btn.getAttribute('data-mode');
+      grid.querySelectorAll('.pv').forEach(function (pv) {
+        if (mode === 'dark') { pv.setAttribute('data-mode', 'dark'); }
+        else { pv.removeAttribute('data-mode'); }
+      });
+      press('mode', mode);
+    });
+  });
+  document.querySelectorAll('[data-deco]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var on = btn.getAttribute('data-deco') === 'on';
+      grid.querySelectorAll('.pv').forEach(function (pv) {
+        pv.style.setProperty('--deco-1', on ? '' : '""');
+        pv.style.setProperty('--deco-2', on ? '' : '""');
+        if (on) { pv.style.removeProperty('--deco-1'); pv.style.removeProperty('--deco-2'); }
+      });
+      press('deco', btn.getAttribute('data-deco'));
+    });
+  });
+}());
+</script>
+</body>
+</html>
