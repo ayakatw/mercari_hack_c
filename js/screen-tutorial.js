@@ -31,13 +31,9 @@
     function renderCapture() {
         return [
             '<section class="tutorial-screen tutorial-capture">',
-            '<header class="tutorial-head"><span>STEP 2</span><h1>祭壇を撮ってみよう</h1><p>1枚からグッズをまとめて登録できます</p></header>',
-            '<label class="shrine-upload" for="tutorial-file">',
-            '<img src="assets/img/saidan.png" alt="デモ用のステライト祭壇">',
-            '<span><b>◎</b><strong>祭壇写真を選ぶ</strong><small>選択後はデモ用写真を解析します</small></span>',
-            '</label>',
-            '<input class="sr-only" id="tutorial-file" data-tutorial-file type="file" accept="image/*">',
-            '<div class="tutorial-tip"><span>✦</span><p>棚全体が写るように撮ると、<br>まとめて見つけやすくなります</p></div>',
+            '<header class="tutorial-head"><span>STEP 2</span><h1>この祭壇を送信しますか？</h1><p>全体画像を確認してから送信してください</p></header>',
+            '<div class="shrine-preview"><img src="assets/img/saidan.png" alt="登録する祭壇の全体画像"><span class="shrine-preview-badge">全体画像</span></div>',
+            '<div class="tutorial-capture-actions"><button type="button" class="tutorial-no-button" data-tutorial-no>いいえ</button><button type="button" class="primary-button tutorial-yes-button" data-tutorial-yes>はい、送信する</button></div>',
             progress(2),
             '</section>',
         ].join('');
@@ -185,12 +181,16 @@
                     AppState.startTutorialCapture();
                 });
             }
-            var file = root.querySelector('[data-tutorial-file]');
-            if (file) {
-                file.addEventListener('change', function () {
-                    if (file.files && file.files.length) {
-                        AppState.startTutorialAnalysis();
-                    }
+            var yes = root.querySelector('[data-tutorial-yes]');
+            if (yes) {
+                yes.addEventListener('click', function () {
+                    AppState.startTutorialAnalysis();
+                });
+            }
+            var no = root.querySelector('[data-tutorial-no]');
+            if (no) {
+                no.addEventListener('click', function () {
+                    AppState.cancelTutorialCapture();
                 });
             }
             root.querySelectorAll('[data-tutorial-count]').forEach(
