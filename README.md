@@ -90,7 +90,7 @@ js/
 assets/img/           グッズ・アバター画像
 specs/                要件定義書
 design/               デザインカンプ。アプリ本体とは別物で実行されない
-docs/                 アーキテクチャ / API / 設計判断
+docs/                 アーキテクチャ / API / 設計判断 / 出品モックのデザイン仕様
 .agents/skills/       タスク別ワークフロー
 ```
 
@@ -105,6 +105,7 @@ docs/                 アーキテクチャ / API / 設計判断
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | 全体像・データフロー・境界・feature 間依存 |
 | [docs/API.md](docs/API.md) | 外部依存（CDN）と内部 API 契約（AppState / Screens） |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | 設計判断の記録（ADR-lite） |
+| [docs/LISTING-DESIGN.md](docs/LISTING-DESIGN.md) | 出品モックのデザイン仕様（実物メルカリの完コピ範囲・トークン・クラス対応） |
 | [specs/推しポート要件定義.md](specs/推しポート要件定義.md) | 要件定義書。仕様の唯一の正 |
 
 ### Workflows

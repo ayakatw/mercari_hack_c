@@ -63,3 +63,15 @@
 # Completed
 
 （完了したタスクをここへ移す）
+
+## Claude
+
+### 出品モックを実物メルカリのダークUIに完コピ
+
+- **Status**: Done
+- **Owner**: Claude
+- **Branch**: main
+- **Files / directories**: `js/screen-listing.js`, `styles.css`（`/* Mercari listing */` セクション全面 + `.status-bar.mercari-status` + `.mercari-runtime .home-indicator`）, `specs/推しポート要件定義.md`（§2.6 改訂）, `docs/DECISIONS.md`
+- **Goal**: 自作の赤ヘッダー版だった出品モックを、実物メルカリの出品画面（ダーク）と出品完了モーダル（ライト）に完コピする。値は空にせず必ずプレフィルしたまま
+
+**Notes**: 判断の根拠は [docs/DECISIONS.md](docs/DECISIONS.md) の「出品モックを実物メルカリのダークUIに完コピし、赤ヘッダーを廃止する」。仕様書 §2.6 は実装に合わせて改訂済み。**ブラウザでの目視は未実施（このセッションではブラウザを操作できなかった）。** 構文チェック・参照画像チェック・Node 上での render 実行・全7アイテムでのフォーム生成は確認済み。

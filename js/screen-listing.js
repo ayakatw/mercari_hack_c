@@ -1,40 +1,113 @@
 (function (global) {
   'use strict';
 
+  function yen(value) {
+    return Number(value).toLocaleString('ja-JP');
+  }
+
+  function description(item) {
+    return 'STELLIGHT ステラの公式' + item.name.replace('ステラ ', '') + 'です。大切に保管していました。目立つ傷は見当たりませんが、写真をご確認ください。防水・緩衝材で丁寧に梱包して発送します。次のステラ推しの方に届いたらうれしいです。';
+  }
+
+  function photoRow(item) {
+    var slots = [
+      '<div class="ml-slot is-filled"><img src="' + item.thumb + '" alt="' + item.name + 'の出品写真"><span class="ml-slot-num">1</span></div>',
+      '<div class="ml-slot"><span class="ml-slot-cam" aria-hidden="true">◎</span><span class="ml-slot-num">2</span></div>'
+    ];
+    var index;
+    for (index = 3; index <= 5; index += 1) {
+      slots.push('<div class="ml-slot"><span class="ml-slot-num">' + index + '</span></div>');
+    }
+    return '<div class="ml-photos" aria-label="商品の写真">' + slots.join('') + '</div>';
+  }
+
+  function navRow(label, value, pill, note) {
+    return [
+      '<div class="ml-row" data-listing-nav>',
+        pill ? '<span class="ml-pill">' + pill + '</span>' : '',
+        '<div class="ml-row-main">',
+          '<span class="ml-row-label">' + label + '</span>',
+          '<span class="ml-row-value">' + value + '</span>',
+          '<span class="ml-chevron" aria-hidden="true">›</span>',
+        '</div>',
+        note ? '<span class="ml-row-note">' + note + '</span>' : '',
+      '</div>'
+    ].join('');
+  }
+
+  function saleTypeBlock(item) {
+    var fee = Math.round(item.marketPrice * 0.1);
+    var profit = item.marketPrice - fee;
+    return [
+      '<div class="ml-block">',
+        '<h2 class="ml-heading">販売タイプ</h2>',
+        '<div class="ml-option">',
+          '<span class="ml-radio" aria-hidden="true"></span>',
+          '<div class="ml-option-copy"><strong>オークション形式</strong><small>思わぬ価格で売れるかも！</small></div>',
+        '</div>',
+        '<div class="ml-option is-selected">',
+          '<div class="ml-option-head">',
+            '<span class="ml-radio is-on" aria-hidden="true"></span>',
+            '<div class="ml-option-copy"><strong>価格を設定する</strong></div>',
+          '</div>',
+          '<div class="ml-price-rows">',
+            '<div class="ml-price-row"><span>販売価格</span><strong>' + AppState.formatYen(item.marketPrice) + '</strong></div>',
+            '<div class="ml-price-row"><span>販売手数料</span><b>−¥' + yen(fee) + '</b></div>',
+            '<div class="ml-price-row is-last"><span>販売利益</span><b>¥' + yen(profit) + '</b></div>',
+          '</div>',
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
   function listingForm(item) {
-    var description = 'STELLIGHT ステラの公式' + item.name.replace('ステラ ', '') + 'です。大切に保管していました。目立つ傷は見当たりませんが、写真をご確認ください。防水・緩衝材で丁寧に梱包して発送します。次のステラ推しの方に届いたらうれしいです。';
     return [
       '<section class="screen listing-screen">',
-        '<header class="mercari-header"><button type="button" data-listing-back aria-label="戻る">‹</button><h1>メルカリに出品</h1><span>下書き</span></header>',
-        '<div class="screen-scroll listing-scroll">',
-          '<div class="external-banner"><span>推しポート</span><b>→</b><strong>メルカリ あんしん出品</strong></div>',
-          '<section class="listing-section photo-section"><h2>商品の写真</h2><div class="listing-photo"><img src="' + item.thumb + '" alt="' + item.name + '"><span>1 / 1</span></div></section>',
-          '<section class="listing-section"><h2>商品の情報</h2>',
-            '<label class="listing-field"><span>商品名</span><input value="' + item.name + '" aria-label="商品名"></label>',
-            '<label class="listing-field"><span>カテゴリー</span><input value="' + item.category + '" aria-label="カテゴリー"></label>',
-            '<label class="listing-field"><span>商品の状態</span><input value="' + item.condition + '" aria-label="商品の状態"></label>',
-          '</section>',
-          '<section class="listing-section"><div class="section-title-line"><h2>商品説明</h2><span>✦ AIで作成済み</span></div><label class="listing-field"><textarea rows="7" aria-label="商品説明">' + description + '</textarea></label></section>',
-          '<section class="listing-section price-section"><div><h2>販売価格</h2><p>相場から自動入力</p></div><label><span>¥</span><input value="' + item.marketPrice.toLocaleString('ja-JP') + '" inputmode="numeric" aria-label="販売価格"></label></section>',
-          '<div class="fee-note"><span>販売手数料（10%）</span><strong>−¥' + Math.round(item.marketPrice * 0.1).toLocaleString('ja-JP') + '</strong><span>販売利益</span><strong>¥' + Math.round(item.marketPrice * 0.9).toLocaleString('ja-JP') + '</strong></div>',
-          '<button type="button" class="mercari-submit" data-submit-listing>出品する</button>',
-          '<p class="mercari-safe">本人確認・匿名配送・補償つきのあんしん取引</p>',
+        '<header class="ml-header">',
+          '<button type="button" class="ml-close" data-listing-close aria-label="閉じる">×</button>',
+          '<h1>商品の情報を入力</h1>',
+        '</header>',
+        '<div class="screen-scroll ml-scroll">',
+          photoRow(item),
+          '<button type="button" class="ml-template" data-listing-template><span aria-hidden="true">▤</span> テンプレート</button>',
+          '<div class="ml-block">',
+            '<h2 class="ml-heading">商品名</h2>',
+            '<div class="ml-input">' + item.name + '</div>',
+          '</div>',
+          '<div class="ml-block ml-rows">',
+            navRow('カテゴリー', item.category, '', ''),
+            navRow('商品の状態', item.condition, '', ''),
+            navRow('配送方法', 'ゆうゆうメルカリ便', '送料込み (出品者負担)', '東京都から1~2日で発送'),
+          '</div>',
+          '<div class="ml-block">',
+            '<div class="ml-heading-line"><h2 class="ml-heading">商品の説明</h2><span class="ml-ai-badge">✦ AIで作成済み</span></div>',
+            '<div class="ml-input ml-textarea">' + description(item) + '</div>',
+          '</div>',
+          saleTypeBlock(item),
+          '<div class="ml-terms">',
+            '<p><a>規約</a>・<a>プライバシーポリシー</a>に同意し出品してください</p>',
+            '<p>役務提供時期、対価とその支払時期・方法等は<a>こちら</a>をご覧ください</p>',
+            '<p><a>あんしん鑑定</a>の規約に同意して出品してください。</p>',
+          '</div>',
+          '<div class="ml-footer">',
+            '<button type="button" class="ml-draft" data-listing-draft>下書きに保存</button>',
+            '<button type="button" class="ml-submit" data-submit-listing>出品する</button>',
+          '</div>',
         '</div>',
       '</section>'
     ].join('');
   }
 
-  function listingSuccess(item) {
+  function listingDone() {
     return [
-      '<section class="screen listing-screen listing-success">',
-        '<header class="mercari-header"><span></span><h1>メルカリに出品</h1><span></span></header>',
-        '<div class="listing-success-body">',
-          '<div class="mercari-success-icon">✓<span>🎉</span></div>',
-          '<h2>出品しました🎉</h2>',
-          '<p>売れたら売上金は<br><strong>推しポートに反映されます</strong></p>',
-          '<div class="listed-mini-card"><img src="' + item.thumb + '" alt=""><div><span>出品中</span><h3>' + item.name + '</h3><strong>' + AppState.formatYen(item.marketPrice) + '</strong></div></div>',
-          '<button type="button" class="mercari-submit" data-finish-listing>資産タブで確認する</button>',
-          '<small>推しポートへ戻ります</small>',
+      '<section class="screen listing-screen ml-done-screen">',
+        '<div class="ml-done-card" role="dialog" aria-modal="true" aria-labelledby="ml-done-title">',
+          '<div class="ml-done-illust" aria-hidden="true">💐</div>',
+          '<h2 id="ml-done-title">出品が完了しました</h2>',
+          '<p class="ml-done-note">売れたら売上金は<strong>推しポート</strong>に反映されます</p>',
+          '<button type="button" class="ml-done-primary" data-finish-listing>出品した商品をみる</button>',
+          '<button type="button" class="ml-done-secondary" data-listing-again>続けて出品する</button>',
+          '<button type="button" class="ml-done-text" data-listing-share>商品をシェアする</button>',
         '</div>',
       '</section>'
     ].join('');
@@ -51,16 +124,40 @@
           condition: AI_RESULTS['acsta2.svg'].state
         });
       }
-      return state.listing.stage === 'success' ? listingSuccess(displayItem) : listingForm(displayItem);
+      return state.listing.stage === 'success' ? listingDone() : listingForm(displayItem);
     },
 
     bind: function (root) {
-      var back = root.querySelector('[data-listing-back]');
-      if (back) { back.addEventListener('click', function () { AppState.setRoute('assets'); }); }
+      var close = root.querySelector('[data-listing-close]');
+      if (close) { close.addEventListener('click', function () { AppState.setRoute('assets'); }); }
+
+      var template = root.querySelector('[data-listing-template]');
+      if (template) { template.addEventListener('click', function () { AppState.showToast('テンプレート入力はデモでは省略しています'); }); }
+
+      root.querySelectorAll('[data-listing-nav]').forEach(function (row) {
+        row.addEventListener('click', function () {
+          AppState.showToast('推しポートが入力済みです。そのまま出品できます');
+        });
+      });
+
+      var draft = root.querySelector('[data-listing-draft]');
+      if (draft) { draft.addEventListener('click', function () { AppState.showToast('下書きに保存しました（デモ）'); }); }
+
       var submit = root.querySelector('[data-submit-listing]');
       if (submit) { submit.addEventListener('click', function () { AppState.submitListing(); }); }
+
       var finish = root.querySelector('[data-finish-listing]');
       if (finish) { finish.addEventListener('click', function () { AppState.finishListing(); }); }
+
+      var again = root.querySelector('[data-listing-again]');
+      if (again) {
+        again.addEventListener('click', function () {
+          AppState.prepareListing(AppState.getState().listing.itemId);
+        });
+      }
+
+      var share = root.querySelector('[data-listing-share]');
+      if (share) { share.addEventListener('click', function () { AppState.showToast('商品のリンクをコピーしました（デモ）'); }); }
     }
   };
 }(window));
