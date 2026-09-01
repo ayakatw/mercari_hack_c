@@ -5,6 +5,19 @@
     return AppState.getUser(handle) || { handle: handle, name: handle, avatar: 'assets/img/avatar-rina.svg', tappable: false };
   }
 
+  function bindPressTargets(root, selector, callback) {
+    root.querySelectorAll(selector).forEach(function (target) {
+      target.addEventListener('click', function () { callback(target); });
+      target.addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter' && event.key !== ' ') {
+          return;
+        }
+        event.preventDefault();
+        callback(target);
+      });
+    });
+  }
+
   function postCard(post) {
     var state = AppState.getState();
     var user = userFor(post.user);
@@ -21,7 +34,7 @@
           '<div class="feed-author-copy"><strong>' + user.name + '</strong><span>@' + user.handle + '</span></div>',
           post.giveaway ? '<span class="inherit-label">✦ 譲ります</span>' : '<span class="sparkle-dot" aria-hidden="true">✦</span>',
         '</header>',
-        '<img class="feed-photo" src="' + post.image + '" alt="' + post.tags[0] + 'の投稿写真" loading="lazy">',
+        '<img class="feed-photo" src="' + post.image + '" alt="' + post.tags[0] + 'の投稿写真" loading="lazy" role="button" tabindex="0" data-feed-post aria-label="' + post.tags[0] + 'の投稿を見る">',
         '<div class="feed-body">',
           '<div class="feed-actions">',
             '<button class="like-button' + (liked ? ' is-liked' : '') + '" type="button" data-like="' + post.id + '" aria-pressed="' + liked + '" aria-label="いいね">' + (liked ? '♥' : '♡') + '</button>',
@@ -32,7 +45,7 @@
               : '',
           '</div>',
           '<p class="feed-caption"><strong>' + user.name + '</strong> ' + post.caption + '</p>',
-          '<div class="product-tags">' + post.tags.map(function (tag) { return '<span># ' + tag + '</span>'; }).join('') + '</div>',
+          '<div class="product-tags">' + post.tags.map(function (tag) { return '<span role="button" tabindex="0" data-explore-tag="' + tag + '" aria-label="' + tag + 'の投稿を探す"># ' + tag + '</span>'; }).join('') + '</div>',
           post.giveaway ? '<p class="secure-note">🛡 取引はメルカリのあんしん決済</p>' : '',
         '</div>',
       '</article>'
@@ -76,6 +89,14 @@
           AppState.openProfile(button.getAttribute('data-profile'));
         });
       });
+      bindPressTargets(root, '[data-feed-post]', function () {
+        AppState.showToast('投稿の詳細表示はデモでは省略しています');
+      });
+      bindPressTargets(root, '[data-explore-tag]', function (target) {
+        var tag = target.getAttribute('data-explore-tag');
+        AppState.setRoute('explore');
+        AppState.showToast('「' + tag + '」の検索画面を開きました');
+      });
     }
   };
 
@@ -86,19 +107,29 @@
         '<section class="screen screen-explore">',
           '<header class="top-app-bar compact-bar"><div><span class="eyebrow">DISCOVER</span><h1>探す</h1></div><span class="header-sparkle">✦</span></header>',
           '<div class="screen-scroll">',
-            '<div class="search-faux" aria-hidden="true"><span>⌕</span> ステライトの投稿を探す</div>',
-            '<div class="topic-chips" aria-hidden="true"><span class="is-active">おすすめ</span><span>祭壇</span><span>アクスタ</span><span>現場コーデ</span></div>',
-            '<div class="explore-grid" aria-label="おすすめ投稿の静的グリッド">',
+            '<div class="search-faux" role="button" tabindex="0" data-explore-search aria-label="ステライトの投稿を検索する"><span aria-hidden="true">⌕</span> ステライトの投稿を探す</div>',
+            '<div class="topic-chips" aria-label="投稿カテゴリ"><span class="is-active" role="button" tabindex="0" data-explore-topic="おすすめ">おすすめ</span><span role="button" tabindex="0" data-explore-topic="祭壇">祭壇</span><span role="button" tabindex="0" data-explore-topic="アクスタ">アクスタ</span><span role="button" tabindex="0" data-explore-topic="現場コーデ">現場コーデ</span></div>',
+            '<div class="explore-grid" aria-label="おすすめ投稿のグリッド">',
               gridImages.map(function (post, index) {
-                return '<div class="explore-tile"><img src="' + post.image + '" alt="おすすめ投稿 ' + (index + 1) + '" loading="lazy"><span>✦</span></div>';
+                return '<div class="explore-tile" role="button" tabindex="0" data-explore-post aria-label="おすすめ投稿 ' + (index + 1) + 'を見る"><img src="' + post.image + '" alt="" loading="lazy"><span aria-hidden="true">✦</span></div>';
               }).join(''),
             '</div>',
-            '<p class="static-note">おすすめを眺めるためのグリッドです</p>',
+            '<p class="static-note">気になる投稿をタップしてみよう</p>',
           '</div>',
         '</section>'
       ].join('');
     },
-    bind: function () {}
+    bind: function (root) {
+      bindPressTargets(root, '[data-explore-search]', function () {
+        AppState.showToast('投稿検索はデモ用のプレビューです');
+      });
+      bindPressTargets(root, '[data-explore-topic]', function (target) {
+        AppState.showToast('「' + target.getAttribute('data-explore-topic') + '」を選びました（デモ）');
+      });
+      bindPressTargets(root, '[data-explore-post]', function () {
+        AppState.showToast('投稿の詳細表示はデモでは省略しています');
+      });
+    }
   };
 
   global.Screens.profile = {
@@ -119,7 +150,7 @@
               '<div><h2>' + user.name + '</h2><p>ステラ推し ✦ 大切なグッズを次の出会いへ</p></div>',
             '</div>',
             '<div class="profile-grid" aria-label="' + user.name + 'さんの投稿グリッド">',
-              grid.slice(0, 9).map(function (post) { return '<img src="' + post.image + '" alt="' + post.tags[0] + 'の投稿" loading="lazy">'; }).join(''),
+              grid.slice(0, 9).map(function (post) { return '<img src="' + post.image + '" alt="' + post.tags[0] + 'の投稿" loading="lazy" role="button" tabindex="0" data-profile-post aria-label="' + post.tags[0] + 'の投稿を見る">'; }).join(''),
             '</div>',
           '</div>',
         '</section>'
@@ -130,6 +161,9 @@
       if (back) {
         back.addEventListener('click', function () { AppState.setRoute('home'); });
       }
+      bindPressTargets(root, '[data-profile-post]', function () {
+        AppState.showToast('投稿の詳細表示はデモでは省略しています');
+      });
     }
   };
 }(window));

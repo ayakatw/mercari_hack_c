@@ -25,6 +25,19 @@
     return MISSING_FIELD_LABELS[key] || key;
   }
 
+  function bindPressTargets(root, selector, callback) {
+    root.querySelectorAll(selector).forEach(function (target) {
+      target.addEventListener('click', function () { callback(target); });
+      target.addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter' && event.key !== ' ') {
+          return;
+        }
+        event.preventDefault();
+        callback(target);
+      });
+    });
+  }
+
   function postHeader(stepLabel) {
     return '<header class="top-app-bar compact-bar"><div><span class="eyebrow">NEW POST</span><h1>＋投稿</h1></div><span class="step-label">' + stepLabel + '</span></header>';
   }
@@ -86,8 +99,8 @@
           '<div class="ai-result-card">',
             '<div class="ai-result-head"><span>✦ AI解析結果</span><small>' + escapeHtml(headNote) + '</small></div>',
             '<div class="ai-result-main">',
-              '<img src="' + escapeHtml(photo) + '" alt="' + escapeHtml(title) + '">',
-              '<div><h2>' + escapeHtml(title) + '</h2><div class="tag-row">' + tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join('') + '</div><p>状態 <strong>' + escapeHtml(condition) + '</strong></p></div>',
+              '<img src="' + escapeHtml(photo) + '" alt="' + escapeHtml(title) + '" role="button" tabindex="0" data-change-post-photo aria-label="投稿写真を変更する">',
+              '<div><h2>' + escapeHtml(title) + '</h2><div class="tag-row">' + tags.map(function (tag) { return '<span role="button" tabindex="0" data-post-result-tag="' + escapeHtml(tag) + '" aria-label="' + escapeHtml(tag) + 'のAIタグを確認する">' + escapeHtml(tag) + '</span>'; }).join('') + '</div><p>状態 <strong>' + escapeHtml(condition) + '</strong></p></div>',
             '</div>',
             '<div class="market-box"><span>現在の相場</span><strong>¥3,200</strong><small>参考：メルカリ成約データ</small></div>',
           '</div>',
@@ -98,8 +111,8 @@
             '</div>'
           ].join('') : '',
           '<div class="form-card">',
-            '<div class="form-row"><div><label>個数</label><small>実物を見て確定</small></div><div class="stepper" aria-label="投稿する個数"><button type="button" data-post-count="-1" aria-label="個数を減らす"' + (state.post.count <= 1 ? ' disabled' : '') + '>−</button><strong>' + state.post.count + '</strong><button type="button" data-post-count="1" aria-label="個数を増やす">＋</button></div></div>',
-            '<div class="form-row"><div><label>譲ります</label><small>次のオタクへ継承する</small></div><button type="button" class="switch' + (state.post.giveaway ? ' is-on' : '') + '" data-giveaway aria-pressed="' + state.post.giveaway + '"><span></span></button></div>',
+            '<div class="form-row"><div><label>個数</label><small>実物を見て確定</small></div><div class="stepper" aria-label="投稿する個数"><button type="button" data-post-count="-1" aria-label="個数を減らす">−</button><strong>' + state.post.count + '</strong><button type="button" data-post-count="1" aria-label="個数を増やす">＋</button></div></div>',
+            '<div class="form-row"><div role="button" tabindex="0" data-giveaway-copy aria-label="譲りますを切り替える"><label>譲ります</label><small>次のオタクへ継承する</small></div><button type="button" class="switch' + (state.post.giveaway ? ' is-on' : '') + '" data-giveaway aria-pressed="' + state.post.giveaway + '"><span></span></button></div>',
             '<label class="caption-field">キャプション<textarea data-caption rows="3" placeholder="お迎えした気持ちを書こう">' + escapeHtml(state.post.caption) + '</textarea></label>',
           '</div>',
           '<button class="primary-button post-submit" type="button" data-submit-post><span>投稿する</span><b>✦</b></button>',
@@ -176,13 +189,27 @@
       }
       root.querySelectorAll('[data-post-count]').forEach(function (button) {
         button.addEventListener('click', function () {
-          AppState.adjustPostCount(Number(button.getAttribute('data-post-count')));
+          var delta = Number(button.getAttribute('data-post-count'));
+          if (delta < 0 && AppState.getState().post.count <= 1) {
+            AppState.showToast('個数は1個以上で投稿してください');
+            return;
+          }
+          AppState.adjustPostCount(delta);
         });
       });
       var giveaway = root.querySelector('[data-giveaway]');
       if (giveaway) {
         giveaway.addEventListener('click', function () { AppState.togglePostGiveaway(); });
       }
+      bindPressTargets(root, '[data-giveaway-copy]', function () {
+        AppState.togglePostGiveaway();
+      });
+      bindPressTargets(root, '[data-change-post-photo]', function () {
+        AppState.showToast('写真の変更はデモでは省略しています');
+      });
+      bindPressTargets(root, '[data-post-result-tag]', function (target) {
+        AppState.showToast('「' + target.getAttribute('data-post-result-tag') + '」はAIが設定したタグです');
+      });
       var caption = root.querySelector('[data-caption]');
       if (caption) {
         caption.addEventListener('input', function () { AppState.setPostCaption(caption.value); });

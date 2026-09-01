@@ -26,7 +26,7 @@
     var isEvent = item.id === 'stella-card';
     var trendLabel = Number.isInteger(item.trend7d) ? item.trend7d.toFixed(0) : item.trend7d.toFixed(1);
     return [
-      '<article class="asset-row' + (isEvent ? ' is-interactive' : '') + '"' + (isEvent ? ' data-asset-detail="' + item.id + '" aria-label="ステラのトレカの価格推移を見る"' : '') + '>',
+      '<article class="asset-row' + (isEvent ? ' is-interactive' : '') + '"' + (isEvent ? ' data-asset-detail="' + item.id + '" aria-label="ステラのトレカの価格推移を見る"' : ' data-asset-summary="' + item.id + '"') + '>',
         '<div class="asset-thumb-wrap"><img src="' + item.thumb + '" alt=""><span class="count-chip">×' + item.count + '</span></div>',
         '<div class="asset-copy"><div class="asset-name-line"><h3>' + item.name + '</h3>' + (item.duplicate ? '<span class="duplicate-badge">×2</span>' : '') + (item.status === 'listed' ? '<span class="listed-badge">出品中</span>' : '') + '</div><p>現在相場 <strong>' + AppState.formatYen(item.marketPrice) + '</strong></p></div>',
         '<div class="asset-actions"><span class="trend ' + (rising ? 'up' : 'down') + '">' + (rising ? '+' : '') + trendLabel + '%</span><button type="button" class="sell-button" data-sell="' + item.id + '">売る</button></div>',
@@ -42,10 +42,10 @@
     return [
       '<div class="modal-layer" data-close-detail>',
         '<section class="modal-sheet asset-modal" role="dialog" aria-modal="true" aria-labelledby="asset-detail-title">',
-          '<div class="sheet-handle" aria-hidden="true"></div>',
+          '<div class="sheet-handle" data-close-detail-handle aria-hidden="true"></div>',
           '<button type="button" class="modal-close" data-close-detail-button aria-label="閉じる">×</button>',
           '<div class="modal-item-head"><img src="' + item.thumb + '" alt=""><div><span class="event-chip">急騰 +18%</span><h2 id="asset-detail-title">' + item.name + '</h2><p>現在相場 <strong>¥18,000</strong></p></div></div>',
-          '<div class="detail-chart-box"><canvas id="detail-chart" aria-label="ステラのトレカの30日価格推移"></canvas><div class="detail-event"><span>8/21</span><strong>日本ツアー発表 +18%</strong></div></div>',
+          '<div class="detail-chart-box" data-detail-chart><canvas id="detail-chart" aria-label="ステラのトレカの30日価格推移"></canvas><div class="detail-event"><span>8/21</span><strong>日本ツアー発表 +18%</strong></div></div>',
           '<p class="chart-disclaimer">メルカリの成約データをもとにした参考相場です</p>',
           '<button type="button" class="primary-button" data-modal-sell="' + item.id + '">このグッズを売る</button>',
         '</section>',
@@ -170,12 +170,12 @@
           '<header class="top-app-bar compact-bar asset-topbar"><div><span class="eyebrow">MY PORTFOLIO</span><h1>資産</h1></div><span class="header-sparkle">✦</span></header>',
           '<div class="screen-scroll asset-scroll">',
             '<section class="portfolio-hero">',
-              '<div class="portfolio-label"><span>✦</span> 現金化可能額 <i aria-hidden="true">?</i></div>',
+              '<div class="portfolio-label"><span>✦</span> 現金化可能額 <i data-portfolio-help>?</i></div>',
               '<h2>' + AppState.formatYen(total) + '</h2>',
               state.postedDemo ? '<p class="day-change">前日比 <strong>+¥2,300 (+2.8%)</strong></p>' : '<p class="day-change initial">祭壇登録時点・7アイテム</p>',
-              '<div class="portfolio-chart-wrap"><canvas id="portfolio-chart" aria-label="ポートフォリオ総額の30日推移"></canvas></div>',
+              '<div class="portfolio-chart-wrap" data-portfolio-chart><canvas id="portfolio-chart" aria-label="ポートフォリオ総額の30日推移"></canvas></div>',
               '<div class="chart-dates"><span>30日前</span><span>今日</span></div>',
-              '<div class="event-callout"><span class="event-bolt">⚡</span><div><small>8/21 EVENT</small><strong>ステライト 日本ツアー発表 <em>+18%</em></strong></div></div>',
+              '<div class="event-callout" data-asset-detail="stella-card" aria-label="ステラのトレカの価格推移を見る"><span class="event-bolt">⚡</span><div><small>8/21 EVENT</small><strong>ステライト 日本ツアー発表 <em>+18%</em></strong></div></div>',
             '</section>',
             '<div class="asset-section-head"><div><h2>グッズ一覧</h2><p>相場は毎日自動で更新</p></div><span>' + state.items.length + '種類</span></div>',
             '<div class="asset-list">' + state.items.map(assetRow).join('') + '</div>',
@@ -197,6 +197,16 @@
         function open() { AppState.openAssetDetail(row.getAttribute('data-asset-detail')); }
         row.addEventListener('click', open);
       });
+      root.querySelectorAll('[data-asset-summary]').forEach(function (row) {
+        row.addEventListener('click', function () {
+          var item = AppState.getItem(row.getAttribute('data-asset-summary'));
+          if (item) { AppState.showToast(item.name + 'の現在相場は' + AppState.formatYen(item.marketPrice) + 'です（デモ）'); }
+        });
+      });
+      var portfolioHelp = root.querySelector('[data-portfolio-help]');
+      if (portfolioHelp) { portfolioHelp.addEventListener('click', function () { AppState.showToast('保有数×現在相場で算出しています（デモ）'); }); }
+      var portfolioChartElement = root.querySelector('[data-portfolio-chart]');
+      if (portfolioChartElement) { portfolioChartElement.addEventListener('click', function () { AppState.showToast('30日間の資産総額推移です（デモ）'); }); }
       var layer = root.querySelector('.modal-layer[data-close-detail]');
       if (layer) {
         layer.addEventListener('click', function (event) {
@@ -205,6 +215,10 @@
       }
       var close = root.querySelector('[data-close-detail-button]');
       if (close) { close.addEventListener('click', function () { AppState.closeAssetDetail(); }); }
+      var handle = root.querySelector('[data-close-detail-handle]');
+      if (handle) { handle.addEventListener('click', function () { AppState.closeAssetDetail(); }); }
+      var detailChartElement = root.querySelector('[data-detail-chart]');
+      if (detailChartElement) { detailChartElement.addEventListener('click', function () { AppState.showToast('8/21の日本ツアー発表で相場が18%上昇しました（デモ）'); }); }
       var modalSell = root.querySelector('[data-modal-sell]');
       if (modalSell) {
         modalSell.addEventListener('click', function () { AppState.prepareListing(modalSell.getAttribute('data-modal-sell')); });

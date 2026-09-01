@@ -28,6 +28,18 @@
 
 # Active Tasks
 
+## Codex
+
+### アバター6点をリアルなSNSプロフィール写真へ差し替え
+
+- **Status**: In progress
+- **Owner**: Codex
+- **Branch**: current worktree
+- **Files / directories**: `assets/img/avatar-*.png`, `data.js`, `js/screen-home.js`, `js/screen-mypage.js`, `assets/photo/README.md`, `docs/DECISIONS.md`
+- **Goal**: 既存6ユーザーのイラストアバターに対応する、判別しやすいリアルなSNS風プロフィール写真をImageGenで生成して参照を差し替える
+
+**Notes**: 既存SVGはフォールバック用に残す。共有作業ツリーの既存変更を保持し、対象の画像参照行だけを変更する。
+
 ## Haruto + Claude (Fable)
 
 ### チュートリアルに推しカラーAI推定UXを追加
