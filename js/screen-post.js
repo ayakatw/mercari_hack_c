@@ -89,6 +89,8 @@
   }
 
   global.Screens.post = {
+    key: function (state) { return state.post.stage; },
+
     render: function () {
       var state = AppState.getState();
       if (state.post.stage === 'analyzing') {

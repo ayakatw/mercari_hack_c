@@ -143,6 +143,8 @@
     });
   }
 
+  var lastScreenKey = null;
+
   function render() {
     var state = AppState.getState();
     var previousScroll = app.querySelector('.screen-scroll');
@@ -151,6 +153,13 @@
     var route = state.route;
     var screen = screenFor(route);
     var chromeFree = route === 'tutorial' || route === 'listing';
+
+    // 入場演出は「画面が変わったとき」だけ出す。render() はいいね1つでも走るため、
+    // ここで絞らないと操作のたびに全画面が再アニメーションする。
+    // screen が任意で key() を返すと、同じ route 内の stage 変化も画面遷移として扱う。
+    var screenKey = route + (typeof screen.key === 'function' ? ':' + screen.key(state) : '');
+    var entering = screenKey !== lastScreenKey;
+    lastScreenKey = screenKey;
 
     // テーマは <html> に当てる。body の背景と ::before/::after の
     // 装飾が body 側にいるため #app では届かない。冪等なので毎render呼ぶ。
@@ -167,7 +176,7 @@
     app.innerHTML = [
       '<div class="app-runtime' + (route === 'listing' ? ' mercari-runtime' : '') + '">',
         statusBar(route === 'listing'),
-        '<div class="screen-host" id="screen-host" role="main">' + markup + '</div>',
+        '<div class="screen-host' + (entering ? ' is-entering' : '') + '" id="screen-host" role="main">' + markup + '</div>',
         chromeFree ? '' : tabBar(route),
         '<div class="home-indicator" aria-hidden="true"><span></span></div>',
         settingsSheet(state),

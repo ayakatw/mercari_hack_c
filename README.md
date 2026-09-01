@@ -107,6 +107,7 @@ docs/                 アーキテクチャ / API / 設計判断 / 出品モッ�
 | [docs/DECISIONS.md](docs/DECISIONS.md) | 設計判断の記録（ADR-lite） |
 | [docs/LISTING-DESIGN.md](docs/LISTING-DESIGN.md) | 出品モックのデザイン仕様（実物メルカリの完コピ範囲・トークン・クラス対応） |
 | [docs/ICONS.md](docs/ICONS.md) | アイコンの持ち方（Ionicons の直書き・ライセンス・追加手順・未対応のグリフ） |
+| [docs/UI-SYSTEM.md](docs/UI-SYSTEM.md) | タイポ・余白・シェイプ・モーションのスケール（色は除く） |
 | [specs/推しポート要件定義.md](specs/推しポート要件定義.md) | 要件定義書。仕様の唯一の正 |
 
 ### Workflows

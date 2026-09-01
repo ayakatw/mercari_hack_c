@@ -114,6 +114,8 @@
   }
 
   global.Screens.listing = {
+    key: function (state) { return state.listing.stage; },
+
     render: function () {
       var state = AppState.getState();
       var item = AppState.getItem(state.listing.itemId || 'stella-acsta');
