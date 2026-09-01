@@ -216,6 +216,11 @@
             notify();
         },
 
+        cancelTutorialCapture: function () {
+            state.tutorial.stage = 'welcome';
+            notify();
+        },
+
         startTutorialAnalysis: function () {
             state.tutorial.selected = true;
             state.tutorial.stage = 'analyzing';
