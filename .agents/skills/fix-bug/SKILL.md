@@ -28,7 +28,8 @@ description: Use when fixing a bug in the 推しポート demo app. Enforces roo
 **リロードすると必ずチュートリアルから始まる**（永続化していないため）。再現手順は「起動直後から何をクリックしたか」で書く。
 
 ```bash
-python3 -m http.server 5173   # → http://localhost:5173
+npm start                     # → http://localhost:3000
+# チュートリアルを飛ばすなら http://localhost:3000/?screen=post
 ```
 
 DevTools の Console から状態を直接見られる。
